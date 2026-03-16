@@ -1,0 +1,51 @@
+{
+  "meta": {
+    "title": "Kim Andrè Furevikstrand — Engenheiro de Software Sênior",
+    "description": "Engenheiro sênior TypeScript / Node.js / React. Disponível para trabalho remoto e oportunidades na Noruega."
+  },
+  "topbar": {
+    "model": "kim-furevikstrand-v1",
+    "status": "Disponível para contratação",
+    "downloadCv": "Baixar CV",
+    "github": "GitHub",
+    "gitlab": "GitLab"
+  },
+  "sidebar": {
+    "role": "Engenheiro de Software Sênior",
+    "availability": "Aberto a oportunidades",
+    "location": "Noruega / Remoto",
+    "experience": "10+ anos",
+    "languages": "EN · NO · PT",
+    "sections": {
+      "stack": "Stack Tecnológico",
+      "links": "Links"
+    }
+  },
+  "chat": {
+    "placeholder": "Me pergunte qualquer coisa...",
+    "send": "Enviar",
+    "thinking": "Pensando...",
+    "suggestions": [
+      "Qual é o seu stack tecnológico?",
+      "Fale sobre sua experiência",
+      "Você está disponível para contratação?",
+      "Quais projetos você construiu?",
+      "Como posso entrar em contato?"
+    ],
+    "welcome": "Olá! Sou o assistente de IA do Kim. Pergunte-me sobre sua experiência, projetos ou disponibilidade.",
+    "fallback": [
+      "Não tenho certeza se entendi isso. Tente perguntar sobre meu stack, experiência, projetos ou disponibilidade.",
+      "Poderia reformular? Você pode perguntar sobre minhas habilidades técnicas, histórico de trabalho ou como entrar em contato.",
+      "Hmm, não entendi isso. Tente: 'Qual é o seu stack?' ou 'Você está disponível para contratação?'"
+    ]
+  },
+  "contact": {
+    "title": "Entre em contato",
+    "name": "Seu nome",
+    "email": "Seu e-mail",
+    "message": "Sua mensagem",
+    "send": "Enviar mensagem",
+    "success": "Mensagem enviada! Entrarei em contato em breve.",
+    "error": "Algo deu errado. Tente novamente ou me envie um e-mail diretamente."
+  }
+}

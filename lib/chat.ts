@@ -1,0 +1,160 @@
+import { knowledge } from '@/data/knowledge'
+import type { KnowledgeEntry, Locale } from '@/types'
+
+// ─── Levenshtein distance for fuzzy matching ────────────────────────────────
+function levenshtein(a: string, b: string): number {
+  const m = a.length
+  const n = b.length
+  const dp: number[][] = Array.from({ length: m + 1 }, (_, i) =>
+    Array.from({ length: n + 1 }, (_, j) => (i === 0 ? j : j === 0 ? i : 0))
+  )
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      dp[i][j] = a[i - 1] === b[j - 1]
+        ? dp[i - 1][j - 1]
+        : 1 + Math.min(dp[i - 1][j - 1], dp[i - 1][j], dp[i][j - 1])
+    }
+  }
+  return dp[m][n]
+}
+
+function fuzzyMatch(word: string, key: string): boolean {
+  if (word.includes(key) || key.includes(word)) return true
+  if (key.length > 4 && word.length > 3) {
+    const maxDist = Math.floor(key.length * 0.3)
+    return levenshtein(word, key) <= maxDist
+  }
+  return false
+}
+
+// ─── Language detection ──────────────────────────────────────────────────────
+const noSignals = ['hei', 'hva', 'er', 'du', 'og', 'ikke', 'kan', 'jeg', 'for', 'med', 'på', 'til', 'av', 'det', 'den', 'har', 'som', 'vil', 'mer', 'seg', 'sin', 'fra', 'ved', 'om', 'når', 'så', 'men', 'om', 'god', 'morgen', 'hallo', 'tusen takk', 'takk', 'norsk', 'norge']
+const ptSignals = ['oi', 'olá', 'ola', 'você', 'voce', 'obrigado', 'sim', 'não', 'nao', 'estou', 'está', 'por', 'favor', 'bom', 'dia', 'tarde', 'noite', 'muito', 'bem', 'quero', 'qual', 'me', 'fale', 'sobre', 'seu', 'sua', 'são', 'disponível', 'disponivel', 'como', 'posso', 'contato', 'contratar', 'trabalho']
+
+export function detectLocale(text: string, current: Locale): Locale {
+  const lower = text.toLowerCase()
+  const words = lower.split(/\s+/)
+
+  let ptScore = 0
+  let noScore = 0
+
+  for (const word of words) {
+    if (noSignals.some((s) => word === s || word.startsWith(s))) noScore += 1
+    if (ptSignals.some((s) => word === s || word.startsWith(s))) ptScore += 1
+  }
+
+  if (noScore > 0 && noScore >= ptScore) return 'no'
+  if (ptScore > 0) return 'pt'
+  return current
+}
+
+// ─── Slash commands ──────────────────────────────────────────────────────────
+export type SlashResult = { type: 'locale'; value: Locale } | { type: 'help' } | null
+
+export function handleSlashCommand(input: string): SlashResult {
+  const cmd = input.trim().toLowerCase()
+  if (cmd === '/en') return { type: 'locale', value: 'en' }
+  if (cmd === '/no') return { type: 'locale', value: 'no' }
+  if (cmd === '/pt') return { type: 'locale', value: 'pt' }
+  if (cmd === '/help') return { type: 'help' }
+  return null
+}
+
+// ─── Score a knowledge entry against the input ───────────────────────────────
+function scoreEntry(input: string, entry: KnowledgeEntry): number {
+  const words = input.toLowerCase().split(/\s+/)
+  let score = 0
+
+  for (const key of entry.keys) {
+    const keyWords = key.split(/\s+/)
+    // Multi-word key: check if all words present
+    if (keyWords.length > 1) {
+      if (keyWords.every((kw) => words.some((w) => w.includes(kw) || kw.includes(w)))) {
+        score += 3
+      }
+      continue
+    }
+    // Single-word key
+    for (const word of words) {
+      if (word === key) {
+        score += (entry.weights?.[key] ?? 1) * 2
+      } else if (fuzzyMatch(word, key)) {
+        score += entry.weights?.[key] ?? 1
+      }
+    }
+  }
+
+  return score
+}
+
+// ─── Pick a random item ──────────────────────────────────────────────────────
+function pick<T>(arr: T[]): T {
+  return arr[Math.floor(Math.random() * arr.length)]
+}
+
+// ─── Main resolve function ────────────────────────────────────────────────────
+export interface ResolveResult {
+  reply: string
+  followUps: string[]
+  entryId: string
+}
+
+export function resolveReply(input: string, locale: Locale, history: string[] = []): ResolveResult {
+  const scored = knowledge
+    .map((entry) => ({ entry, score: scoreEntry(input, entry) }))
+    .filter(({ score }) => score > 0)
+    .sort((a, b) => b.score - a.score)
+
+  // Avoid repeating the last entry
+  const lastId = history[history.length - 1]
+  const best = scored.find(({ entry }) => entry.id !== lastId) ?? scored[0]
+
+  if (!best || best.score < (best.entry.minScore ?? 1)) {
+    return getFallback(locale)
+  }
+
+  const reply = pick(best.entry.replies[locale])
+  const followUps = best.entry.followUps[locale]
+
+  return { reply, followUps, entryId: best.entry.id }
+}
+
+// ─── Fallback ─────────────────────────────────────────────────────────────────
+const fallbacks: Record<Locale, string[]> = {
+  en: [
+    "I'm not sure I understood that. Try asking about my stack, experience, projects, or availability.",
+    "Could you rephrase? You can ask: *What's your tech stack?*, *Are you available for hire?*, or *Tell me about your projects*.",
+    "Hmm, I didn't catch that. Try: *Tell me about yourself* or *How can I contact you?*",
+  ],
+  no: [
+    "Jeg er ikke sikker på at jeg forstod det. Prøv å spørre om stakk, erfaring, prosjekter eller tilgjengelighet.",
+    "Kan du omformulere? Du kan spørre: *Hva er teknologistakken din?* eller *Er du tilgjengelig for ansettelse?*",
+    "Hmm, jeg skjønte ikke det. Prøv: *Fortell om deg selv* eller *Hvordan kan jeg kontakte deg?*",
+  ],
+  pt: [
+    "Não tenho certeza se entendi. Tente perguntar sobre meu stack, experiência, projetos ou disponibilidade.",
+    "Poderia reformular? Você pode perguntar: *Qual é o seu stack?* ou *Você está disponível para contratação?*",
+    "Hmm, não entendi. Tente: *Fale sobre você* ou *Como posso entrar em contato?*",
+  ],
+}
+
+const fallbackFollowUps: Record<Locale, string[]> = {
+  en: ["What's your tech stack?", "Are you available for hire?", "Tell me about your projects"],
+  no: ["Hva er teknologistakken din?", "Er du tilgjengelig for ansettelse?", "Fortell om prosjektene dine"],
+  pt: ["Qual é o seu stack?", "Você está disponível?", "Fale sobre seus projetos"],
+}
+
+function getFallback(locale: Locale): ResolveResult {
+  return {
+    reply: pick(fallbacks[locale]),
+    followUps: fallbackFollowUps[locale],
+    entryId: 'fallback',
+  }
+}
+
+// ─── Help command response ────────────────────────────────────────────────────
+export const helpReplies: Record<Locale, string> = {
+  en: "**Available commands:**\n`/en` — Switch to English\n`/no` — Switch to Norwegian\n`/pt` — Switch to Portuguese\n`/help` — Show this message\n\nOr just ask naturally: *What's your stack?*, *Are you available?*, *Tell me about your projects*.",
+  no: "**Tilgjengelige kommandoer:**\n`/en` — Bytt til engelsk\n`/no` — Bytt til norsk\n`/pt` — Bytt til portugisisk\n`/help` — Vis denne meldingen\n\nEller spør naturlig: *Hva er stakken din?*, *Er du tilgjengelig?*",
+  pt: "**Comandos disponíveis:**\n`/en` — Mudar para inglês\n`/no` — Mudar para norueguês\n`/pt` — Mudar para português\n`/help` — Mostrar esta mensagem\n\nOu pergunte naturalmente: *Qual é o seu stack?*, *Você está disponível?*",
+}

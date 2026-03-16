@@ -1,0 +1,51 @@
+{
+  "meta": {
+    "title": "Kim Andrè Furevikstrand — Senior Software Engineer",
+    "description": "Senior TypeScript / Node.js / React engineer. Available for remote and Norway-based roles."
+  },
+  "topbar": {
+    "model": "kim-furevikstrand-v1",
+    "status": "Available for hire",
+    "downloadCv": "Download CV",
+    "github": "GitHub",
+    "gitlab": "GitLab"
+  },
+  "sidebar": {
+    "role": "Senior Software Engineer",
+    "availability": "Open to opportunities",
+    "location": "Norway / Remote",
+    "experience": "10+ years",
+    "languages": "EN · NO · PT",
+    "sections": {
+      "stack": "Tech Stack",
+      "links": "Links"
+    }
+  },
+  "chat": {
+    "placeholder": "Ask me anything...",
+    "send": "Send",
+    "thinking": "Thinking...",
+    "suggestions": [
+      "What's your tech stack?",
+      "Tell me about your experience",
+      "Are you available for hire?",
+      "What projects have you built?",
+      "How can I contact you?"
+    ],
+    "welcome": "Hi! I'm Kim's AI assistant. Ask me anything about his experience, projects, or availability.",
+    "fallback": [
+      "I'm not sure I understood that. Try asking about my stack, experience, projects, or availability.",
+      "Could you rephrase that? You can ask about my tech skills, work history, or how to get in touch.",
+      "Hmm, I didn't catch that. Try asking: 'What's your stack?' or 'Are you available for hire?'"
+    ]
+  },
+  "contact": {
+    "title": "Get in touch",
+    "name": "Your name",
+    "email": "Your email",
+    "message": "Your message",
+    "send": "Send message",
+    "success": "Message sent! I'll get back to you soon.",
+    "error": "Something went wrong. Please try again or email me directly."
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "meta": {
+    "title": "Kim Andrè Furevikstrand — Senior Programvareutvikler",
+    "description": "Senior TypeScript / Node.js / React-utvikler. Tilgjengelig for remote og norskbaserte stillinger."
+  },
+  "topbar": {
+    "model": "kim-furevikstrand-v1",
+    "status": "Tilgjengelig for ansettelse",
+    "downloadCv": "Last ned CV",
+    "github": "GitHub",
+    "gitlab": "GitLab"
+  },
+  "sidebar": {
+    "role": "Senior Programvareutvikler",
+    "availability": "Åpen for muligheter",
+    "location": "Norge / Remote",
+    "experience": "10+ år",
+    "languages": "EN · NO · PT",
+    "sections": {
+      "stack": "Teknologistakk",
+      "links": "Lenker"
+    }
+  },
+  "chat": {
+    "placeholder": "Spør meg om hva som helst...",
+    "send": "Send",
+    "thinking": "Tenker...",
+    "suggestions": [
+      "Hva er teknologistakken din?",
+      "Fortell om din erfaring",
+      "Er du tilgjengelig for ansettelse?",
+      "Hvilke prosjekter har du bygget?",
+      "Hvordan kan jeg kontakte deg?"
+    ],
+    "welcome": "Hei! Jeg er Kims AI-assistent. Spør meg om hans erfaring, prosjekter eller tilgjengelighet.",
+    "fallback": [
+      "Jeg er ikke sikker på at jeg forstod det. Prøv å spørre om stakk, erfaring, prosjekter eller tilgjengelighet.",
+      "Kan du omformulere det? Du kan spørre om tekniske ferdigheter, arbeidshistorie eller kontaktinformasjon.",
+      "Hmm, jeg skjønte ikke det. Prøv: 'Hva er stakken din?' eller 'Er du tilgjengelig for ansettelse?'"
+    ]
+  },
+  "contact": {
+    "title": "Ta kontakt",
+    "name": "Ditt navn",
+    "email": "Din e-post",
+    "message": "Din melding",
+    "send": "Send melding",
+    "success": "Melding sendt! Jeg tar kontakt snart.",
+    "error": "Noe gikk galt. Prøv igjen eller send meg en e-post direkte."
+  }
+}

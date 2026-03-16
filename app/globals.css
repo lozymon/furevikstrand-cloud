@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #0d0d10;
+  --surface: #161620;
+  --surface-2: #1e1e2e;
+  --border: #252535;
+  --text: #e2e2f0;
+  --text-muted: #8888a8;
+  --violet: #a78bfa;
+  --sky: #38bdf8;
+  --emerald: #34d399;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-violet: var(--violet);
+  --color-sky: var(--sky);
+  --color-emerald: var(--emerald);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular,
+    Consolas, 'Liberation Mono', Menlo, monospace;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: var(--surface);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+::selection {
+  background: rgba(167, 139, 250, 0.3);
+  color: var(--text);
+}
+
+:focus-visible {
+  outline: 2px solid var(--violet);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
