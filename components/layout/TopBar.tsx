@@ -1,4 +1,5 @@
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
+import Link from 'next/link'
 import LanguageSwitcher from './LanguageSwitcher'
 import { profile } from '@/data/profile'
 
@@ -8,6 +9,7 @@ interface TopBarProps {
 
 export default function TopBar({ onMenuOpen }: TopBarProps) {
   const t = useTranslations('topbar')
+  const locale = useLocale()
 
   return (
     <header className="flex items-center justify-between px-4 h-12 border-b border-[#252535] bg-[#161620] shrink-0 z-10">
@@ -31,6 +33,13 @@ export default function TopBar({ onMenuOpen }: TopBarProps) {
 
       <div className="flex items-center gap-3">
         <LanguageSwitcher />
+
+        <Link href={`/${locale}/classic`} className="hidden sm:block text-xs text-[#8888a8] hover:text-[#38bdf8] transition-colors font-mono" aria-label="Classic layout">
+          /classic
+        </Link>
+        <Link href={`/${locale}/dev`} className="hidden sm:block text-xs text-[#8888a8] hover:text-[#38bdf8] transition-colors font-mono" aria-label="Dev layout">
+          /dev
+        </Link>
 
         <a
           href={profile.github}
