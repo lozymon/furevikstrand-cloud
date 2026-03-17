@@ -4,7 +4,7 @@ import { useState, useCallback, useEffect, useRef } from 'react'
 import { useLocale } from 'next-intl'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { resolveReply, detectLocale, handleSlashCommand, helpReplies } from '@/lib/chat'
+import { resolveReply, resolveById, detectLocale, handleSlashCommand, helpReplies } from '@/lib/chat'
 import type { Locale } from '@/types'
 import { profile } from '@/data/profile'
 
@@ -121,6 +121,21 @@ export default function DevPage() {
         const id = makeId()
         setLines((prev) => [...prev, { id, type: 'ai', text: '' }])
         await streamLine(helpReplies[locale].replace(/\*\*/g, '').replace(/`/g, ''), id)
+        setBusy(false)
+        return
+      }
+      if (slash.type === 'clear') {
+        setLines([{ id: makeId(), type: 'banner', text: BANNER }])
+        setBusy(false)
+        return
+      }
+      if (slash.type === 'topic') {
+        const { reply, entryId } = resolveById(slash.entryId, locale)
+        setHistory((h) => [...h.slice(-4), entryId])
+        const plain = reply.replace(/\*\*(.*?)\*\*/g, '$1').replace(/\*(.*?)\*/g, '$1').replace(/<[^>]+>/g, '')
+        const id = makeId()
+        setLines((prev) => [...prev, { id, type: 'ai', text: '' }])
+        await streamLine(plain, id)
         setBusy(false)
         return
       }

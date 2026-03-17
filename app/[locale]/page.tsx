@@ -11,6 +11,7 @@ import ChatWindow from '@/components/chat/ChatWindow'
 import ChatInput from '@/components/chat/ChatInput'
 import {
   resolveReply,
+  resolveById,
   detectLocale,
   handleSlashCommand,
   helpReplies,
@@ -95,6 +96,21 @@ export default function ChatPage() {
           const id = makeId()
           setMessages((prev) => [...prev, { id, role: 'ai', content: '', timestamp: new Date() }])
           await streamText(helpReplies[locale], id)
+          setShowSuggestions(true)
+          return
+        }
+        if (slash.type === 'clear') {
+          setMessages([{ id: makeId(), role: 'ai', content: t('welcome'), timestamp: new Date() }])
+          setShowSuggestions(true)
+          return
+        }
+        if (slash.type === 'topic') {
+          const { reply, followUps, entryId } = resolveById(slash.entryId, locale)
+          setHistory((h) => [...h.slice(-4), entryId])
+          const id = makeId()
+          setMessages((prev) => [...prev, { id, role: 'ai', content: '', timestamp: new Date() }])
+          await streamText(reply, id)
+          setCurrentFollowUps(followUps)
           setShowSuggestions(true)
           return
         }

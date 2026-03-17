@@ -49,7 +49,30 @@ export function detectLocale(text: string, current: Locale): Locale {
 }
 
 // ─── Slash commands ──────────────────────────────────────────────────────────
-export type SlashResult = { type: 'locale'; value: Locale } | { type: 'help' } | null
+export type SlashResult =
+  | { type: 'locale'; value: Locale }
+  | { type: 'help' }
+  | { type: 'clear' }
+  | { type: 'topic'; entryId: string }
+  | null
+
+const TOPIC_COMMANDS: Record<string, string> = {
+  '/about':      'about',
+  '/experience': 'experience',
+  '/stack':      'stack',
+  '/tech':       'stack',
+  '/projects':   'projects',
+  '/hire':       'available',
+  '/available':  'available',
+  '/contact':    'contact',
+  '/cv':         'cv',
+  '/location':   'location',
+  '/databases':  'databases',
+  '/db':         'databases',
+  '/devops':     'devops',
+  '/mentoring':  'mentoring',
+  '/style':      'work-style',
+}
 
 export function handleSlashCommand(input: string): SlashResult {
   const cmd = input.trim().toLowerCase()
@@ -57,7 +80,20 @@ export function handleSlashCommand(input: string): SlashResult {
   if (cmd === '/no') return { type: 'locale', value: 'no' }
   if (cmd === '/pt') return { type: 'locale', value: 'pt' }
   if (cmd === '/help') return { type: 'help' }
+  if (cmd === '/clear') return { type: 'clear' }
+  if (TOPIC_COMMANDS[cmd]) return { type: 'topic', entryId: TOPIC_COMMANDS[cmd] }
   return null
+}
+
+// ─── Resolve by entry id directly (used by slash topic commands) ─────────────
+export function resolveById(entryId: string, locale: Locale): ResolveResult {
+  const entry = knowledge.find((e) => e.id === entryId)
+  if (!entry) return getFallback(locale)
+  return {
+    reply: pick(entry.replies[locale]),
+    followUps: entry.followUps[locale],
+    entryId: entry.id,
+  }
 }
 
 // ─── Score a knowledge entry against the input ───────────────────────────────
@@ -154,7 +190,7 @@ function getFallback(locale: Locale): ResolveResult {
 
 // ─── Help command response ────────────────────────────────────────────────────
 export const helpReplies: Record<Locale, string> = {
-  en: "**Available commands:**\n`/en` — Switch to English\n`/no` — Switch to Norwegian\n`/pt` — Switch to Portuguese\n`/help` — Show this message\n\nOr just ask naturally: *What's your stack?*, *Are you available?*, *Tell me about your projects*.",
-  no: "**Tilgjengelige kommandoer:**\n`/en` — Bytt til engelsk\n`/no` — Bytt til norsk\n`/pt` — Bytt til portugisisk\n`/help` — Vis denne meldingen\n\nEller spør naturlig: *Hva er stakken din?*, *Er du tilgjengelig?*",
-  pt: "**Comandos disponíveis:**\n`/en` — Mudar para inglês\n`/no` — Mudar para norueguês\n`/pt` — Mudar para português\n`/help` — Mostrar esta mensagem\n\nOu pergunte naturalmente: *Qual é o seu stack?*, *Você está disponível?*",
+  en: "**Available commands:**\n\n*Topics*\n`/about` — Who is Kim\n`/experience` — Work history\n`/stack` — Tech stack\n`/projects` — Open-source projects\n`/hire` — Availability\n`/contact` — How to reach me\n`/cv` — Download CV\n`/location` — Where I'm based\n`/databases` — Database experience\n`/devops` — Docker & deployment\n`/mentoring` — Leadership & mentoring\n`/style` — How I work\n\n*Language*\n`/en` `/no` `/pt` — Switch language\n\n*Other*\n`/help` — Show this message\n`/clear` — Clear the screen\n\nOr just ask naturally in any language.",
+  no: "**Tilgjengelige kommandoer:**\n\n*Emner*\n`/about` — Hvem er Kim\n`/experience` — Arbeidshistorikk\n`/stack` — Teknologistakk\n`/projects` — Åpen kildekode-prosjekter\n`/hire` — Tilgjengelighet\n`/contact` — Kontaktinfo\n`/cv` — Last ned CV\n`/location` — Hvor jeg er basert\n`/databases` — Databaseerfaring\n`/devops` — Docker og utrulling\n`/mentoring` — Lederskap og mentoring\n`/style` — Hvordan jeg jobber\n\n*Språk*\n`/en` `/no` `/pt` — Bytt språk\n\n*Annet*\n`/help` — Vis denne meldingen\n`/clear` — Tøm skjermen\n\nEller bare spør naturlig på hvilket som helst språk.",
+  pt: "**Comandos disponíveis:**\n\n*Tópicos*\n`/about` — Quem é Kim\n`/experience` — Histórico de trabalho\n`/stack` — Stack tecnológico\n`/projects` — Projetos open-source\n`/hire` — Disponibilidade\n`/contact` — Como me contatar\n`/cv` — Baixar CV\n`/location` — Onde estou baseado\n`/databases` — Experiência com bancos de dados\n`/devops` — Docker e implantação\n`/mentoring` — Liderança e mentoria\n`/style` — Como eu trabalho\n\n*Idioma*\n`/en` `/no` `/pt` — Trocar idioma\n\n*Outros*\n`/help` — Mostrar esta mensagem\n`/clear` — Limpar a tela\n\nOu pergunte naturalmente em qualquer idioma.",
 }
