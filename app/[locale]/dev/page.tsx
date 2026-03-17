@@ -5,7 +5,7 @@ import { useLocale } from 'next-intl'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { resolveReply, detectLocale, handleSlashCommand, helpReplies } from '@/lib/chat'
-import type { Message, Locale } from '@/types'
+import type { Locale } from '@/types'
 import { profile } from '@/data/profile'
 
 function makeId() { return Math.random().toString(36).slice(2) }
@@ -93,10 +93,16 @@ export default function DevPage() {
     streamingRef.current = false
   }, [])
 
+  // Re-focus when AI finishes responding
+  useEffect(() => {
+    if (!busy) inputRef.current?.focus()
+  }, [busy])
+
   const handleSubmit = useCallback(async () => {
     const text = input.trim()
     if (!text || busy || streamingRef.current) return
     setInput('')
+    inputRef.current?.focus()
     setLines((prev) => [...prev, { id: makeId(), type: 'input', text }])
     setBusy(true)
 
