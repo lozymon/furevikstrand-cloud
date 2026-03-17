@@ -56,6 +56,31 @@ export type SlashResult =
   | { type: 'topic'; entryId: string }
   | null
 
+export interface SlashCommand {
+  cmd: string
+  description: string
+}
+
+export const SLASH_COMMANDS: SlashCommand[] = [
+  { cmd: '/about',      description: 'Who is Kim' },
+  { cmd: '/experience', description: 'Work history' },
+  { cmd: '/stack',      description: 'Tech stack' },
+  { cmd: '/projects',   description: 'Open-source projects' },
+  { cmd: '/hire',       description: 'Availability for hire' },
+  { cmd: '/contact',    description: 'Contact information' },
+  { cmd: '/cv',         description: 'Download CV' },
+  { cmd: '/location',   description: 'Where I\'m based' },
+  { cmd: '/databases',  description: 'Database experience' },
+  { cmd: '/devops',     description: 'Docker & deployment' },
+  { cmd: '/mentoring',  description: 'Leadership & mentoring' },
+  { cmd: '/style',      description: 'How I work' },
+  { cmd: '/help',       description: 'Show all commands' },
+  { cmd: '/clear',      description: 'Clear the screen' },
+  { cmd: '/en',         description: 'Switch to English' },
+  { cmd: '/no',         description: 'Switch to Norwegian' },
+  { cmd: '/pt',         description: 'Switch to Portuguese' },
+]
+
 const TOPIC_COMMANDS: Record<string, string> = {
   '/about':      'about',
   '/experience': 'experience',

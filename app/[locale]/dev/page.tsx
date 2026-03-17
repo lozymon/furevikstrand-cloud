@@ -4,7 +4,7 @@ import { useState, useCallback, useEffect, useRef } from 'react'
 import { useLocale } from 'next-intl'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { resolveReply, resolveById, detectLocale, handleSlashCommand, helpReplies } from '@/lib/chat'
+import { resolveReply, resolveById, detectLocale, handleSlashCommand, helpReplies, SLASH_COMMANDS } from '@/lib/chat'
 import type { Locale } from '@/types'
 import { profile } from '@/data/profile'
 
@@ -169,7 +169,17 @@ export default function DevPage() {
     setBusy(false)
   }, [input, busy, locale, pathname, router, history, streamLine])
 
+  const slashSuggestions = input.startsWith('/') && !input.includes(' ')
+    ? SLASH_COMMANDS.filter((c) => c.cmd.startsWith(input))
+    : []
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Escape') { setInput(''); return }
+    if (e.key === 'Tab' && slashSuggestions.length > 0) {
+      e.preventDefault()
+      setInput(slashSuggestions[0].cmd)
+      return
+    }
     if (e.key === 'Enter') handleSubmit()
   }
 
@@ -224,7 +234,24 @@ export default function DevPage() {
 
       {/* Input */}
       {booted && (
-        <div className="border-t border-[#0a2a0a] bg-[#010801] px-4 py-3 flex items-center gap-2 shrink-0">
+        <div className="border-t border-[#0a2a0a] bg-[#010801] shrink-0">
+          {/* Slash suggestions */}
+          {slashSuggestions.length > 0 && (
+            <div className="px-4 pt-2 pb-1 flex flex-col gap-0.5 border-b border-[#0a2a0a]">
+              {slashSuggestions.map((c) => (
+                <button
+                  key={c.cmd}
+                  onMouseDown={(e) => { e.preventDefault(); setInput(c.cmd); inputRef.current?.focus() }}
+                  className="flex items-baseline gap-3 text-left hover:bg-[#0a2a0a] px-1 rounded transition-colors"
+                >
+                  <span className="text-[#33ff33] text-xs font-mono w-28 shrink-0">{c.cmd}</span>
+                  <span className="text-[#1a6b1a] text-xs font-mono">{c.description}</span>
+                </button>
+              ))}
+              <p className="text-[#1a4a1a] text-[10px] font-mono mt-0.5">Tab to complete · Enter to run</p>
+            </div>
+          )}
+        <div className="px-4 py-3 flex items-center gap-2">
           <span className="text-[#33ff33] shrink-0">kim@portfolio:~$</span>
           <input
             ref={inputRef}
@@ -239,6 +266,7 @@ export default function DevPage() {
             aria-label="Terminal input"
           />
           {busy && <span className="text-[#1a6b1a] text-xs animate-pulse shrink-0">▋</span>}
+        </div>
         </div>
       )}
     </div>
