@@ -98,10 +98,10 @@ export default function DevPage() {
     if (!busy) inputRef.current?.focus()
   }, [busy])
 
-  const handleSubmit = useCallback(async () => {
-    const text = input.trim()
+  const submitText = useCallback(async (text: string) => {
     if (!text || busy || streamingRef.current) return
     setInput('')
+    setActiveIndex(0)
     inputRef.current?.focus()
     setLines((prev) => [...prev, { id: makeId(), type: 'input', text }])
     setBusy(true)
@@ -167,7 +167,9 @@ export default function DevPage() {
     setLines((prev) => [...prev, { id, type: 'ai', text: '' }])
     await streamLine(plain, id)
     setBusy(false)
-  }, [input, busy, locale, pathname, router, history, streamLine])
+  }, [busy, locale, pathname, router, history, streamLine])
+
+  const handleSubmit = useCallback(() => submitText(input.trim()), [submitText, input])
 
   const [activeIndex, setActiveIndex] = useState(0)
 
@@ -189,10 +191,15 @@ export default function DevPage() {
         setActiveIndex((i) => (i - 1 + slashSuggestions.length) % slashSuggestions.length)
         return
       }
-      if (e.key === 'Tab' || (e.key === 'Enter' && slashSuggestions[activeIndex])) {
+      if (e.key === 'Tab') {
         e.preventDefault()
-        setInput(slashSuggestions[activeIndex].cmd)
+        setInput(slashSuggestions[activeIndex].cmd + ' ')
         setActiveIndex(0)
+        return
+      }
+      if (e.key === 'Enter') {
+        e.preventDefault()
+        submitText(slashSuggestions[activeIndex].cmd)
         return
       }
       if (e.key === 'Escape') { setInput(''); return }
@@ -258,7 +265,7 @@ export default function DevPage() {
               {slashSuggestions.map((c, i) => (
                 <button
                   key={c.cmd}
-                  onMouseDown={(e) => { e.preventDefault(); setInput(c.cmd); setActiveIndex(0); inputRef.current?.focus() }}
+                  onMouseDown={(e) => { e.preventDefault(); submitText(c.cmd) }}
                   className={['flex items-baseline gap-3 text-left px-1 rounded transition-colors', i === activeIndex ? 'bg-[#0a2a0a]' : 'hover:bg-[#0a2a0a]'].join(' ')}
                 >
                   <span className={['text-xs font-mono w-28 shrink-0', i === activeIndex ? 'text-[#33ff33]' : 'text-[#1a8a1a]'].join(' ')}>{c.cmd}</span>
