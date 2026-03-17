@@ -67,11 +67,13 @@ export default function ChatInput({ onSend, disabled }: Props) {
       }
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault()
-        // If active item is selected, fill it; otherwise submit
-        if (filtered[activeIndex]) {
-          selectCommand(filtered[activeIndex].cmd)
-        } else {
-          handleSubmit()
+        // Fill and immediately submit the selected command
+        const cmd = filtered[activeIndex]?.cmd
+        if (cmd) {
+          setActiveIndex(0)
+          onSend(cmd)
+          setValue('')
+          textareaRef.current?.focus()
         }
         return
       }
