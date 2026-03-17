@@ -6,11 +6,11 @@ import type { SlashCommand } from '@/lib/chat'
 interface Props {
   query: string
   commands: SlashCommand[]
+  activeIndex: number
   onSelect: (cmd: string) => void
-  onClose: () => void
 }
 
-export default function SlashMenu({ query, commands, onSelect, onClose }: Props) {
+export default function SlashMenu({ query, commands, activeIndex, onSelect }: Props) {
   const filtered = query === '/'
     ? commands
     : commands.filter((c) => c.cmd.startsWith(query))
@@ -19,31 +19,41 @@ export default function SlashMenu({ query, commands, onSelect, onClose }: Props)
 
   useEffect(() => {
     activeRef.current?.scrollIntoView({ block: 'nearest' })
-  }, [query])
+  }, [activeIndex])
 
   if (filtered.length === 0) return null
 
   return (
     <div className="absolute bottom-full left-0 right-0 mb-1 mx-3 rounded-xl border border-[#252535] bg-[#161620] shadow-xl overflow-hidden z-20">
       <div className="px-3 py-1.5 border-b border-[#252535]">
-        <span className="text-[10px] font-mono text-[#8888a8] uppercase tracking-wider">commands</span>
+        <span className="text-[10px] font-mono text-[#8888a8] uppercase tracking-wider">
+          commands · ↑↓ navigate · Enter select
+        </span>
       </div>
       <ul className="max-h-52 overflow-y-auto" role="listbox" aria-label="Slash commands">
-        {filtered.map((c) => (
-          <li key={c.cmd} role="option">
-            <button
-              ref={filtered[0].cmd === c.cmd ? activeRef : undefined}
-              onMouseDown={(e) => {
-                e.preventDefault() // keep textarea focus
-                onSelect(c.cmd)
-              }}
-              className="w-full flex items-baseline gap-3 px-3 py-2 hover:bg-[#1e1e2e] transition-colors text-left group"
-            >
-              <span className="text-[#a78bfa] font-mono text-xs shrink-0 group-hover:text-[#c4b5fd]">{c.cmd}</span>
-              <span className="text-[#8888a8] font-mono text-[11px] truncate">{c.description}</span>
-            </button>
-          </li>
-        ))}
+        {filtered.map((c, i) => {
+          const isActive = i === activeIndex
+          return (
+            <li key={c.cmd} role="option" aria-selected={isActive}>
+              <button
+                ref={isActive ? activeRef : undefined}
+                onMouseDown={(e) => {
+                  e.preventDefault()
+                  onSelect(c.cmd)
+                }}
+                className={[
+                  'w-full flex items-baseline gap-3 px-3 py-2 transition-colors text-left group',
+                  isActive ? 'bg-[#1e1e2e]' : 'hover:bg-[#1e1e2e]',
+                ].join(' ')}
+              >
+                <span className={['font-mono text-xs shrink-0', isActive ? 'text-[#c4b5fd]' : 'text-[#a78bfa] group-hover:text-[#c4b5fd]'].join(' ')}>
+                  {c.cmd}
+                </span>
+                <span className="text-[#8888a8] font-mono text-[11px] truncate">{c.description}</span>
+              </button>
+            </li>
+          )
+        })}
       </ul>
     </div>
   )

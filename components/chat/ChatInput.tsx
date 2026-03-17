@@ -13,26 +13,35 @@ interface Props {
 export default function ChatInput({ onSend, disabled }: Props) {
   const t = useTranslations('chat')
   const [value, setValue] = useState('')
-  const [showMenu, setShowMenu] = useState(false)
+  const [activeIndex, setActiveIndex] = useState(0)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
+
+  const filtered = value.startsWith('/') && !value.includes(' ')
+    ? (value === '/' ? SLASH_COMMANDS : SLASH_COMMANDS.filter((c) => c.cmd.startsWith(value)))
+    : []
+  const showMenu = filtered.length > 0
+
+  // Reset active index when filtered list changes
+  useEffect(() => { setActiveIndex(0) }, [value])
 
   // Re-focus when AI finishes responding
   useEffect(() => {
     if (!disabled) textareaRef.current?.focus()
   }, [disabled])
 
-  // Show menu when input starts with /
-  useEffect(() => {
-    setShowMenu(value.startsWith('/') && !value.includes(' '))
-  }, [value])
+  const selectCommand = (cmd: string) => {
+    setValue(cmd)
+    setActiveIndex(0)
+    textareaRef.current?.focus()
+  }
 
   const handleSubmit = (e?: { preventDefault(): void }) => {
     e?.preventDefault()
     const text = value.trim()
     if (!text || disabled) return
-    setShowMenu(false)
     onSend(text)
     setValue('')
+    setActiveIndex(0)
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto'
       textareaRef.current.focus()
@@ -40,7 +49,37 @@ export default function ChatInput({ onSend, disabled }: Props) {
   }
 
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Escape') { setShowMenu(false); return }
+    if (showMenu) {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault()
+        setActiveIndex((i) => (i + 1) % filtered.length)
+        return
+      }
+      if (e.key === 'ArrowUp') {
+        e.preventDefault()
+        setActiveIndex((i) => (i - 1 + filtered.length) % filtered.length)
+        return
+      }
+      if (e.key === 'Tab') {
+        e.preventDefault()
+        selectCommand(filtered[activeIndex].cmd)
+        return
+      }
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault()
+        // If active item is selected, fill it; otherwise submit
+        if (filtered[activeIndex]) {
+          selectCommand(filtered[activeIndex].cmd)
+        } else {
+          handleSubmit()
+        }
+        return
+      }
+      if (e.key === 'Escape') {
+        setValue('')
+        return
+      }
+    }
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
       handleSubmit()
@@ -54,20 +93,14 @@ export default function ChatInput({ onSend, disabled }: Props) {
     el.style.height = Math.min(el.scrollHeight, 160) + 'px'
   }
 
-  const handleSelect = (cmd: string) => {
-    setValue(cmd)
-    setShowMenu(false)
-    textareaRef.current?.focus()
-  }
-
   return (
     <div className="relative border-t border-[#252535] bg-[#161620]">
       {showMenu && (
         <SlashMenu
           query={value}
           commands={SLASH_COMMANDS}
-          onSelect={handleSelect}
-          onClose={() => setShowMenu(false)}
+          activeIndex={activeIndex}
+          onSelect={selectCommand}
         />
       )}
       <form onSubmit={handleSubmit} className="p-3 flex items-end gap-2">

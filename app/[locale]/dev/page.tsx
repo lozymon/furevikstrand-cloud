@@ -169,16 +169,33 @@ export default function DevPage() {
     setBusy(false)
   }, [input, busy, locale, pathname, router, history, streamLine])
 
+  const [activeIndex, setActiveIndex] = useState(0)
+
   const slashSuggestions = input.startsWith('/') && !input.includes(' ')
-    ? SLASH_COMMANDS.filter((c) => c.cmd.startsWith(input))
+    ? (input === '/' ? SLASH_COMMANDS : SLASH_COMMANDS.filter((c) => c.cmd.startsWith(input)))
     : []
 
+  useEffect(() => { setActiveIndex(0) }, [input])
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Escape') { setInput(''); return }
-    if (e.key === 'Tab' && slashSuggestions.length > 0) {
-      e.preventDefault()
-      setInput(slashSuggestions[0].cmd)
-      return
+    if (slashSuggestions.length > 0) {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault()
+        setActiveIndex((i) => (i + 1) % slashSuggestions.length)
+        return
+      }
+      if (e.key === 'ArrowUp') {
+        e.preventDefault()
+        setActiveIndex((i) => (i - 1 + slashSuggestions.length) % slashSuggestions.length)
+        return
+      }
+      if (e.key === 'Tab' || (e.key === 'Enter' && slashSuggestions[activeIndex])) {
+        e.preventDefault()
+        setInput(slashSuggestions[activeIndex].cmd)
+        setActiveIndex(0)
+        return
+      }
+      if (e.key === 'Escape') { setInput(''); return }
     }
     if (e.key === 'Enter') handleSubmit()
   }
@@ -238,17 +255,17 @@ export default function DevPage() {
           {/* Slash suggestions */}
           {slashSuggestions.length > 0 && (
             <div className="px-4 pt-2 pb-1 flex flex-col gap-0.5 border-b border-[#0a2a0a]">
-              {slashSuggestions.map((c) => (
+              {slashSuggestions.map((c, i) => (
                 <button
                   key={c.cmd}
-                  onMouseDown={(e) => { e.preventDefault(); setInput(c.cmd); inputRef.current?.focus() }}
-                  className="flex items-baseline gap-3 text-left hover:bg-[#0a2a0a] px-1 rounded transition-colors"
+                  onMouseDown={(e) => { e.preventDefault(); setInput(c.cmd); setActiveIndex(0); inputRef.current?.focus() }}
+                  className={['flex items-baseline gap-3 text-left px-1 rounded transition-colors', i === activeIndex ? 'bg-[#0a2a0a]' : 'hover:bg-[#0a2a0a]'].join(' ')}
                 >
-                  <span className="text-[#33ff33] text-xs font-mono w-28 shrink-0">{c.cmd}</span>
+                  <span className={['text-xs font-mono w-28 shrink-0', i === activeIndex ? 'text-[#33ff33]' : 'text-[#1a8a1a]'].join(' ')}>{c.cmd}</span>
                   <span className="text-[#1a6b1a] text-xs font-mono">{c.description}</span>
                 </button>
               ))}
-              <p className="text-[#1a4a1a] text-[10px] font-mono mt-0.5">Tab to complete · Enter to run</p>
+              <p className="text-[#1a4a1a] text-[10px] font-mono mt-0.5">↑↓ navigate · Tab/Enter select · Esc cancel</p>
             </div>
           )}
         <div className="px-4 py-3 flex items-center gap-2">
