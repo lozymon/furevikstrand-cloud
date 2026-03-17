@@ -16,7 +16,7 @@ export const experience: Experience[] = [
       no: 'Bygger en plattform for idrettsarrangementer — mikrotjenestebackend for turneringsregistrering, utøverabonnementer og varesalg. Inkluderer en trener-mobilapp og admin-backoffice for plattformadministrasjon. Løste et kritisk datakonsistenseproblem på tvers av distribuerte databaser ved å designe en dedikert replikerings-mikrotjeneste med Saga-mønsteret. Optimaliserte flere trege spørringer og forbedret den totale plattformytelsen. Mentorer 2 junior-traineer gjennom kodegjennomganger og teknisk veiledning i NestJS og TypeScript.',
       pt: 'Construindo uma plataforma de gestão de eventos esportivos — backend de microsserviços para inscrições em torneios, assinaturas de atletas e vendas de itens. Inclui app mobile para treinadores e backoffice administrativo para gestão da plataforma. Resolveu um problema crítico de consistência de dados entre bancos de dados distribuídos projetando um microsserviço de replicação dedicado usando o padrão Saga. Otimizou múltiplas consultas lentas melhorando o desempenho geral da plataforma. Mentorando 2 trainees em NestJS e TypeScript.',
     },
-    tech: ['TypeScript', 'NestJS', 'React', 'Microservices', 'Saga Pattern', 'PostgreSQL', 'Docker', 'AWS'],
+    tech: ['TypeScript', 'NestJS', 'React', 'Microservices', 'Saga Pattern', 'MariaDB', 'Docker', 'AWS'],
   },
   {
     id: 'velit',
