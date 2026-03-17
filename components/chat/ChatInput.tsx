@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState, type FormEvent, type KeyboardEvent } from 'react'
+import { useRef, useState, useEffect, type KeyboardEvent } from 'react'
 import { useTranslations } from 'next-intl'
 
 interface Props {
@@ -13,7 +13,12 @@ export default function ChatInput({ onSend, disabled }: Props) {
   const [value, setValue] = useState('')
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
-  const handleSubmit = (e?: FormEvent) => {
+  // Re-focus when AI finishes responding
+  useEffect(() => {
+    if (!disabled) textareaRef.current?.focus()
+  }, [disabled])
+
+  const handleSubmit = (e?: { preventDefault(): void }) => {
     e?.preventDefault()
     const text = value.trim()
     if (!text || disabled) return
@@ -21,6 +26,7 @@ export default function ChatInput({ onSend, disabled }: Props) {
     setValue('')
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto'
+      textareaRef.current.focus()
     }
   }
 
