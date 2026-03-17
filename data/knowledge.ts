@@ -271,12 +271,12 @@ export const knowledge: KnowledgeEntry[] = [
         "My database history: MSSQL (Uni Micro), Oracle DB (Velit — 8 years of schema design, migrations, and query tuning on a live ERP), MariaDB (Compass.uol), and PostgreSQL for personal projects. I've done meaningful performance work at each: identifying slow queries, rewriting them, adding targeted indexes, and redesigning schemas to avoid N+1 patterns. Schema design is one of the most important and least reversible decisions in a project — I take it seriously.",
       ],
       no: [
-        "PostgreSQL er min primære database — jeg har brukt den profesjonelt i årevis og har god forståelse for indekseringsstrategier, spørringsoptimalisering og skjemadesign. Jeg har brukt Redis mye for caching, øktlagring og som en lett meldingsmegler. Jeg har også jobbet med MySQL og Oracle DB.",
-        "Min databasefilosofi: skjemadesign er en av de viktigste og minst reversible beslutningene i et prosjekt. Jeg foretrekker eksplisitte migreringer og tar spørringsytelse på alvor fra dag én.",
+        "Jeg har brukt forskjellig database på hvert arbeidssted: **MSSQL** hos Uni Micro, **Oracle DB** hos Velit (8 år), og **MariaDB** hos Compass.uol. Til personlige prosjekter bruker jeg **PostgreSQL**. Den bredden betyr at jeg forstår SQL dypt fremfor bare én variant. Jeg har også brukt Redis mye for caching, øktlagring og som en lett meldingsmegler.",
+        "Min databasehistorikk: MSSQL (Uni Micro), Oracle DB (Velit — 8 år med skjemadesign, migreringer og spørringsoptimalisering på et live ERP), MariaDB (Compass.uol) og PostgreSQL for personlige prosjekter. Skjemadesign er en av de viktigste og minst reversible beslutningene i et prosjekt — jeg tar det på alvor.",
       ],
       pt: [
-        "PostgreSQL é meu banco de dados principal — venho usando profissionalmente há anos e tenho sólido domínio de estratégias de indexação, otimização de queries e design de schema. Usei Redis extensivamente para cache, armazenamento de sessão e como broker de mensagens leve. Também trabalhei com MySQL e Oracle DB.",
-        "Minha filosofia de banco de dados: o design do schema é uma das decisões mais importantes e menos reversíveis em um projeto. Prefiro migrações explícitas e levo a performance de queries a sério desde o dia um.",
+        "Usei um banco de dados diferente em cada emprego: **MSSQL** na Uni Micro, **Oracle DB** na Velit (8 anos), e **MariaDB** na Compass.uol. Para projetos pessoais uso **PostgreSQL**. Essa variedade significa que entendo SQL profundamente, não apenas um dialeto. Também usei Redis extensivamente para cache, armazenamento de sessão e como broker de mensagens leve.",
+        "Meu histórico de bancos de dados: MSSQL (Uni Micro), Oracle DB (Velit — 8 anos de design de schema, migrações e otimização de queries em um ERP em produção), MariaDB (Compass.uol) e PostgreSQL para projetos pessoais. Design de schema é uma das decisões mais importantes e menos reversíveis em um projeto — levo isso a sério.",
       ],
     },
     followUps: {
