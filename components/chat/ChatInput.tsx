@@ -30,7 +30,7 @@ export default function ChatInput({ onSend, disabled }: Props) {
   }, [disabled])
 
   const selectCommand = (cmd: string) => {
-    setValue(cmd)
+    setValue(cmd + ' ')
     setActiveIndex(0)
     textareaRef.current?.focus()
   }
