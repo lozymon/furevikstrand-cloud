@@ -2,12 +2,25 @@ import { useTranslations } from 'next-intl'
 import LanguageSwitcher from './LanguageSwitcher'
 import { profile } from '@/data/profile'
 
-export default function TopBar() {
+interface TopBarProps {
+  onMenuOpen?: () => void
+}
+
+export default function TopBar({ onMenuOpen }: TopBarProps) {
   const t = useTranslations('topbar')
 
   return (
     <header className="flex items-center justify-between px-4 h-12 border-b border-[#252535] bg-[#161620] shrink-0 z-10">
       <div className="flex items-center gap-3">
+        <button
+          onClick={onMenuOpen}
+          className="lg:hidden text-[#8888a8] hover:text-[#e2e2f0] transition-colors p-1 -ml-1"
+          aria-label="Open menu"
+        >
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+            <path d="M2 4h14M2 9h14M2 14h14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
+        </button>
         <div className="flex items-center gap-1.5">
           <span className="w-2.5 h-2.5 rounded-full bg-[#34d399] animate-pulse" />
           <span className="text-xs text-[#8888a8] font-mono">{t('model')}</span>

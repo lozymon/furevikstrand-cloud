@@ -6,6 +6,7 @@ import { useRouter, usePathname } from 'next/navigation'
 import NeuralCanvas from '@/components/ui/NeuralCanvas'
 import TopBar from '@/components/layout/TopBar'
 import Sidebar from '@/components/sidebar/Sidebar'
+import MobileSidebar from '@/components/layout/MobileSidebar'
 import ChatWindow from '@/components/chat/ChatWindow'
 import ChatInput from '@/components/chat/ChatInput'
 import {
@@ -36,6 +37,7 @@ export default function ChatPage() {
     { id: makeId(), role: 'ai', content: t('welcome'), timestamp: new Date() },
   ])
   const [isTyping, setIsTyping] = useState(false)
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
   const [showSuggestions, setShowSuggestions] = useState(true)
   const [currentFollowUps, setCurrentFollowUps] = useState<string[]>(suggestions)
   const [history, setHistory] = useState<string[]>([])
@@ -131,7 +133,8 @@ export default function ChatPage() {
     <div className="relative flex flex-col h-full overflow-hidden bg-[#0d0d10]">
       <NeuralCanvas />
       <div className="relative z-10 flex flex-col h-full">
-        <TopBar />
+        <TopBar onMenuOpen={() => setMobileSidebarOpen(true)} />
+        <MobileSidebar isOpen={mobileSidebarOpen} onClose={() => setMobileSidebarOpen(false)} />
         <div className="flex flex-1 overflow-hidden">
           <Sidebar />
           <main className="flex-1 flex flex-col overflow-hidden">

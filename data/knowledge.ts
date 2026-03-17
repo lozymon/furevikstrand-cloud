@@ -57,7 +57,7 @@ export const knowledge: KnowledgeEntry[] = [
     replies: {
       en: [
         "I have **10+ years** of professional experience. Currently a Senior Software Engineer at **Compass.uol** in Brazil, building microservices platforms for enterprise clients. Before that, I freelanced for Norwegian and international companies for 3 years. I started my career in Norway, working at several tech companies from 2014.",
-        "My career spans 10+ years. The highlights: Senior engineer at Compass.uol (2021–present), 3 years of freelancing for Norwegian SMBs, and early experience at various Norwegian tech companies. I've worked across the full stack — from database design to deployment pipelines.",
+        "My career spans 10+ years across two main companies. At Compass.uol (2022–present) I build a sports event management platform using NestJS microservices, the Saga pattern, and mentor 2 junior developers. Before that, 8 years at Velit where I built a full ERP for the automotive parts industry — including a custom backend framework and a real-time worker tracking system.",
       ],
       no: [
         "Jeg har **10+ år** med profesjonell erfaring. For øyeblikket Senior Programvareutvikler hos **Compass.uol** i Brasil, bygger mikrotjenesteplattformer for bedriftskunder. Før det frilanserte jeg for norske og internasjonale selskaper i 3 år. Jeg startet karrieren i Norge i 2014.",

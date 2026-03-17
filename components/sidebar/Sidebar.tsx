@@ -9,7 +9,7 @@ export default function Sidebar() {
   const locale = useLocale() as Locale
 
   return (
-    <aside className="w-72 shrink-0 border-r border-[#252535] bg-[#161620] flex flex-col overflow-y-auto">
+    <aside className="hidden lg:flex w-72 shrink-0 border-r border-[#252535] bg-[#161620] flex-col overflow-y-auto">
       {/* Profile */}
       <div className="p-5 border-b border-[#252535]">
         <div className="flex items-start gap-3">
