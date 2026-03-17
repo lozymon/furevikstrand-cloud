@@ -209,7 +209,7 @@ export default function DevPage() {
 
   return (
     <div
-      className="min-h-screen bg-[#020c02] text-[#33ff33] font-mono text-sm flex flex-col"
+      className="h-screen bg-[#020c02] text-[#33ff33] font-mono text-sm flex flex-col overflow-hidden"
       onClick={() => inputRef.current?.focus()}
     >
       {/* Title bar */}
