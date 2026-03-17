@@ -13,6 +13,8 @@ export default function Suggestions({ suggestions, onSelect }: Props) {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 8 }}
+      role="group"
+      aria-label="Suggested questions"
       className="flex flex-wrap gap-2 px-4 pb-3"
     >
       {suggestions.map((s) => (

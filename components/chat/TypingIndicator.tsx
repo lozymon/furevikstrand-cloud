@@ -13,8 +13,12 @@ export default function TypingIndicator() {
       <div className="w-7 h-7 rounded-full bg-[#1e1e2e] border border-[#a78bfa]/40 flex items-center justify-center shrink-0 text-xs">
         K
       </div>
-      <div className="bg-[#1e1e2e] border border-[#252535] rounded-xl rounded-tl-sm px-4 py-3">
-        <div className="flex items-center gap-1.5">
+      <div
+        role="status"
+        aria-label="Kim is typing"
+        className="bg-[#1e1e2e] border border-[#252535] rounded-xl rounded-tl-sm px-4 py-3"
+      >
+        <div className="flex items-center gap-1.5" aria-hidden="true">
           {[0, 1, 2].map((i) => (
             <motion.span
               key={i}

@@ -27,6 +27,7 @@ export default function ChatMessage({ message }: Props) {
     >
       {/* Avatar */}
       <div
+        aria-hidden="true"
         className={[
           'w-7 h-7 rounded-full flex items-center justify-center shrink-0 text-xs font-mono',
           isAi
@@ -39,6 +40,8 @@ export default function ChatMessage({ message }: Props) {
 
       {/* Bubble */}
       <div
+        role="article"
+        aria-label={isAi ? 'Kim' : 'You'}
         className={[
           'max-w-[75%] px-4 py-3 rounded-xl text-sm leading-relaxed',
           isAi
