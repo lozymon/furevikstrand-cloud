@@ -219,7 +219,8 @@ export default function DevPage() {
             onKeyDown={handleKeyDown}
             disabled={busy}
             placeholder={locale === 'no' ? 'skriv her...' : locale === 'pt' ? 'digite aqui...' : 'type here...'}
-            className="flex-1 bg-transparent text-[#e2e2f0] outline-none placeholder-[#1a6b1a] caret-[#33ff33] disabled:opacity-50"
+            style={{ outline: 'none', boxShadow: 'none' }}
+            className="flex-1 bg-transparent text-[#e2e2f0] placeholder-[#1a6b1a] caret-[#33ff33] disabled:opacity-50"
             aria-label="Terminal input"
           />
           {busy && <span className="text-[#1a6b1a] text-xs animate-pulse shrink-0">▋</span>}
