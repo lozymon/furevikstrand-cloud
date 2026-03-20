@@ -4,7 +4,7 @@ import { useState, useCallback, useEffect, useRef } from 'react'
 import { useLocale } from 'next-intl'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { resolveReply, resolveById, detectLocale, handleSlashCommand, helpReplies, SLASH_COMMANDS } from '@/lib/chat'
+import { resolveById, detectLocale, handleSlashCommand, helpReplies, SLASH_COMMANDS } from '@/lib/chat'
 import type { Locale } from '@/types'
 import { profile } from '@/data/profile'
 
@@ -49,11 +49,11 @@ export default function DevPage() {
   const router = useRouter()
   const pathname = usePathname()
 
-  const [lines, setLines] = useState<{ id: string; type: 'banner' | 'boot' | 'output' | 'input' | 'ai'; text: string }[]>([])
+  const [lines, setLines] = useState<{ id: string; type: 'banner' | 'boot' | 'output' | 'input' | 'ai'; text: string; source?: 'ollama' | 'fallback' | 'local' }[]>([])
   const [input, setInput] = useState('')
   const [busy, setBusy] = useState(false)
   const [booted, setBooted] = useState(false)
-  const [history, setHistory] = useState<string[]>([])
+
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const streamingRef = useRef(false)
@@ -130,11 +130,10 @@ export default function DevPage() {
         return
       }
       if (slash.type === 'topic') {
-        const { reply, entryId } = resolveById(slash.entryId, locale)
-        setHistory((h) => [...h.slice(-4), entryId])
+        const { reply } = resolveById(slash.entryId, locale)
         const plain = reply.replace(/\*\*(.*?)\*\*/g, '$1').replace(/\*(.*?)\*/g, '$1').replace(/<[^>]+>/g, '')
         const id = makeId()
-        setLines((prev) => [...prev, { id, type: 'ai', text: '' }])
+        setLines((prev) => [...prev, { id, type: 'ai', text: '', source: 'local' }])
         await streamLine(plain, id)
         setBusy(false)
         return
@@ -152,22 +151,44 @@ export default function DevPage() {
       return
     }
 
-    await delay(Math.min(300 + text.length * 10, 1000))
-
-    const { reply, entryId } = resolveReply(text, locale, history)
-    setHistory((h) => [...h.slice(-4), entryId])
-
-    // Strip markdown for terminal output
-    const plain = reply
-      .replace(/\*\*(.*?)\*\*/g, '$1')
-      .replace(/\*(.*?)\*/g, '$1')
-      .replace(/<[^>]+>/g, '')
-
     const id = makeId()
-    setLines((prev) => [...prev, { id, type: 'ai', text: '' }])
-    await streamLine(plain, id)
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text, locale }),
+      })
+
+      const source = (res.headers.get('X-Reply-Source') ?? 'fallback') as 'ollama' | 'fallback'
+      setLines((prev) => [...prev, { id, type: 'ai', text: '', source }])
+
+      if (source === 'ollama' && res.body) {
+        // Stream real tokens from Ollama
+        const reader = res.body.getReader()
+        const decoder = new TextDecoder()
+        let accumulated = ''
+        while (true) {
+          const { done, value } = await reader.read()
+          if (done) break
+          accumulated += decoder.decode(value, { stream: true })
+          setLines((prev) => prev.map((l) => l.id === id ? { ...l, text: accumulated } : l))
+        }
+      } else {
+        // Keyword fallback — animate with typewriter
+        const raw = await res.text()
+        const plain = raw
+          .replace(/\*\*(.*?)\*\*/g, '$1')
+          .replace(/\*(.*?)\*/g, '$1')
+          .replace(/<[^>]+>/g, '')
+        await streamLine(plain, id)
+      }
+    } catch {
+      setLines((prev) => [...prev, { id, type: 'ai', text: 'Something went wrong. Please try again.', source: 'fallback' }])
+    }
+
     setBusy(false)
-  }, [busy, locale, pathname, router, history, streamLine])
+  }, [busy, locale, pathname, router, streamLine])
 
   const handleSubmit = useCallback(() => submitText(input.trim()), [submitText, input])
 
@@ -242,9 +263,14 @@ export default function DevPage() {
               <p><span className="text-[#33ff33]">kim@portfolio:~$</span> <span className="text-[#e2e2f0]">{line.text}</span></p>
             )}
             {line.type === 'ai' && (
-              <p className="text-[#33ff33] pl-4 whitespace-pre-wrap leading-relaxed">
-                {line.text}<span className={line.text ? 'hidden' : 'inline-block w-2 h-4 bg-[#33ff33] animate-pulse'} />
-              </p>
+              <div className="pl-4">
+                {line.source === 'ollama' && (
+                  <span className="text-[#1a6b1a] text-[10px] font-mono mr-2 border border-[#1a6b1a] px-1 rounded select-none">AI</span>
+                )}
+                <span className="text-[#33ff33] whitespace-pre-wrap leading-relaxed">
+                  {line.text}<span className={line.text ? 'hidden' : 'inline-block w-2 h-4 bg-[#33ff33] animate-pulse'} />
+                </span>
+              </div>
             )}
           </div>
         ))}
