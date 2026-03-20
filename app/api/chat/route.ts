@@ -90,6 +90,7 @@ export async function POST(request: Request) {
     try {
       const ollamaRes = await fetch(`${ollamaHost}/api/chat`, {
         method: 'POST',
+        cache: 'no-store',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           model,
@@ -102,6 +103,7 @@ export async function POST(request: Request) {
         signal: AbortSignal.timeout(30_000),
       })
 
+      if (!ollamaRes.ok) console.warn('[chat] Ollama non-ok:', ollamaRes.status, await ollamaRes.text())
       if (ollamaRes.ok && ollamaRes.body) {
         const decoder = new TextDecoder()
         const stream = new TransformStream<Uint8Array, Uint8Array>({
