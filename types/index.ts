@@ -14,6 +14,7 @@ export interface Message {
   role: 'user' | 'ai'
   content: string
   timestamp: Date
+  source?: 'ollama' | 'fallback' | 'local'
 }
 
 export interface Project {

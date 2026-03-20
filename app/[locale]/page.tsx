@@ -10,7 +10,6 @@ import MobileSidebar from '@/components/layout/MobileSidebar'
 import ChatWindow from '@/components/chat/ChatWindow'
 import ChatInput from '@/components/chat/ChatInput'
 import {
-  resolveReply,
   resolveById,
   detectLocale,
   handleSlashCommand,
@@ -41,14 +40,14 @@ export default function ChatPage() {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
   const [showSuggestions, setShowSuggestions] = useState(true)
   const [currentFollowUps, setCurrentFollowUps] = useState<string[]>(suggestions)
-  const [history, setHistory] = useState<string[]>([])
+
   const streamingRef = useRef(false)
 
   useEffect(() => {
     setMessages([{ id: makeId(), role: 'ai', content: t('welcome'), timestamp: new Date() }])
     setShowSuggestions(true)
     setCurrentFollowUps(t.raw('suggestions') as string[])
-    setHistory([])
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locale])
 
@@ -105,8 +104,7 @@ export default function ChatPage() {
           return
         }
         if (slash.type === 'topic') {
-          const { reply, followUps, entryId } = resolveById(slash.entryId, locale)
-          setHistory((h) => [...h.slice(-4), entryId])
+          const { reply, followUps } = resolveById(slash.entryId, locale)
           const id = makeId()
           setMessages((prev) => [...prev, { id, role: 'ai', content: '', timestamp: new Date() }])
           await streamText(reply, id)
@@ -127,22 +125,43 @@ export default function ChatPage() {
         return
       }
 
-      // Thinking delay
-      await delay(Math.min(400 + text.length * 12, 1400))
-
-      const { reply, followUps, entryId } = resolveReply(text, locale, history)
-      setHistory((h) => [...h.slice(-4), entryId])
-      setIsTyping(false)
-
-      // Stream reply in place
       const id = makeId()
-      setMessages((prev) => [...prev, { id, role: 'ai', content: '', timestamp: new Date() }])
-      await streamText(reply, id)
 
-      setCurrentFollowUps(followUps)
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: text, locale }),
+        })
+
+        const source = (res.headers.get('X-Reply-Source') ?? 'fallback') as 'ollama' | 'fallback'
+        setIsTyping(false)
+        setMessages((prev) => [...prev, { id, role: 'ai', content: '', timestamp: new Date(), source }])
+
+        if (source === 'ollama' && res.body) {
+          const reader = res.body.getReader()
+          const decoder = new TextDecoder()
+          let accumulated = ''
+          while (true) {
+            const { done, value } = await reader.read()
+            if (done) break
+            accumulated += decoder.decode(value, { stream: true })
+            setMessages((prev) => prev.map((m) => m.id === id ? { ...m, content: accumulated } : m))
+          }
+          setCurrentFollowUps(suggestions)
+        } else {
+          const raw = await res.text()
+          await streamText(raw, id)
+          setCurrentFollowUps(suggestions)
+        }
+      } catch {
+        setIsTyping(false)
+        setMessages((prev) => [...prev, { id, role: 'ai', content: 'Something went wrong. Please try again.', timestamp: new Date(), source: 'fallback' }])
+      }
+
       setShowSuggestions(true)
     },
-    [locale, pathname, router, history, streamText]
+    [locale, pathname, router, suggestions, streamText]
   )
 
   return (
