@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { NextResponse } from 'next/server'
 import { knowledge } from '@/data/knowledge'
 import { profile } from '@/data/profile'
