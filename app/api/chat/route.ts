@@ -105,7 +105,6 @@ export async function POST(request: Request) {
         signal: AbortSignal.timeout(30_000),
       })
 
-      if (!ollamaRes.ok) console.warn('[chat] Ollama non-ok:', ollamaRes.status, await ollamaRes.text())
       if (ollamaRes.ok && ollamaRes.body) {
         const decoder = new TextDecoder()
         const stream = new TransformStream<Uint8Array, Uint8Array>({
