@@ -2,6 +2,7 @@ import { useTranslations, useLocale } from 'next-intl'
 import Image from 'next/image'
 import { profile } from '@/data/profile'
 import { topChips } from '@/data/stack'
+import { education } from '@/data/education'
 import TestimonialsCarousel from '@/components/sidebar/TestimonialsCarousel'
 import type { Locale } from '@/types'
 
@@ -72,6 +73,19 @@ export default function Sidebar() {
             </span>
           ))}
         </div>
+      </div>
+
+      {/* Education */}
+      <div className="p-4 border-b border-[#252535]">
+        <p className="text-[10px] text-[#8888a8] font-mono uppercase tracking-wider mb-3">
+          {locale === 'no' ? 'Utdanning' : locale === 'pt' ? 'Educação' : 'Education'}
+        </p>
+        {education.filter((e) => e.country === 'br').map((ed) => (
+          <div key={ed.school}>
+            <p className="text-xs text-[#e2e2f0]">{ed.school}</p>
+            <p className="text-[10px] text-[#8888a8] font-mono mt-0.5">{ed.degree} · {ed.period}</p>
+          </div>
+        ))}
       </div>
 
       {/* Testimonials */}

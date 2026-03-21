@@ -8,6 +8,7 @@ import { projects } from '@/data/projects'
 import { stack } from '@/data/stack'
 import { certifications } from '@/data/certifications'
 import { education } from '@/data/education'
+import { testimonials } from '@/data/testimonials'
 import PageNav from '@/components/layout/PageNav'
 import type { Locale } from '@/types'
 
@@ -150,6 +151,28 @@ export default function ClassicPage() {
                 <div className="flex items-center gap-2 shrink-0">
                   <span className="text-sm">{ed.country === 'no' ? '🇳🇴' : '🇧🇷'}</span>
                   <span className="text-[10px] font-mono text-[#8888a8]">{ed.period}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Testimonials */}
+        <section>
+          <SectionLabel>{locale === 'no' ? 'Anbefalinger' : locale === 'pt' ? 'Recomendações' : 'Testimonials'}</SectionLabel>
+          <div className="mt-6 space-y-6">
+            {testimonials.slice(0, 3).map((t) => (
+              <div key={t.name} className="pl-4 border-l-2 border-[#252535]">
+                <p className="text-sm text-[#c0c0d8] leading-relaxed italic">"{t.quote[locale]}"</p>
+                <div className="mt-2 flex items-center justify-between gap-2">
+                  <div>
+                    <span className="text-xs font-semibold text-[#e2e2f0]">{t.name}</span>
+                    {t.role && <span className="text-xs text-[#8888a8] font-mono"> · {t.role}</span>}
+                    <span className="text-xs text-[#8888a8] font-mono"> · {t.company}</span>
+                  </div>
+                  <span className="text-[10px] font-mono text-[#8888a8] shrink-0">
+                    {new Date(t.date).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}
+                  </span>
                 </div>
               </div>
             ))}
