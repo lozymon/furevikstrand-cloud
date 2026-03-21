@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import Image from 'next/image'
+import { useLocale } from 'next-intl'
 import type { Message } from '@/types'
 
 interface Props {
@@ -10,12 +11,27 @@ interface Props {
 
 export default function ChatMessage({ message }: Props) {
   const isAi = message.role === 'ai'
+  const locale = useLocale()
 
-  // Convert markdown-like **bold** to <strong>
   const formatContent = (text: string) => {
     return text
       .replace(/\*\*(.*?)\*\*/g, '<strong class="text-[#a78bfa]">$1</strong>')
       .replace(/\*(.*?)\*/g, '<em class="text-[#38bdf8]">$1</em>')
+      // Markdown links [text](url)
+      .replace(
+        /\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,
+        '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-[#38bdf8] underline underline-offset-2 hover:text-[#a78bfa] transition-colors">$1</a>'
+      )
+      // Backtick internal paths `/page` → clickable link
+      .replace(
+        /`(\/[a-z]+)`/g,
+        `<a href="/${locale}$1" class="text-[#a78bfa] font-mono text-[11px] px-1.5 py-0.5 bg-[#1e1e2e] border border-[#a78bfa]/30 rounded hover:bg-[#a78bfa]/10 transition-colors">$1</a>`
+      )
+      // Remaining backticks → inline code
+      .replace(
+        /`([^`]+)`/g,
+        '<code class="text-[#38bdf8] font-mono text-[11px] px-1.5 py-0.5 bg-[#1e1e2e] border border-[#252535] rounded">$1</code>'
+      )
       .replace(/\n/g, '<br />')
   }
 
