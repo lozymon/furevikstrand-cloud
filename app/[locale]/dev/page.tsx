@@ -249,8 +249,8 @@ export default function DevPage() {
         </div>
         <div className="flex items-center gap-2">
           <LanguageSwitcher variant="terminal" />
-          <span className="hidden sm:inline text-[#1a4a1a] text-xs">|</span>
-          <div className="hidden sm:block">
+          <span className="hidden lg:inline text-[#1a4a1a] text-xs">|</span>
+          <div className="hidden lg:block">
             <PageNav current="dev" variant="terminal" />
           </div>
           <button

@@ -35,7 +35,7 @@ export default function PageHeader({ current, maxWidth = 'max-w-5xl', extra }: P
         {/* Right — language switcher + nav + print CV + optional slot */}
         <div className="flex items-center gap-4">
           <LanguageSwitcher />
-          <div className="hidden sm:block">
+          <div className="hidden lg:block">
             <PageNav current={current} />
           </div>
           <button

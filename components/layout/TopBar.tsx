@@ -42,7 +42,7 @@ export default function TopBar({ onMenuOpen }: TopBarProps) {
           <Link
             key={link.path}
             href={`/${locale}/${link.path}`}
-            className="hidden sm:block text-xs text-[#8888a8] hover:text-[#38bdf8] transition-colors font-mono"
+            className="hidden lg:block text-xs text-[#8888a8] hover:text-[#38bdf8] transition-colors font-mono"
           >
             {link.label}
           </Link>
