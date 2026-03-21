@@ -317,16 +317,16 @@ export const knowledge: KnowledgeEntry[] = [
     keys: ['location', 'where', 'country', 'norway', 'brazil', 'brasil', 'remote', 'based', 'live', 'bor', 'norge', 'sted', 'onde', 'noruega', 'mora', 'timezone', 'tidssone', 'fuso horário', 'moving', 'return', 'flytte'],
     replies: {
       en: [
-        "I'm Norwegian, originally from western Norway, and currently based in Natal, Brazil — where I've been working remotely for the past few years. I'm actively planning my return to Norway. For timezone purposes: I can comfortably work Central European hours (CET/CEST), and I'm used to async-first communication. I've worked with Norwegian, European, and global teams without any friction.",
-        "Geographically between Norway and Brazil right now. The plan is to move back to Norway, so I'm particularly interested in opportunities there — but fully remote works well too. I've been in Brazilian timezone (UTC-3) for a while, which means I overlap with European mornings perfectly if needed.",
+        "I'm Norwegian, originally from western Norway, and currently based in Natal, Brazil — where I've been working remotely for the past few years. I'm open to relocating to Norway and particularly interested in Norway-based opportunities. For timezone purposes: I can comfortably work Central European hours (CET/CEST), and I'm used to async-first communication. I've worked with Norwegian, European, and global teams without any friction.",
+        "Geographically between Norway and Brazil right now. I'm open to relocating to Norway and interested in opportunities there — but fully remote works well too. I've been in Brazilian timezone (UTC-3) for a while, which means I overlap with European mornings perfectly if needed.",
       ],
       no: [
-        "Jeg er norsk, opprinnelig fra Vestlandet, og for øyeblikket basert i Natal, Brasil — hvor jeg har jobbet remote de siste årene. Jeg planlegger aktivt å flytte tilbake til Norge. For tidssonet: jeg kan komfortabelt jobbe i CET/CEST, og er vant til async-first kommunikasjon.",
-        "Geografisk mellom Norge og Brasil akkurat nå. Planen er å flytte tilbake til Norge, så jeg er spesielt interessert i muligheter der — men fullt remote fungerer også bra.",
+        "Jeg er norsk, opprinnelig fra Vestlandet, og for øyeblikket basert i Natal, Brasil — hvor jeg har jobbet remote de siste årene. Jeg er åpen for å flytte tilbake til Norge og spesielt interessert i norskbaserte muligheter. For tidssonet: jeg kan komfortabelt jobbe i CET/CEST, og er vant til async-first kommunikasjon.",
+        "Geografisk mellom Norge og Brasil akkurat nå. Jeg er åpen for relokasjon til Norge og interessert i muligheter der — men fullt remote fungerer også bra.",
       ],
       pt: [
-        "Sou norueguês, originalmente do oeste da Noruega, e atualmente baseado em Natal, Brasil — onde tenho trabalhado remotamente nos últimos anos. Estou ativamente planejando meu retorno à Noruega. Para fuso horário: posso trabalhar confortavelmente no horário europeu central (CET/CEST).",
-        "Geograficamente entre Noruega e Brasil agora. O plano é voltar para a Noruega, então tenho especial interesse em oportunidades lá — mas totalmente remoto também funciona bem.",
+        "Sou norueguês, originalmente do oeste da Noruega, e atualmente baseado em Natal, Brasil — onde tenho trabalhado remotamente nos últimos anos. Estou aberto a me realocar para a Noruega e tenho especial interesse em oportunidades lá. Para fuso horário: posso trabalhar confortavelmente no horário europeu central (CET/CEST).",
+        "Geograficamente entre Noruega e Brasil agora. Estou aberto à realocação para a Noruega e interessado em oportunidades lá — mas totalmente remoto também funciona bem.",
       ],
     },
     followUps: {

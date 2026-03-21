@@ -7,7 +7,7 @@ export const profile = {
     pt: 'Desenvolvedor Full-Stack Sênior',
   },
   bio: {
-    en: 'Senior Software Engineer with 10+ years of experience building scalable, maintainable, and high-performing web applications using TypeScript, Node.js, React, and modern cloud architectures. Currently seeking remote roles with Norwegian-based teams while preparing for a full-time return to Norway.',
+    en: 'Senior Software Engineer with 10+ years of experience building scalable, maintainable, and high-performing web applications using TypeScript, Node.js, React, and modern cloud architectures. Currently seeking remote roles and open to Norway-based opportunities.',
     no: 'Senior programvareutvikler med 10+ års erfaring med å bygge skalerbare, vedlikeholdbare og høytytende webapplikasjoner med TypeScript, Node.js, React og moderne skyarkitekturer. Søker for øyeblikket remote-stillinger hos norske team.',
     pt: 'Engenheiro de software sênior com 10+ anos de experiência construindo aplicações web escaláveis e de alto desempenho usando TypeScript, Node.js, React e arquiteturas de nuvem modernas.',
   },

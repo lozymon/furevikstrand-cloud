@@ -10,6 +10,7 @@ import { projects } from '@/data/projects'
 import { stack } from '@/data/stack'
 import { certifications } from '@/data/certifications'
 import { education } from '@/data/education'
+import { testimonials } from '@/data/testimonials'
 import PageHeader from '@/components/layout/PageHeader'
 import type { Locale } from '@/types'
 
@@ -93,7 +94,7 @@ export default function ClassicPage() {
             <ContactItem label="GitHub"   value="github.com/lozymon" />
             <ContactItem label="LinkedIn" value="linkedin.com/in/kim-andre-furevikstrand" />
             <ContactItem label={locale === 'no' ? 'Sted' : locale === 'pt' ? 'Local' : 'Location'}
-              value={locale === 'no' ? 'Natal, Brasil → Norge' : locale === 'pt' ? 'Natal, Brasil → Noruega' : 'Natal, Brazil → Norway'} />
+              value={locale === 'no' ? 'Natal, Brasil / Åpen for Norge' : locale === 'pt' ? 'Natal, Brasil / Aberto à Noruega' : 'Natal, Brazil / Open to Norway'} />
           </div>
         </header>
 
@@ -131,6 +132,21 @@ export default function ClassicPage() {
                       </div>
                     </div>
                   ))}
+                </div>
+              ))}
+            </section>
+
+            {/* Testimonials */}
+            <section className="mb-[22px]">
+              <SectionTitle>// {locale === 'no' ? 'Anbefalinger' : locale === 'pt' ? 'Recomendações' : 'Testimonials'}</SectionTitle>
+              {testimonials.slice(0, 3).map((t) => (
+                <div key={t.name} className="mb-[10px] p-[9px_11px] bg-[#161620] border border-[#252535] rounded-[6px] last:mb-0">
+                  <p className="text-[10px] text-[#8888a8] leading-[1.7] mb-2 italic">"{t.quote[locale]}"</p>
+                  <div className="flex justify-between items-baseline">
+                    <span className="text-[10px] font-semibold text-[#e2e2f0]">{t.name}</span>
+                    <span className="text-[9px] text-[#8888a8]">{t.date}</span>
+                  </div>
+                  <p className="text-[9px] text-[#38bdf8]">{t.role ?? t.company}</p>
                 </div>
               ))}
             </section>
@@ -212,7 +228,7 @@ export default function ClassicPage() {
             <section className="mb-[22px]">
               <SectionTitle>// Info</SectionTitle>
               <InfoRow k={locale === 'no' ? 'Lokasjon'    : locale === 'pt' ? 'Localização'   : 'Location'}  v="Natal, Brazil" />
-              <InfoRow k={locale === 'no' ? 'Flytter til' : locale === 'pt' ? 'Movendo para'  : 'Moving to'} v={locale === 'no' ? 'Norge (6–12 mnd)' : locale === 'pt' ? 'Noruega (6–12 meses)' : 'Norway (6–12 mo)'} />
+              <InfoRow k={locale === 'no' ? 'Relokasjon' : locale === 'pt' ? 'Relocação' : 'Relocation'} v={locale === 'no' ? 'Åpen for Norge' : locale === 'pt' ? 'Aberto à Noruega' : 'Open to Norway'} />
               <InfoRow k={locale === 'no' ? 'Arbeidstype' : locale === 'pt' ? 'Tipo trabalho' : 'Work type'} v="Remote · On-site" />
               <InfoRow k={locale === 'no' ? 'Rolletype'   : locale === 'pt' ? 'Tipo de cargo' : 'Role type'} v="Senior · Tech Lead" />
               <InfoRow k="Timezone" v="CET / BRT" />
