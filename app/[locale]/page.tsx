@@ -91,6 +91,10 @@ export default function ChatPage() {
           router.push(segs.join('/'))
           return
         }
+        if (slash.type === 'navigate') {
+          router.push(`/${locale}/${slash.path}`)
+          return
+        }
         if (slash.type === 'help') {
           const id = makeId()
           setMessages((prev) => [...prev, { id, role: 'ai', content: '', timestamp: new Date() }])

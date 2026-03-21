@@ -51,6 +51,7 @@ export function detectLocale(text: string, current: Locale): Locale {
 // ─── Slash commands ──────────────────────────────────────────────────────────
 export type SlashResult =
   | { type: 'locale'; value: Locale }
+  | { type: 'navigate'; path: string }
   | { type: 'help' }
   | { type: 'clear' }
   | { type: 'topic'; entryId: string }
@@ -62,23 +63,24 @@ export interface SlashCommand {
 }
 
 export const SLASH_COMMANDS: SlashCommand[] = [
-  { cmd: '/about',      description: 'Who is Kim' },
-  { cmd: '/experience', description: 'Work history' },
-  { cmd: '/stack',      description: 'Tech stack' },
-  { cmd: '/projects',   description: 'Open-source projects' },
-  { cmd: '/hire',       description: 'Availability for hire' },
-  { cmd: '/contact',    description: 'Contact information' },
-  { cmd: '/cv',         description: 'Download CV' },
-  { cmd: '/location',   description: 'Where I\'m based' },
-  { cmd: '/databases',  description: 'Database experience' },
-  { cmd: '/devops',     description: 'Docker & deployment' },
-  { cmd: '/mentoring',  description: 'Leadership & mentoring' },
-  { cmd: '/style',      description: 'How I work' },
-  { cmd: '/help',       description: 'Show all commands' },
-  { cmd: '/clear',      description: 'Clear the screen' },
-  { cmd: '/en',         description: 'Switch to English' },
-  { cmd: '/no',         description: 'Switch to Norwegian' },
-  { cmd: '/pt',         description: 'Switch to Portuguese' },
+  { cmd: '/about',        description: 'Who is Kim' },
+  { cmd: '/experience',   description: 'Work history' },
+  { cmd: '/stack',        description: 'Tech stack' },
+  { cmd: '/projects',     description: 'Open-source projects' },
+  { cmd: '/hire',         description: 'Availability for hire' },
+  { cmd: '/contact',      description: 'Contact information' },
+  { cmd: '/cv',           description: 'Download CV' },
+  { cmd: '/location',     description: 'Where I\'m based' },
+  { cmd: '/databases',    description: 'Database experience' },
+  { cmd: '/devops',       description: 'Docker & deployment' },
+  { cmd: '/mentoring',    description: 'Leadership & mentoring' },
+  { cmd: '/style',        description: 'How I work' },
+  { cmd: '/testimonials', description: 'What colleagues say' },
+  { cmd: '/help',         description: 'Show all commands' },
+  { cmd: '/clear',        description: 'Clear the screen' },
+  { cmd: '/en',           description: 'Switch to English' },
+  { cmd: '/no',           description: 'Switch to Norwegian' },
+  { cmd: '/pt',           description: 'Switch to Portuguese' },
 ]
 
 const TOPIC_COMMANDS: Record<string, string> = {
@@ -106,6 +108,7 @@ export function handleSlashCommand(input: string): SlashResult {
   if (cmd === '/pt') return { type: 'locale', value: 'pt' }
   if (cmd === '/help') return { type: 'help' }
   if (cmd === '/clear') return { type: 'clear' }
+  if (cmd === '/testimonials') return { type: 'navigate', path: 'testimonials' }
   if (TOPIC_COMMANDS[cmd]) return { type: 'topic', entryId: TOPIC_COMMANDS[cmd] }
   return null
 }
@@ -215,7 +218,7 @@ function getFallback(locale: Locale): ResolveResult {
 
 // ─── Help command response ────────────────────────────────────────────────────
 export const helpReplies: Record<Locale, string> = {
-  en: "**Available commands:**\n\n*Topics*\n`/about` — Who is Kim\n`/experience` — Work history\n`/stack` — Tech stack\n`/projects` — Open-source projects\n`/hire` — Availability\n`/contact` — How to reach me\n`/cv` — Download CV\n`/location` — Where I'm based\n`/databases` — Database experience\n`/devops` — Docker & deployment\n`/mentoring` — Leadership & mentoring\n`/style` — How I work\n\n*Language*\n`/en` `/no` `/pt` — Switch language\n\n*Other*\n`/help` — Show this message\n`/clear` — Clear the screen\n\nOr just ask naturally in any language.",
-  no: "**Tilgjengelige kommandoer:**\n\n*Emner*\n`/about` — Hvem er Kim\n`/experience` — Arbeidshistorikk\n`/stack` — Teknologistakk\n`/projects` — Åpen kildekode-prosjekter\n`/hire` — Tilgjengelighet\n`/contact` — Kontaktinfo\n`/cv` — Last ned CV\n`/location` — Hvor jeg er basert\n`/databases` — Databaseerfaring\n`/devops` — Docker og utrulling\n`/mentoring` — Lederskap og mentoring\n`/style` — Hvordan jeg jobber\n\n*Språk*\n`/en` `/no` `/pt` — Bytt språk\n\n*Annet*\n`/help` — Vis denne meldingen\n`/clear` — Tøm skjermen\n\nEller bare spør naturlig på hvilket som helst språk.",
-  pt: "**Comandos disponíveis:**\n\n*Tópicos*\n`/about` — Quem é Kim\n`/experience` — Histórico de trabalho\n`/stack` — Stack tecnológico\n`/projects` — Projetos open-source\n`/hire` — Disponibilidade\n`/contact` — Como me contatar\n`/cv` — Baixar CV\n`/location` — Onde estou baseado\n`/databases` — Experiência com bancos de dados\n`/devops` — Docker e implantação\n`/mentoring` — Liderança e mentoria\n`/style` — Como eu trabalho\n\n*Idioma*\n`/en` `/no` `/pt` — Trocar idioma\n\n*Outros*\n`/help` — Mostrar esta mensagem\n`/clear` — Limpar a tela\n\nOu pergunte naturalmente em qualquer idioma.",
+  en: "**Available commands:**\n\n*Topics*\n`/about` — Who is Kim\n`/experience` — Work history\n`/stack` — Tech stack\n`/projects` — Open-source projects\n`/hire` — Availability\n`/contact` — How to reach me\n`/cv` — Download CV\n`/location` — Where I'm based\n`/databases` — Database experience\n`/devops` — Docker & deployment\n`/mentoring` — Leadership & mentoring\n`/style` — How I work\n`/testimonials` — What colleagues say\n\n*Language*\n`/en` `/no` `/pt` — Switch language\n\n*Other*\n`/help` — Show this message\n`/clear` — Clear the screen\n\nOr just ask naturally in any language.",
+  no: "**Tilgjengelige kommandoer:**\n\n*Emner*\n`/about` — Hvem er Kim\n`/experience` — Arbeidshistorikk\n`/stack` — Teknologistakk\n`/projects` — Åpen kildekode-prosjekter\n`/hire` — Tilgjengelighet\n`/contact` — Kontaktinfo\n`/cv` — Last ned CV\n`/location` — Hvor jeg er basert\n`/databases` — Databaseerfaring\n`/devops` — Docker og utrulling\n`/mentoring` — Lederskap og mentoring\n`/style` — Hvordan jeg jobber\n`/testimonials` — Hva kolleger sier\n\n*Språk*\n`/en` `/no` `/pt` — Bytt språk\n\n*Annet*\n`/help` — Vis denne meldingen\n`/clear` — Tøm skjermen\n\nEller bare spør naturlig på hvilket som helst språk.",
+  pt: "**Comandos disponíveis:**\n\n*Tópicos*\n`/about` — Quem é Kim\n`/experience` — Histórico de trabalho\n`/stack` — Stack tecnológico\n`/projects` — Projetos open-source\n`/hire` — Disponibilidade\n`/contact` — Como me contatar\n`/cv` — Baixar CV\n`/location` — Onde estou baseado\n`/databases` — Experiência com bancos de dados\n`/devops` — Docker e implantação\n`/mentoring` — Liderança e mentoria\n`/style` — Como eu trabalho\n`/testimonials` — O que colegas dizem\n\n*Idioma*\n`/en` `/no` `/pt` — Trocar idioma\n\n*Outros*\n`/help` — Mostrar esta mensagem\n`/clear` — Limpar a tela\n\nOu pergunte naturalmente em qualquer idioma.",
 }

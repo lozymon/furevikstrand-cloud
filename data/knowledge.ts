@@ -452,6 +452,28 @@ export const knowledge: KnowledgeEntry[] = [
     },
   },
 
+  // ─── Testimonials ────────────────────────────────────────────────────────────
+  {
+    id: 'testimonials',
+    keys: ['testimonial', 'recommendation', 'reference', 'colleagues', 'what do people say', 'reviews', 'feedback', 'anbefaling', 'referanse', 'kolleger', 'hva sier folk', 'recomendação', 'referência', 'colegas', 'o que dizem'],
+    replies: {
+      en: [
+        "Here's what colleagues say about working with Kim:\n\n**Jesse Levandovski** (Compass.uol): *\"Kim handles urgent situations with enormous calm. Always has an innovative solution and helps the whole team.\"*\n\n**Renato Wagner** (Compass.uol): *\"Solved complex backend challenges and has vast knowledge of Frontend and DevOps. Resolved backend integrations with great confidence.\"*\n\n**Lucas Novaes** (LinkedIn): *\"Stands out for delivering complex tasks on time and taking the lead on the most challenging projects — skills across both front-end and back-end.\"*\n\nYou can see all recommendations in the sidebar.",
+      ],
+      no: [
+        "Her er hva kolleger sier om å jobbe med Kim:\n\n**Jesse Levandovski** (Compass.uol): *\"Kim håndterer pressede situasjoner med stor ro. Har alltid en innovativ løsning og hjelper hele teamet.\"*\n\n**Renato Wagner** (Compass.uol): *\"Løste komplekse backend-utfordringer og har bred kunnskap om Frontend og DevOps.\"*\n\n**Lucas Novaes** (LinkedIn): *\"Utmerker seg med evnen til å levere komplekse oppgaver til rett tid og ta lederrollen på de mest utfordrende prosjektene.\"*\n\nDu kan se alle anbefalinger i sidepanelet.",
+      ],
+      pt: [
+        "Veja o que colegas dizem sobre trabalhar com Kim:\n\n**Jesse Levandovski** (Compass.uol): *\"Kim é um excelente profissional, sabe lidar com situações de urgência com uma tranquilidade enorme. Sempre possui uma solução inovadora.\"*\n\n**Renato Wagner** (Compass.uol): *\"Realizou a solução de desafios complexos no Backend e tem vasto conhecimento em Frontend e DevOps.\"*\n\n**Lucas Novaes** (LinkedIn): *\"Se destaca pela capacidade de entregar tarefas complexas dentro do prazo e assumir a liderança nos projetos mais desafiadores.\"*\n\nVeja todas as recomendações no painel lateral.",
+      ],
+    },
+    followUps: {
+      en: ["Are you available for hire?", "Tell me about your experience", "How can I contact you?"],
+      no: ["Er du tilgjengelig for ansettelse?", "Fortell om din erfaring", "Hvordan kan jeg kontakte deg?"],
+      pt: ["Você está disponível?", "Fale sobre sua experiência", "Como posso entrar em contato?"],
+    },
+  },
+
   // ─── Salary ───────────────────────────────────────────────────────────────────
   {
     id: 'salary',

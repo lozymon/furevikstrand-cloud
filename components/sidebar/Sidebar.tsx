@@ -2,6 +2,7 @@ import { useTranslations, useLocale } from 'next-intl'
 import Image from 'next/image'
 import { profile } from '@/data/profile'
 import { topChips } from '@/data/stack'
+import TestimonialsCarousel from '@/components/sidebar/TestimonialsCarousel'
 import type { Locale } from '@/types'
 
 export default function Sidebar() {
@@ -61,6 +62,9 @@ export default function Sidebar() {
           ))}
         </div>
       </div>
+
+      {/* Testimonials */}
+      <TestimonialsCarousel locale={locale} />
 
       {/* Links */}
       <div className="p-4">

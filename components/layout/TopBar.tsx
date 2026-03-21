@@ -40,6 +40,9 @@ export default function TopBar({ onMenuOpen }: TopBarProps) {
         <Link href={`/${locale}/dev`} className="hidden sm:block text-xs text-[#8888a8] hover:text-[#38bdf8] transition-colors font-mono" aria-label="Dev layout">
           /dev
         </Link>
+        <Link href={`/${locale}/testimonials`} className="hidden sm:block text-xs text-[#8888a8] hover:text-[#38bdf8] transition-colors font-mono" aria-label="Testimonials">
+          /testimonials
+        </Link>
 
         <a
           href={profile.github}
