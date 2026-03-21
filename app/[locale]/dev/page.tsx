@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect, useRef } from 'react'
 import { useLocale } from 'next-intl'
 import { useRouter, usePathname } from 'next/navigation'
 import PageNav from '@/components/layout/PageNav'
+import LanguageSwitcher from '@/components/layout/LanguageSwitcher'
 import { resolveById, detectLocale, handleSlashCommand, helpReplies, SLASH_COMMANDS } from '@/lib/chat'
 import type { Locale } from '@/types'
 import { profile } from '@/data/profile'
@@ -242,9 +243,20 @@ export default function DevPage() {
             <span className="w-3 h-3 rounded-full bg-[#28c840]" />
           </div>
           <span className="text-[#1a6b1a] text-xs ml-2">kim@furevikstrand.cloud — bash</span>
+          <span className="text-[#1a4a1a] text-xs">|</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-[#33ff33] animate-pulse" />
+          <span className="text-[#33ff33] text-xs font-mono">{profile.availability.label[locale]}</span>
         </div>
-        <div className="flex items-center gap-3">
-          <PageNav current="dev" variant="terminal" showCv={false} />
+        <div className="flex items-center gap-2">
+          <LanguageSwitcher variant="terminal" />
+          <span className="text-[#1a4a1a] text-xs">|</span>
+          <PageNav current="dev" variant="terminal" />
+          <button
+            onClick={() => window.open(`/${locale}/classic?print=true`, '_blank')}
+            className="text-[#1a6b1a] hover:text-[#33ff33] transition-colors text-xs font-mono"
+          >
+            cv.pdf
+          </button>
         </div>
       </div>
 

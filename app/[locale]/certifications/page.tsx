@@ -2,7 +2,7 @@
 
 import { useLocale } from 'next-intl'
 import { certifications } from '@/data/certifications'
-import PageNav from '@/components/layout/PageNav'
+import PageHeader from '@/components/layout/PageHeader'
 import type { Locale } from '@/types'
 
 const headings = {
@@ -47,13 +47,7 @@ export default function CertificationsPage() {
 
   return (
     <div className="min-h-screen bg-[#0d0d10] text-[#e2e2f0]">
-      {/* Nav */}
-      <nav className="sticky top-0 z-10 border-b border-[#252535] bg-[#0d0d10]/90 backdrop-blur-sm">
-        <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
-          <span className="text-sm font-mono text-[#a78bfa]">kim.furevikstrand</span>
-          <PageNav current="certifications" />
-        </div>
-      </nav>
+      <PageHeader current="certifications" />
 
       <main className="max-w-5xl mx-auto px-6 py-16">
         {/* Header */}

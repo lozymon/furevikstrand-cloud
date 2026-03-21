@@ -1,7 +1,11 @@
+'use client'
+
 import { useTranslations, useLocale } from 'next-intl'
 import Link from 'next/link'
 import LanguageSwitcher from './LanguageSwitcher'
+import { NAV_LINKS } from '@/lib/nav'
 import { profile } from '@/data/profile'
+import type { Locale } from '@/types'
 
 interface TopBarProps {
   onMenuOpen?: () => void
@@ -28,53 +32,29 @@ export default function TopBar({ onMenuOpen }: TopBarProps) {
           <span className="text-xs text-[#8888a8] font-mono">{t('model')}</span>
         </div>
         <span className="text-[#252535] text-xs">|</span>
-        <span className="text-xs text-[#34d399] font-mono">{t('status')}</span>
+        <span className="text-xs text-[#34d399] font-mono">{profile.availability.label[locale as Locale]}</span>
       </div>
 
       <div className="flex items-center gap-3">
         <LanguageSwitcher />
 
-        <Link href={`/${locale}/classic`} className="hidden sm:block text-xs text-[#8888a8] hover:text-[#38bdf8] transition-colors font-mono" aria-label="Classic layout">
-          /classic
-        </Link>
-        <Link href={`/${locale}/dev`} className="hidden sm:block text-xs text-[#8888a8] hover:text-[#38bdf8] transition-colors font-mono" aria-label="Dev layout">
-          /dev
-        </Link>
-        <Link href={`/${locale}/testimonials`} className="hidden sm:block text-xs text-[#8888a8] hover:text-[#38bdf8] transition-colors font-mono" aria-label="Testimonials">
-          /testimonials
-        </Link>
-        <Link href={`/${locale}/certifications`} className="hidden sm:block text-xs text-[#8888a8] hover:text-[#38bdf8] transition-colors font-mono" aria-label="Certifications">
-          /certifications
-        </Link>
+        {NAV_LINKS.filter((l) => l.path !== '').map((link) => (
+          <Link
+            key={link.path}
+            href={`/${locale}/${link.path}`}
+            className="hidden sm:block text-xs text-[#8888a8] hover:text-[#38bdf8] transition-colors font-mono"
+          >
+            {link.label}
+          </Link>
+        ))}
 
-        <a
-          href={profile.github}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-xs text-[#8888a8] hover:text-[#38bdf8] transition-colors font-mono"
-          aria-label="GitHub profile"
-        >
-          {t('github')}
-        </a>
-
-        <a
-          href={profile.gitlab}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-xs text-[#8888a8] hover:text-[#38bdf8] transition-colors font-mono"
-          aria-label="GitLab profile"
-        >
-          {t('gitlab')}
-        </a>
-
-        <a
-          href="/cv-kim-furevikstrand.pdf"
-          download
+        <button
+          onClick={() => window.open(`/${locale}/classic?print=true`, '_blank')}
           className="px-3 py-1 rounded border border-[#a78bfa] text-[#a78bfa] text-xs font-mono hover:bg-[#a78bfa] hover:text-[#0d0d10] transition-colors"
-          aria-label="Download CV PDF"
+          aria-label="View and print CV"
         >
           {t('downloadCv')}
-        </a>
+        </button>
       </div>
     </header>
   )

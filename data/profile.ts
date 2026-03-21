@@ -12,6 +12,7 @@ export const profile = {
     pt: 'Engenheiro de software sênior com 10+ anos de experiência construindo aplicações web escaláveis e de alto desempenho usando TypeScript, Node.js, React e arquiteturas de nuvem modernas.',
   },
   location: 'Norway / Remote from Brazil',
+  phone: '+55 (84) 99950-8696',
   email: 'lozymon@gmail.com',
   github: 'https://github.com/lozymon',
   gitlab: 'https://gitlab.com/lozymon',
