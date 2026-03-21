@@ -496,6 +496,31 @@ export const knowledge: KnowledgeEntry[] = [
     },
   },
 
+  // ─── Skills / Competencies ───────────────────────────────────────────────────
+  {
+    id: 'skills',
+    keys: ['skills', 'competencies', 'competence', 'abilities', 'what can you do', 'expertise', 'strengths', 'proficiency', 'capable', 'know how', 'ferdigheter', 'kompetanse', 'evner', 'hva kan du', 'habilidades', 'competências', 'o que você sabe', 'capacidades', 'qa', 'testing', 'infrastructure', 'infra', 'devops skills', 'architecture skills'],
+    replies: {
+      en: [
+        "Here's a breakdown of my top competencies by area:\n\n**Development:** TypeScript, JavaScript, Node.js, ReactJS, NestJS, Express, REST APIs, async/event-driven processing, OOP, Software Architecture, Microservices, CI/CD, Docker, Git, GitLab CI, AWS\n\n**Infrastructure:** Docker Compose, AWS (EC2, S3, SQS, DynamoDB, Lambda, CloudWatch), Nginx, HTTP Protocol, Relational & Non-relational Databases\n\n**QA:** Jest, Supertest, Cypress, Playwright, TDD, automation development, user testing\n\n**Analysis & Architecture:** Design Patterns, DDD, CQRS, Event-driven Architecture, Saga Pattern, LGPD compliance, API-first design\n\nAll competencies scored 3–4 out of 4 in a structured self-assessment across 120+ items.",
+        "My strongest areas based on a structured skills assessment:\n\n- **Core languages:** TypeScript (3/4), Node.js (3/4), JavaScript (3/4), React (3/4)\n- **Backend frameworks:** NestJS (3/4), Express (3/4), REST (3/4)\n- **Infrastructure:** Docker (3/4), GitLab CI (3/4), AWS (3/4), Relational DBs (3/4)\n- **Architecture:** Software Architecture (3/4), OOP (3/4), Microservices (2/4), Event-driven (2/4)\n- **QA:** Automation development (2/4), Jest, Cypress, Playwright\n\nFull assessment covers Development, Infrastructure, QA, Analysis, and Management areas.",
+      ],
+      no: [
+        "Her er en oversikt over mine toppkompetanser per område:\n\n**Utvikling:** TypeScript, JavaScript, Node.js, ReactJS, NestJS, Express, REST APIer, asynkron/hendelsesdrevet prosessering, OOP, Programvarearkitektur, Mikrotjenester, CI/CD, Docker, Git, GitLab CI, AWS\n\n**Infrastruktur:** Docker Compose, AWS (EC2, S3, SQS, DynamoDB, Lambda, CloudWatch), Nginx, HTTP-protokoll, relasjonelle og ikke-relasjonelle databaser\n\n**QA:** Jest, Supertest, Cypress, Playwright, TDD, automatiseringsutvikling, brukertesting\n\n**Analyse og Arkitektur:** Design Patterns, DDD, CQRS, Hendelsesdrevet Arkitektur, Saga-mønsteret, LGPD-samsvar, API-first design\n\nAlle kompetanser scoret 3–4 av 4 i en strukturert egenvurdering på 120+ punkter.",
+        "Mine sterkeste områder basert på en strukturert kompetansevurdering:\n\n- **Kjernespråk:** TypeScript (3/4), Node.js (3/4), JavaScript (3/4), React (3/4)\n- **Backend-rammeverk:** NestJS (3/4), Express (3/4), REST (3/4)\n- **Infrastruktur:** Docker (3/4), GitLab CI (3/4), AWS (3/4), Relasjonelle DBer (3/4)\n- **Arkitektur:** Programvarearkitektur (3/4), OOP (3/4), Mikrotjenester (2/4), Hendelsesdrevet (2/4)\n- **QA:** Automatiseringsutvikling (2/4), Jest, Cypress, Playwright",
+      ],
+      pt: [
+        "Aqui está um resumo das minhas principais competências por área:\n\n**Desenvolvimento:** TypeScript, JavaScript, Node.js, ReactJS, NestJS, Express, REST APIs, processamento assíncrono/orientado a eventos, OOP, Arquitetura de Software, Microsserviços, CI/CD, Docker, Git, GitLab CI, AWS\n\n**Infraestrutura:** Docker Compose, AWS (EC2, S3, SQS, DynamoDB, Lambda, CloudWatch), Nginx, HTTP Protocol, Bancos de Dados Relacionais e Não-relacionais\n\n**QA:** Jest, Supertest, Cypress, Playwright, TDD, desenvolvimento de automação, testes de usuário\n\n**Análise e Arquitetura:** Design Patterns, DDD, CQRS, Arquitetura Orientada a Eventos, Padrão Saga, conformidade LGPD, design API-first\n\nTodas as competências pontuadas 3–4 de 4 numa autoavaliação estruturada com 120+ itens.",
+        "Minhas áreas mais fortes com base numa avaliação estruturada de habilidades:\n\n- **Linguagens core:** TypeScript (3/4), Node.js (3/4), JavaScript (3/4), React (3/4)\n- **Frameworks backend:** NestJS (3/4), Express (3/4), REST (3/4)\n- **Infraestrutura:** Docker (3/4), GitLab CI (3/4), AWS (3/4), DBs Relacionais (3/4)\n- **Arquitetura:** Arquitetura de Software (3/4), OOP (3/4), Microsserviços (2/4), Orientada a Eventos (2/4)\n- **QA:** Desenvolvimento de automação (2/4), Jest, Cypress, Playwright",
+      ],
+    },
+    followUps: {
+      en: ["What's your tech stack?", "How do you approach architecture?", "Tell me about your QA experience"],
+      no: ["Hva er teknologistakken din?", "Hvordan tilnærmer du deg arkitektur?", "Fortell om din QA-erfaring"],
+      pt: ["Qual é o seu stack?", "Como você aborda arquitetura?", "Fale sobre sua experiência em QA"],
+    },
+  },
+
   // ─── Testimonials ────────────────────────────────────────────────────────────
   {
     id: 'testimonials',
