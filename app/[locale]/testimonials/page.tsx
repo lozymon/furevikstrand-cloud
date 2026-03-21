@@ -1,9 +1,9 @@
 'use client'
 
 import { useLocale } from 'next-intl'
-import Link from 'next/link'
 import Image from 'next/image'
 import { testimonials } from '@/data/testimonials'
+import PageNav from '@/components/layout/PageNav'
 import type { Locale } from '@/types'
 
 const headings = {
@@ -27,21 +27,7 @@ export default function TestimonialsPage() {
       <nav className="sticky top-0 z-10 border-b border-[#252535] bg-[#0d0d10]/90 backdrop-blur-sm">
         <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
           <span className="text-sm font-mono text-[#a78bfa]">kim.furevikstrand</span>
-          <div className="flex items-center gap-4">
-            <Link href={`/${locale}`} className="text-xs font-mono text-[#8888a8] hover:text-[#38bdf8] transition-colors">
-              ← chat
-            </Link>
-            <Link href={`/${locale}/classic`} className="text-xs font-mono text-[#8888a8] hover:text-[#38bdf8] transition-colors">
-              /classic
-            </Link>
-            <a
-              href="/cv-kim-furevikstrand.pdf"
-              download
-              className="px-3 py-1 rounded border border-[#a78bfa] text-[#a78bfa] text-xs font-mono hover:bg-[#a78bfa] hover:text-[#0d0d10] transition-colors"
-            >
-              CV ↓
-            </a>
-          </div>
+          <PageNav current="testimonials" />
         </div>
       </nav>
 

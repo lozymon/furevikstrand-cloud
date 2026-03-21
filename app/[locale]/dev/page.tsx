@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { useLocale } from 'next-intl'
 import { useRouter, usePathname } from 'next/navigation'
-import Link from 'next/link'
+import PageNav from '@/components/layout/PageNav'
 import { resolveById, detectLocale, handleSlashCommand, helpReplies, SLASH_COMMANDS } from '@/lib/chat'
 import type { Locale } from '@/types'
 import { profile } from '@/data/profile'
@@ -244,8 +244,7 @@ export default function DevPage() {
           <span className="text-[#1a6b1a] text-xs ml-2">kim@furevikstrand.cloud — bash</span>
         </div>
         <div className="flex items-center gap-3">
-          <Link href={`/${locale}`} className="text-[#1a6b1a] hover:text-[#33ff33] transition-colors text-xs">chat</Link>
-          <Link href={`/${locale}/classic`} className="text-[#1a6b1a] hover:text-[#33ff33] transition-colors text-xs">classic</Link>
+          <PageNav current="dev" variant="terminal" showCv={false} />
         </div>
       </div>
 

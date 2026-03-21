@@ -1,12 +1,14 @@
 'use client'
 
 import { useLocale } from 'next-intl'
-import Link from 'next/link'
 import Image from 'next/image'
 import { profile } from '@/data/profile'
 import { experience } from '@/data/experience'
 import { projects } from '@/data/projects'
 import { stack } from '@/data/stack'
+import { certifications } from '@/data/certifications'
+import { education } from '@/data/education'
+import PageNav from '@/components/layout/PageNav'
 import type { Locale } from '@/types'
 
 export default function ClassicPage() {
@@ -18,21 +20,7 @@ export default function ClassicPage() {
       <nav className="sticky top-0 z-10 border-b border-[#252535] bg-[#0d0d10]/90 backdrop-blur-sm">
         <div className="max-w-3xl mx-auto px-6 h-14 flex items-center justify-between">
           <span className="text-sm font-mono text-[#a78bfa]">kim.furevikstrand</span>
-          <div className="flex items-center gap-4">
-            <Link href={`/${locale}`} className="text-xs font-mono text-[#8888a8] hover:text-[#38bdf8] transition-colors">
-              ← chat
-            </Link>
-            <Link href={`/${locale}/dev`} className="text-xs font-mono text-[#8888a8] hover:text-[#38bdf8] transition-colors">
-              /dev
-            </Link>
-            <a
-              href="/cv-kim-furevikstrand.pdf"
-              download
-              className="px-3 py-1 rounded border border-[#a78bfa] text-[#a78bfa] text-xs font-mono hover:bg-[#a78bfa] hover:text-[#0d0d10] transition-colors"
-            >
-              CV ↓
-            </a>
-          </div>
+          <PageNav current="classic" />
         </div>
       </nav>
 
@@ -119,6 +107,49 @@ export default function ClassicPage() {
                   {items.map((item) => (
                     <span key={item} className="px-2 py-0.5 rounded bg-[#1e1e2e] border border-[#252535] text-[10px] text-[#38bdf8] font-mono">{item}</span>
                   ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Certifications */}
+        <section>
+          <SectionLabel>{locale === 'no' ? 'Sertifiseringer' : locale === 'pt' ? 'Certificações' : 'Certifications'}</SectionLabel>
+          <div className="mt-6 space-y-2">
+            {certifications.map((cert) => (
+              <div key={cert.name} className="flex items-start justify-between gap-4 py-2 border-b border-[#252535]/50 last:border-0">
+                <div className="min-w-0">
+                  {cert.url ? (
+                    <a href={cert.url} target="_blank" rel="noopener noreferrer" className="text-sm text-[#e2e2f0] hover:text-[#a78bfa] transition-colors">
+                      {cert.name}
+                    </a>
+                  ) : (
+                    <span className="text-sm text-[#e2e2f0]">{cert.name}</span>
+                  )}
+                  <span className="text-xs text-[#8888a8] font-mono ml-2">· {cert.authority}</span>
+                </div>
+                <span className="text-[10px] font-mono text-[#8888a8] shrink-0">
+                  {cert.date.replace('-', '/')}
+                </span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Education */}
+        <section>
+          <SectionLabel>{locale === 'no' ? 'Utdanning' : locale === 'pt' ? 'Educação' : 'Education'}</SectionLabel>
+          <div className="mt-6 space-y-4">
+            {education.map((ed) => (
+              <div key={ed.school} className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-sm text-[#e2e2f0]">{ed.school}</p>
+                  <p className="text-xs text-[#8888a8] font-mono mt-0.5">{ed.degree}</p>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <span className="text-sm">{ed.country === 'no' ? '🇳🇴' : '🇧🇷'}</span>
+                  <span className="text-[10px] font-mono text-[#8888a8]">{ed.period}</span>
                 </div>
               </div>
             ))}

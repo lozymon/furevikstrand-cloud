@@ -452,6 +452,50 @@ export const knowledge: KnowledgeEntry[] = [
     },
   },
 
+  // ─── Certifications ──────────────────────────────────────────────────────────
+  {
+    id: 'certifications',
+    keys: ['certification', 'certifications', 'certificate', 'courses', 'udemy', 'alura', 'learning', 'trained', 'sertifisering', 'kurs', 'certificação', 'cursos'],
+    replies: {
+      en: [
+        "Kim holds **14 certifications** across his core specialisations:\n\n**TypeScript & Backend:** Understanding TypeScript · NestJS Zero to Hero · Node.js Master Class · Clean Code\n\n**DevOps & Docker:** Docker Mastery · Docker for Node.js · Docker Swarm Mastery · GitLab CI & Docker · Continuous Integration\n\n**Architecture:** Microservices: Decision Making · Microservices: Design Patterns\n\n**AI:** AI-Assisted Certified Professional (Compass.uol) · NLW IA (Rocketseat)\n\nAll certificates are verifiable — ask for a specific one or check the `/classic` layout for links.",
+      ],
+      no: [
+        "Kim har **14 sertifiseringer** innen sine kjerneområder:\n\n**TypeScript & Backend:** Understanding TypeScript · NestJS Zero to Hero · Node.js Master Class · Clean Code\n\n**DevOps & Docker:** Docker Mastery · Docker for Node.js · Docker Swarm Mastery · GitLab CI & Docker · Continuous Integration\n\n**Arkitektur:** Microservices: Decision Making · Microservices: Design Patterns\n\n**AI:** AI-Assisted Certified Professional (Compass.uol) · NLW IA (Rocketseat)\n\nAlle sertifikater er verifiserbare — spør om et spesifikt eller sjekk `/classic`-layouten for lenker.",
+      ],
+      pt: [
+        "Kim possui **14 certificações** nas suas especializações principais:\n\n**TypeScript & Backend:** Understanding TypeScript · NestJS Zero to Hero · Node.js Master Class · Clean Code\n\n**DevOps & Docker:** Docker Mastery · Docker for Node.js · Docker Swarm Mastery · GitLab CI & Docker · Integração Contínua\n\n**Arquitetura:** Microsserviços: Tomada de Decisões · Microsserviços: Padrões de Projeto\n\n**IA:** AI-Assisted Certified Professional (Compass.uol) · NLW IA (Rocketseat)\n\nTodos os certificados são verificáveis — pergunte sobre um específico ou veja o layout `/classic` para os links.",
+      ],
+    },
+    followUps: {
+      en: ["What's your tech stack?", "Tell me about your experience", "What's your DevOps setup?"],
+      no: ["Hva er teknologistakken din?", "Fortell om din erfaring", "Hva er DevOps-oppsettet ditt?"],
+      pt: ["Qual é o seu stack?", "Fale sobre sua experiência", "Como é o seu setup de DevOps?"],
+    },
+  },
+
+  // ─── Education ───────────────────────────────────────────────────────────────
+  {
+    id: 'education',
+    keys: ['education', 'school', 'university', 'degree', 'studied', 'utdanning', 'skole', 'universitet', 'educação', 'escola', 'universidade', 'formação'],
+    replies: {
+      en: [
+        "Kim's formal education spans both Norway and Brazil:\n\n🇧🇷 **Universidade Federal do Rio Grande do Norte** — Technician in Information Technology (2017)\n\n🇳🇴 **Bergen Maritime** — VK2 (2001–2002)\n🇳🇴 **Manger Folkehøgskule** — Lydteknikker (2000–2001)\n🇳🇴 **Norheimsund vidaregåande skule** — VK1 (1999–2000)\n🇳🇴 **Voss vidaregåande skule** — GK (1998–1999)\n\nBeyond formal education, Kim holds 14 industry certifications in TypeScript, Docker, microservices and AI.",
+      ],
+      no: [
+        "Kims formelle utdanning spenner over både Norge og Brasil:\n\n🇧🇷 **Universidade Federal do Rio Grande do Norte** — Tekniker i informasjonsteknologi (2017)\n\n🇳🇴 **Bergen Maritime** — VK2 (2001–2002)\n🇳🇴 **Manger Folkehøgskule** — Lydteknikker (2000–2001)\n🇳🇴 **Norheimsund vidaregåande skule** — VK1 (1999–2000)\n🇳🇴 **Voss vidaregåande skule** — GK (1998–1999)\n\nI tillegg til formell utdanning har Kim 14 bransjesertifiseringer innen TypeScript, Docker, mikrotjenester og AI.",
+      ],
+      pt: [
+        "A formação acadêmica do Kim abrange tanto a Noruega quanto o Brasil:\n\n🇧🇷 **Universidade Federal do Rio Grande do Norte** — Técnico em Tecnologia da Informação (2017)\n\n🇳🇴 **Bergen Maritime** — VK2 (2001–2002)\n🇳🇴 **Manger Folkehøgskule** — Lydteknikker (2000–2001)\n🇳🇴 **Norheimsund vidaregåande skule** — VK1 (1999–2000)\n🇳🇴 **Voss vidaregåande skule** — GK (1998–1999)\n\nAlém da formação formal, Kim possui 14 certificações da indústria em TypeScript, Docker, microsserviços e IA.",
+      ],
+    },
+    followUps: {
+      en: ["What certifications do you have?", "Tell me about your experience", "What's your tech stack?"],
+      no: ["Hvilke sertifiseringer har du?", "Fortell om din erfaring", "Hva er teknologistakken din?"],
+      pt: ["Quais certificações você tem?", "Fale sobre sua experiência", "Qual é o seu stack?"],
+    },
+  },
+
   // ─── Testimonials ────────────────────────────────────────────────────────────
   {
     id: 'testimonials',
