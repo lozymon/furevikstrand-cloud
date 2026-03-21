@@ -93,6 +93,17 @@ export default function ChatMessage({ message }: Props) {
               <p className="text-[11px] text-[#c4c4d8] leading-relaxed italic border-l-2 border-[#a78bfa]/30 pl-2.5">
                 &ldquo;{message.testimonial.quote[locale as 'en' | 'no' | 'pt']}&rdquo;
               </p>
+              <a
+                href={`/${locale}/testimonials/${message.testimonial.slug}`}
+                className="inline-flex items-center gap-1 mt-2 text-[10px] text-[#a78bfa]/70 hover:text-[#a78bfa] transition-colors font-mono"
+              >
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <polyline points="15 3 21 3 21 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <line x1="10" y1="14" x2="21" y2="3" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+                /testimonials/{message.testimonial.slug}
+              </a>
             </div>
           </div>
         )}

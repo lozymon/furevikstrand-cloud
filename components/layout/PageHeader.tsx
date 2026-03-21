@@ -25,7 +25,7 @@ export default function PageHeader({ current, maxWidth = 'max-w-5xl', extra }: P
         {/* Left — logo + availability */}
         <div className="flex items-center gap-3">
           <span className="text-sm font-mono text-[#a78bfa]">kim.furevikstrand</span>
-          <span className="text-[#252535] text-xs">|</span>
+          <span className="hidden sm:inline text-[#252535] text-xs">|</span>
           <span className="w-1.5 h-1.5 rounded-full bg-[#34d399] animate-pulse" />
           <span className="text-xs text-[#34d399] font-mono hidden sm:block">
             {profile.availability.label[locale]}
@@ -35,7 +35,9 @@ export default function PageHeader({ current, maxWidth = 'max-w-5xl', extra }: P
         {/* Right — language switcher + nav + print CV + optional slot */}
         <div className="flex items-center gap-4">
           <LanguageSwitcher />
-          <PageNav current={current} />
+          <div className="hidden sm:block">
+            <PageNav current={current} />
+          </div>
           <button
             onClick={() => router.push(`/${locale}/classic?print=true`)}
             className="px-3 py-1 rounded border border-[#a78bfa] text-[#a78bfa] text-xs font-mono hover:bg-[#a78bfa] hover:text-[#0d0d10] transition-colors"

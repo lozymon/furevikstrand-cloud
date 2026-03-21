@@ -29,9 +29,9 @@ export default function TopBar({ onMenuOpen }: TopBarProps) {
         </button>
         <div className="flex items-center gap-1.5">
           <span className="w-2.5 h-2.5 rounded-full bg-[#34d399] animate-pulse" />
-          <span className="text-xs text-[#8888a8] font-mono">{t('model')}</span>
+          <span className="hidden sm:inline text-xs text-[#8888a8] font-mono">{t('model')}</span>
         </div>
-        <span className="text-[#252535] text-xs">|</span>
+        <span className="hidden sm:inline text-[#252535] text-xs">|</span>
         <span className="text-xs text-[#34d399] font-mono">{profile.availability.label[locale as Locale]}</span>
       </div>
 
