@@ -66,21 +66,21 @@ function renderTerminalText(text: string): React.ReactNode {
   })
 }
 
-const DEV_STORAGE_KEY = 'dev_chat_history'
+function storageKey(locale: string) { return `dev_chat_history_${locale}` }
 
-function loadFromStorage(): Line[] {
+function loadFromStorage(locale: string): Line[] {
   try {
-    const raw = sessionStorage.getItem(DEV_STORAGE_KEY)
+    const raw = sessionStorage.getItem(storageKey(locale))
     return raw ? (JSON.parse(raw) as Line[]) : []
   } catch {
     return []
   }
 }
 
-function saveToStorage(lines: Line[]) {
+function saveToStorage(lines: Line[], locale: string) {
   try {
     const toSave = lines.filter((l) => l.type === 'input' || l.type === 'ai')
-    sessionStorage.setItem(DEV_STORAGE_KEY, JSON.stringify(toSave))
+    sessionStorage.setItem(storageKey(locale), JSON.stringify(toSave))
   } catch {
     // ignore quota errors
   }
@@ -102,7 +102,7 @@ export default function DevPage() {
 
   // Boot sequence — skip if there's a stored session
   useEffect(() => {
-    const stored = loadFromStorage()
+    const stored = loadFromStorage(locale)
     if (stored.length > 0) {
       setLines([{ id: 'banner', type: 'banner', text: BANNER }, ...stored])
       setBooted(true)
@@ -132,7 +132,7 @@ export default function DevPage() {
 
   // Persist conversation lines to sessionStorage
   useEffect(() => {
-    if (booted) saveToStorage(lines)
+    if (booted) saveToStorage(lines, locale)
   }, [lines, booted])
 
   const streamLine = useCallback(async (text: string, id: string) => {
@@ -180,7 +180,7 @@ export default function DevPage() {
       }
       if (slash.type === 'clear') {
         setLines([{ id: makeId(), type: 'banner', text: BANNER }])
-        sessionStorage.removeItem(DEV_STORAGE_KEY)
+        sessionStorage.removeItem(storageKey(locale))
         setBusy(false)
         return
       }

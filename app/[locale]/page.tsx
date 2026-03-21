@@ -49,6 +49,15 @@ export default function ChatPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded])
 
+  // Update welcome message when locale changes (if chat only has the welcome message)
+  useEffect(() => {
+    if (isLoaded && messages.length === 1 && messages[0].role === 'ai') {
+      setMessages([{ id: makeId(), role: 'ai', content: t('welcome'), timestamp: new Date() }])
+      setCurrentFollowUps(t.raw('suggestions') as string[])
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [locale])
+
   const handleClear = useCallback(() => {
     setMessages([{ id: makeId(), role: 'ai', content: t('welcome'), timestamp: new Date() }])
     setCurrentFollowUps(t.raw('suggestions') as string[])
