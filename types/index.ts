@@ -1,3 +1,4 @@
+export type { Testimonial } from '@/data/testimonials'
 export type Locale = 'en' | 'no' | 'pt'
 
 export interface KnowledgeEntry {
@@ -15,6 +16,7 @@ export interface Message {
   content: string
   timestamp: Date
   source?: 'ollama' | 'fallback' | 'local'
+  testimonial?: import('@/data/testimonials').Testimonial
 }
 
 export interface Project {

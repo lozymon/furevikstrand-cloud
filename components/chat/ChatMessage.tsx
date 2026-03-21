@@ -70,6 +70,33 @@ export default function ChatMessage({ message }: Props) {
         <div
           dangerouslySetInnerHTML={{ __html: formatContent(message.content) }}
         />
+
+        {/* Testimonial card */}
+        {message.testimonial && (
+          <div className="mt-3 rounded-lg border border-[#a78bfa]/20 bg-[#13131f] overflow-hidden flex flex-col gap-2">
+            {message.testimonial.photo && (
+              <div className="relative w-full">
+                <Image
+                  src={message.testimonial.photo}
+                  alt={`Testimonial from ${message.testimonial.name}`}
+                  width={600}
+                  height={400}
+                  className="w-full h-auto object-contain"
+                />
+              </div>
+            )}
+            <div className="px-3 pb-3">
+              <div className="mb-1.5">
+                <p className="text-[12px] font-semibold text-[#e2e2f0] leading-tight">{message.testimonial.name}</p>
+                <p className="text-[10px] text-[#8888a8]">{message.testimonial.role ?? message.testimonial.company}</p>
+              </div>
+              <p className="text-[11px] text-[#c4c4d8] leading-relaxed italic border-l-2 border-[#a78bfa]/30 pl-2.5">
+                &ldquo;{message.testimonial.quote[locale as 'en' | 'no' | 'pt']}&rdquo;
+              </p>
+            </div>
+          </div>
+        )}
+
         <div className="flex items-center gap-2 mt-1.5">
           <time className="text-[10px] text-[#8888a8] font-mono">
             {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}

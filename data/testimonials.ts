@@ -1,4 +1,5 @@
 export interface Testimonial {
+  slug: string;
   name: string;
   company: string;
   role?: string;
@@ -15,6 +16,7 @@ export interface Testimonial {
 export const testimonials: Testimonial[] = [
   // ─── Newest first ─────────────────────────────────────────────────────────────
   {
+    slug: 'evandro-rodrigues',
     name: 'Evandro Rodrigues De Paula Junior',
     company: 'Compass.uol',
     source: 'we-share',
@@ -27,6 +29,7 @@ export const testimonials: Testimonial[] = [
     },
   },
   {
+    slug: 'alexandre-vieira',
     name: 'Alexandre Vieira de Souza',
     company: 'Compass.uol',
     source: 'we-share',
@@ -39,6 +42,7 @@ export const testimonials: Testimonial[] = [
     },
   },
   {
+    slug: 'caio-weliton',
     name: 'Caio Weliton Nascimento Queiroz',
     company: 'Compass.uol',
     source: 'we-share',
@@ -51,6 +55,7 @@ export const testimonials: Testimonial[] = [
     },
   },
   {
+    slug: 'jose-jacinto',
     name: 'Jose Jacinto Costa Moraes',
     company: 'Compass.uol',
     source: 'we-share',
@@ -63,6 +68,7 @@ export const testimonials: Testimonial[] = [
     },
   },
   {
+    slug: 'isabela-barbosa',
     name: 'Isabela Barbosa Dos Santos',
     company: 'Compass.uol',
     source: 'we-share',
@@ -75,6 +81,7 @@ export const testimonials: Testimonial[] = [
     },
   },
   {
+    slug: 'jesse-levandovski',
     name: 'Jesse Levandovski',
     company: 'Compass.uol',
     source: 'we-share',
@@ -87,6 +94,7 @@ export const testimonials: Testimonial[] = [
     },
   },
   {
+    slug: 'renato-wagner',
     name: 'Renato Wagner Anunciacao',
     company: 'Compass.uol',
     source: 'we-share',
@@ -99,6 +107,7 @@ export const testimonials: Testimonial[] = [
     },
   },
   {
+    slug: 'jose-adilson',
     name: 'Jose Adilson Junior Da Silva',
     company: 'Compass.uol',
     source: 'we-share',
@@ -111,6 +120,7 @@ export const testimonials: Testimonial[] = [
     },
   },
   {
+    slug: 'lucas-novaes',
     name: 'Lucas Novaes',
     company: 'ClearSale',
     role: 'Former Velit colleague',

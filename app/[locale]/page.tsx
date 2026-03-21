@@ -14,6 +14,7 @@ import {
   detectLocale,
   handleSlashCommand,
   helpReplies,
+  resolveTestimonial,
 } from '@/lib/chat'
 import type { Message, Locale } from '@/types'
 
@@ -116,6 +117,24 @@ export default function ChatPage() {
           setShowSuggestions(true)
           return
         }
+      }
+
+      // Testimonial lookup
+      const testimonial = resolveTestimonial(text)
+      if (testimonial) {
+        await delay(350)
+        setIsTyping(false)
+        const testimonialReplies: Record<string, string> = {
+          en: `Here's what **${testimonial.name}** said:`,
+          no: `Her er hva **${testimonial.name}** sa:`,
+          pt: `Veja o que **${testimonial.name}** disse:`,
+        }
+        const id = makeId()
+        setMessages((prev) => [...prev, { id, role: 'ai', content: '', timestamp: new Date(), testimonial }])
+        await streamText(testimonialReplies[locale] ?? testimonialReplies.en, id)
+        setCurrentFollowUps(suggestions)
+        setShowSuggestions(true)
+        return
       }
 
       // Language auto-detection

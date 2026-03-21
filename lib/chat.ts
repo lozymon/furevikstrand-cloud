@@ -1,4 +1,5 @@
 import { knowledge } from '@/data/knowledge'
+import { testimonials, type Testimonial } from '@/data/testimonials'
 import type { KnowledgeEntry, Locale } from '@/types'
 
 // ─── Levenshtein distance for fuzzy matching ────────────────────────────────
@@ -223,6 +224,32 @@ function getFallback(locale: Locale): ResolveResult {
     followUps: fallbackFollowUps[locale],
     entryId: 'fallback',
   }
+}
+
+// ─── Testimonial lookup ───────────────────────────────────────────────────────
+const testimonialTriggers = ['testimonial', 'reference', 'recommendation', 'said about', 'what did', 'anbefaling', 'anbefale', 'anbefalte', 'referanse', 'depoimento', 'recomendação', 'recomendacao']
+
+export function resolveTestimonial(input: string): Testimonial | null {
+  const lower = input.toLowerCase()
+  if (!testimonialTriggers.some((t) => lower.includes(t))) return null
+
+  // Try to find a specific person by name
+  for (const t of testimonials) {
+    const nameParts = t.name.toLowerCase().split(/\s+/)
+    for (const part of nameParts) {
+      if (part.length > 3 && lower.includes(part)) return t
+    }
+    const words = lower.split(/\s+/)
+    for (const part of nameParts) {
+      if (part.length <= 3) continue
+      for (const word of words) {
+        if (word.length > 3 && levenshtein(word, part) <= 1) return t
+      }
+    }
+  }
+
+  // No name specified — return a random testimonial
+  return testimonials[Math.floor(Math.random() * testimonials.length)]
 }
 
 // ─── Help command response ────────────────────────────────────────────────────

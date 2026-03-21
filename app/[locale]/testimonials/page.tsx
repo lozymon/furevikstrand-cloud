@@ -2,6 +2,7 @@
 
 import { useLocale } from 'next-intl'
 import Image from 'next/image'
+import Link from 'next/link'
 import { testimonials } from '@/data/testimonials'
 import PageHeader from '@/components/layout/PageHeader'
 import type { Locale } from '@/types'
@@ -35,9 +36,10 @@ export default function TestimonialsPage() {
         {/* Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {testimonials.map((t) => (
-            <div
-              key={t.name}
-              className="rounded-xl border border-[#252535] bg-[#161620] overflow-hidden flex flex-col"
+            <Link
+              key={t.slug}
+              href={`/${locale}/testimonials/${t.slug}`}
+              className="rounded-xl border border-[#252535] bg-[#161620] overflow-hidden flex flex-col hover:border-[#a78bfa]/30 transition-colors"
             >
               {/* Original card image */}
               {t.photo && (
@@ -75,7 +77,7 @@ export default function TestimonialsPage() {
                   </div>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </main>
