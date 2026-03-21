@@ -45,12 +45,34 @@ const BOOT_LINES: Record<Locale, string[]> = {
   ],
 }
 
+type Line = { id: string; type: 'banner' | 'boot' | 'output' | 'input' | 'ai'; text: string; source?: 'claude' | 'ollama' | 'fallback' | 'local' }
+
+const DEV_STORAGE_KEY = 'dev_chat_history'
+
+function loadFromStorage(): Line[] {
+  try {
+    const raw = sessionStorage.getItem(DEV_STORAGE_KEY)
+    return raw ? (JSON.parse(raw) as Line[]) : []
+  } catch {
+    return []
+  }
+}
+
+function saveToStorage(lines: Line[]) {
+  try {
+    const toSave = lines.filter((l) => l.type === 'input' || l.type === 'ai')
+    sessionStorage.setItem(DEV_STORAGE_KEY, JSON.stringify(toSave))
+  } catch {
+    // ignore quota errors
+  }
+}
+
 export default function DevPage() {
   const locale = useLocale() as Locale
   const router = useRouter()
   const pathname = usePathname()
 
-  const [lines, setLines] = useState<{ id: string; type: 'banner' | 'boot' | 'output' | 'input' | 'ai'; text: string; source?: 'ollama' | 'fallback' | 'local' }[]>([])
+  const [lines, setLines] = useState<Line[]>([])
   const [input, setInput] = useState('')
   const [busy, setBusy] = useState(false)
   const [booted, setBooted] = useState(false)
@@ -59,8 +81,15 @@ export default function DevPage() {
   const inputRef = useRef<HTMLInputElement>(null)
   const streamingRef = useRef(false)
 
-  // Boot sequence
+  // Boot sequence — skip if there's a stored session
   useEffect(() => {
+    const stored = loadFromStorage()
+    if (stored.length > 0) {
+      setLines([{ id: 'banner', type: 'banner', text: BANNER }, ...stored])
+      setBooted(true)
+      return
+    }
+
     let cancelled = false
     async function boot() {
       setLines([{ id: 'banner', type: 'banner', text: BANNER }])
@@ -76,11 +105,16 @@ export default function DevPage() {
     boot()
     return () => { cancelled = true }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locale])
+  }, [])
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [lines])
+
+  // Persist conversation lines to sessionStorage
+  useEffect(() => {
+    if (booted) saveToStorage(lines)
+  }, [lines, booted])
 
   const streamLine = useCallback(async (text: string, id: string) => {
     const CHUNK = 3
@@ -127,6 +161,7 @@ export default function DevPage() {
       }
       if (slash.type === 'clear') {
         setLines([{ id: makeId(), type: 'banner', text: BANNER }])
+        sessionStorage.removeItem(DEV_STORAGE_KEY)
         setBusy(false)
         return
       }
@@ -154,18 +189,23 @@ export default function DevPage() {
 
     const id = makeId()
 
+    // Build conversation history from prior input/ai lines
+    const history = lines
+      .filter((l) => (l.type === 'input' || l.type === 'ai') && l.text.trim())
+      .slice(-10)
+      .map((l) => ({ role: l.type === 'input' ? 'user' : 'assistant', content: l.text }))
+
     try {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text, locale }),
+        body: JSON.stringify({ message: text, locale, history }),
       })
 
-      const source = (res.headers.get('X-Reply-Source') ?? 'fallback') as 'ollama' | 'fallback'
+      const source = (res.headers.get('X-Reply-Source') ?? 'fallback') as 'claude' | 'ollama' | 'fallback'
       setLines((prev) => [...prev, { id, type: 'ai', text: '', source }])
 
-      if (source === 'ollama' && res.body) {
-        // Stream real tokens from Ollama
+      if ((source === 'claude' || source === 'ollama') && res.body) {
         const reader = res.body.getReader()
         const decoder = new TextDecoder()
         let accumulated = ''
@@ -176,7 +216,6 @@ export default function DevPage() {
           setLines((prev) => prev.map((l) => l.id === id ? { ...l, text: accumulated } : l))
         }
       } else {
-        // Keyword fallback — animate with typewriter
         const raw = await res.text()
         const plain = raw
           .replace(/\*\*(.*?)\*\*/g, '$1')
@@ -189,7 +228,7 @@ export default function DevPage() {
     }
 
     setBusy(false)
-  }, [busy, locale, pathname, router, streamLine])
+  }, [busy, lines, locale, pathname, router, streamLine])
 
   const handleSubmit = useCallback(() => submitText(input.trim()), [submitText, input])
 
@@ -277,7 +316,7 @@ export default function DevPage() {
             )}
             {line.type === 'ai' && (
               <div className="pl-4">
-                {line.source === 'ollama' && (
+                {(line.source === 'ollama' || line.source === 'claude') && (
                   <span className="text-[#1a6b1a] text-[10px] font-mono mr-2 border border-[#1a6b1a] px-1 rounded select-none">AI</span>
                 )}
                 <span className="text-[#33ff33] whitespace-pre-wrap leading-relaxed">
