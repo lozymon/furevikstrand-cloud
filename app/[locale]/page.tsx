@@ -49,6 +49,13 @@ export default function ChatPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded])
 
+  const handleClear = useCallback(() => {
+    setMessages([{ id: makeId(), role: 'ai', content: t('welcome'), timestamp: new Date() }])
+    setCurrentFollowUps(t.raw('suggestions') as string[])
+    setShowSuggestions(true)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [t])
+
   const streamText = useCallback(async (text: string, id: string) => {
     const CHUNK = 3
     const TICK = 18
@@ -101,8 +108,7 @@ export default function ChatPage() {
           return
         }
         if (slash.type === 'clear') {
-          setMessages([{ id: makeId(), role: 'ai', content: t('welcome'), timestamp: new Date() }])
-          setShowSuggestions(true)
+          handleClear()
           return
         }
         if (slash.type === 'topic') {
@@ -187,7 +193,7 @@ export default function ChatPage() {
 
       setShowSuggestions(true)
     },
-    [locale, pathname, router, suggestions, streamText]
+    [handleClear, locale, pathname, router, suggestions, streamText]
   )
 
   return (
@@ -206,7 +212,7 @@ export default function ChatPage() {
               showSuggestions={showSuggestions && !isTyping}
               onSuggestion={handleSend}
             />
-            <ChatInput onSend={handleSend} disabled={isTyping} />
+            <ChatInput onSend={handleSend} onClear={handleClear} disabled={isTyping} />
           </main>
         </div>
       </div>

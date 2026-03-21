@@ -7,10 +7,11 @@ import SlashMenu from './SlashMenu'
 
 interface Props {
   onSend: (text: string) => void
+  onClear: () => void
   disabled?: boolean
 }
 
-export default function ChatInput({ onSend, disabled }: Props) {
+export default function ChatInput({ onSend, onClear, disabled }: Props) {
   const t = useTranslations('chat')
   const [value, setValue] = useState('')
   const [activeIndex, setActiveIndex] = useState(0)
@@ -121,6 +122,20 @@ export default function ChatInput({ onSend, disabled }: Props) {
           style={{ outline: 'none', boxShadow: 'none' }}
           className="flex-1 bg-[#1e1e2e] border border-[#252535] rounded-lg px-3 py-2 text-sm text-[#e2e2f0] placeholder-[#8888a8] font-mono resize-none focus:border-[#a78bfa]/50 transition-colors disabled:opacity-50"
         />
+        <button
+          type="button"
+          onClick={onClear}
+          disabled={disabled}
+          aria-label="Clear chat"
+          className="w-9 h-9 rounded-lg border border-[#252535] flex items-center justify-center hover:border-[#a78bfa]/50 hover:text-[#a78bfa] text-[#8888a8] transition-colors disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <polyline points="3 6 5 6 21 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M19 6l-1 14H6L5 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M10 11v6M14 11v6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+            <path d="M9 6V4h6v2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
         <button
           type="submit"
           disabled={disabled || !value.trim()}
