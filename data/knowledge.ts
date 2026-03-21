@@ -47,7 +47,7 @@ export const knowledge: KnowledgeEntry[] = [
       pt: [
         "Sou **Kim Andrè Furevikstrand** — um engenheiro de software sênior norueguês com 10+ anos de experiência profissional. Me especializo em desenvolvimento full-stack TypeScript-first: NestJS e Node.js no backend, React e Next.js no frontend. Construí de sistemas ERP internos que processam milhões de transações a plataformas de microsserviços em tempo real para clientes corporativos.",
         "Kim é um engenheiro full-stack sênior que passou uma década construindo produtos que realmente entram em produção e escalam. Seu ponto forte é o ecossistema TypeScript/Node.js/React, mas está igualmente confortável desenhando schemas de banco de dados, otimizando queries lentas ou mentorando devs junior em code reviews.",
-        "Em resumo: 10+ anos entregando TypeScript, um engenheiro norueguês atualmente baseado no Brasil, e ativamente procurando o papel sênior certo — idealmente remote-first ou baseado na Noruega.",
+        "Em resumo: 10+ anos entregando TypeScript, um engenheiro norueguês atualmente baseado no Brasil, e ativamente buscando a posição sênior certa — idealmente remote-first ou baseada na Noruega.",
       ],
     },
     followUps: {
@@ -121,8 +121,8 @@ export const knowledge: KnowledgeEntry[] = [
         "My current project is a multi-tenant sports platform with a trainer mobile app and an admin backoffice. The backend is a cluster of NestJS services on AWS, with MariaDB, Docker for containerisation, and event-driven flows between services. I joined as a senior engineer and have progressively taken on more architectural ownership — the kind of role I want to continue in.",
       ],
       no: [
-        "Hos **Compass.uol** er jeg Senior Utvikler og bygger en plattform for idrettsarrangementer — turneringsregistrering, utøverabonnementer og varesalg, alt servert gjennom et NestJS mikrotjeneste-backend. Et av mine mer interessante bidrag var å løse et datakonsistenseproblem på tvers av distribuerte databaser ved å designe en dedikert replikerings-mikrotjeneste med **Saga-mønsteret**. Jeg mentorerer også to juniorutviklere.",
-        "Mit nåværende prosjekt er en multi-tenant idrettsplattform med en trener-mobilapp og et admin-backoffice. Backend er en klynge av NestJS-tjenester på AWS, med PostgreSQL per tjeneste og Docker for containerisering. Jeg ble med som senioringeniør og har gradvis tatt på meg mer arkitektonisk eierskap.",
+        "Hos **Compass.uol** er jeg Senior Utvikler og bygger en plattform for idrettsarrangementer — turneringsregistrering, utøverabonnementer og varesalg, alt servert gjennom en NestJS-mikrotjenestebackend. Et av mine mer interessante bidrag var å løse et datakonsistenseproblem på tvers av distribuerte databaser ved å designe en dedikert replikerings-mikrotjeneste med **Saga-mønsteret**. Jeg mentorerer også to juniorutviklere.",
+        "Mitt nåværende prosjekt er en multi-tenant idrettsplattform med en trener-mobilapp og et admin-backoffice. Backend er en klynge av NestJS-tjenester på AWS, med PostgreSQL per tjeneste og Docker for containerisering. Jeg ble med som senioringeniør og har gradvis tatt på meg mer arkitektonisk eierskap.",
       ],
       pt: [
         "Na **Compass.uol** sou Desenvolvedor Sênior construindo uma plataforma de gestão de eventos esportivos — registro em torneios, assinaturas de atletas e vendas de itens, todos servidos por um backend de microsserviços NestJS. Uma das minhas contribuições mais interessantes foi resolver um problema de consistência de dados entre bancos distribuídos projetando um microsserviço de replicação dedicado usando o **padrão Saga**. Também mentoro dois desenvolvedores júnior.",
@@ -221,7 +221,7 @@ export const knowledge: KnowledgeEntry[] = [
         "Open to the right opportunity. My criteria: senior or lead role, TypeScript/Node.js stack (or polyglot team that values these), remote-friendly or Norway-based, and a product I can care about. I'm not in a rush, but I'm actively talking to teams. Best first step: email lozymon@gmail.com with a bit of context about your team.",
       ],
       no: [
-        "Ja — jeg ser aktivt. Jeg er interessert i **senior IC- eller tech lead**-stillinger, ideelt sett remote-first eller basert i Norge. Jeg leter etter et team som jobber med interessante tekniske problemer med TypeScript-tung stakk. Nå meg på **lozymon@gmail.com** for en samtale.",
+        "Ja — jeg leter aktivt. Jeg er interessert i **senior IC- eller tech lead**-stillinger, ideelt sett remote-first eller basert i Norge. Jeg leter etter et team som jobber med interessante tekniske problemer med TypeScript-tung stakk. Nå meg på **lozymon@gmail.com** for en samtale.",
         "Åpen for den rette muligheten. Mine kriterier: senior- eller ledelsesrolle, TypeScript/Node.js-stakk, remote-vennlig eller norskbasert. Beste første steg: e-post lozymon@gmail.com med litt kontekst om teamet ditt.",
       ],
       pt: [
@@ -246,7 +246,7 @@ export const knowledge: KnowledgeEntry[] = [
         "I've naturally grown into a mentoring role over the last few years. What I've found works: regular code reviews with written explanations, asking juniors to explain their design before I comment, and creating space for them to make (and learn from) small mistakes in safe contexts. Strong juniors make the whole team better — it's worth the investment.",
       ],
       no: [
-        "Mentoring er noe jeg tar på alvor. Hos Compass.uol mentorerer jeg to juniorutviklere — strukturerte kodegjennomganger, arkitekturgjennomganger og paressesjoner. Min tilnærming: jeg prøver å forklare *hvorfor* bak tilbakemeldingen, ikke bare flagge hva som er galt.",
+        "Mentoring er noe jeg tar på alvor. Hos Compass.uol mentorerer jeg to juniorutviklere — strukturerte kodegjennomganger, arkitekturgjennomganger og pairingsessioner. Min tilnærming: jeg prøver å forklare *hvorfor* bak tilbakemeldingen, ikke bare flagge hva som er galt.",
         "Jeg har naturlig vokst inn i en mentorrolle de siste årene. Hva jeg finner fungerer: regelmessige kodegjennomganger med skriftlige forklaringer, be juniorer forklare designet sitt, og skape rom for at de kan lære av mindre feil.",
       ],
       pt: [
@@ -296,7 +296,7 @@ export const knowledge: KnowledgeEntry[] = [
         "DevOps for me is about making deployments boring. A green CI, automated tests, and a one-click deploy pipeline mean you can ship with confidence. I've set up these pipelines from scratch multiple times and have experience with AWS (EC2, RDS, S3) for managed cloud and self-hosted VPS setups for cost-efficient projects.",
       ],
       no: [
-        "Jeg er komfortabel gjennom hele distribusjonslivssyklusen. Alle prosjektene mine kjører i Docker — flerstegsbygninger for å holde bildestørrelsene små, Docker Compose for lokal utvikling. For CI/CD bruker jeg GitHub Actions. Jeg selvhoster på en VPS med **Coolify** — denne hele porteføljen er distribuert på den måten.",
+        "Jeg er komfortabel gjennom hele distribusjonslivssyklusen. Alle prosjektene mine kjører i Docker — flerstegsbygninger for å holde bildestørrelsene små, Docker Compose for lokal utvikling. For CI/CD bruker jeg GitHub Actions. Jeg selvhoster på en VPS med **Coolify** — hele denne porteføljen er distribuert på den måten.",
         "DevOps for meg handler om å gjøre distribusjoner kjedelige. En grønn CI, automatiserte tester og en ett-klikks distribusjonspipeline betyr at du kan levere med tillit.",
       ],
       pt: [
