@@ -2,11 +2,14 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
+import { useLocale } from 'next-intl'
 import { testimonials } from '@/data/testimonials'
 import type { Locale } from '@/types'
 
-export default function TestimonialsCarousel({ locale }: { locale: Locale }) {
+export default function TestimonialsCarousel({ locale, compact = false }: { locale: Locale; compact?: boolean }) {
   const [index, setIndex] = useState(0)
+  const routeLocale = useLocale()
   const t = testimonials[index]
 
   const prev = () => setIndex((i) => (i - 1 + testimonials.length) % testimonials.length)
@@ -14,6 +17,29 @@ export default function TestimonialsCarousel({ locale }: { locale: Locale }) {
 
   const label =
     locale === 'no' ? 'Anbefalinger' : locale === 'pt' ? 'Recomendações' : 'Testimonials'
+
+  if (compact) {
+    return (
+      <div className="p-3 border-b border-[#252535]">
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-[10px] text-[#8888a8] font-mono uppercase tracking-wider">{label}</p>
+          <div className="flex items-center gap-1">
+            <button onClick={prev} aria-label="Previous testimonial" className="w-4 h-4 flex items-center justify-center text-[#8888a8] hover:text-[#a78bfa] transition-colors">‹</button>
+            <span className="text-[10px] text-[#8888a8] font-mono">{index + 1}/{testimonials.length}</span>
+            <button onClick={next} aria-label="Next testimonial" className="w-4 h-4 flex items-center justify-center text-[#8888a8] hover:text-[#a78bfa] transition-colors">›</button>
+          </div>
+        </div>
+        <Link href={`/${routeLocale}/testimonials`} className="group block hover:opacity-80 transition-opacity">
+          <blockquote className="text-[10px] text-[#c0c0d8] italic line-clamp-2 mb-1.5">
+            "{t.quote[locale]}"
+          </blockquote>
+          <p className="text-[10px] text-[#8888a8] font-mono truncate group-hover:text-[#38bdf8] transition-colors">
+            — {t.name}
+          </p>
+        </Link>
+      </div>
+    )
+  }
 
   return (
     <div className="p-4 border-b border-[#252535]">
@@ -40,7 +66,7 @@ export default function TestimonialsCarousel({ locale }: { locale: Locale }) {
         </div>
       </div>
 
-      <blockquote className="text-[11px] text-[#c0c0d8] leading-relaxed italic mb-3">
+      <blockquote className="text-[11px] text-[#c0c0d8] leading-relaxed italic mb-3 line-clamp-3">
         "{t.quote[locale]}"
       </blockquote>
 

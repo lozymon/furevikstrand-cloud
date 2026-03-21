@@ -36,16 +36,19 @@ export default function Sidebar() {
         </div>
       </div>
 
-      {/* Stats */}
-      <div className="p-4 border-b border-[#252535] grid grid-cols-3 gap-3">
-        <Stat label={locale === 'en' ? 'Experience' : locale === 'no' ? 'Erfaring' : 'Experiência'} value={profile.stats.experience + (locale === 'no' ? ' år' : locale === 'pt' ? ' anos' : ' yrs')} />
-        <Stat label={locale === 'en' ? 'Projects' : locale === 'no' ? 'Prosjekter' : 'Projetos'} value={profile.stats.projects + ''} />
-        <Stat label={locale === 'en' ? 'Languages' : locale === 'no' ? 'Språk' : 'Idiomas'} value={profile.stats.languages + ''} />
-      </div>
-
-      {/* Info rows */}
-      <div className="p-4 border-b border-[#252535] space-y-2">
-        <InfoRow icon="📍" value={t('location')} />
+      {/* Stats + location */}
+      <div className="p-4 border-b border-[#252535]">
+        <div className="grid grid-cols-3 gap-3 mb-3">
+          <Stat label={locale === 'en' ? 'Experience' : locale === 'no' ? 'Erfaring' : 'Experiência'} value={profile.stats.experience + (locale === 'no' ? ' år' : locale === 'pt' ? ' anos' : ' yrs')} />
+          <Stat label={locale === 'en' ? 'Projects' : locale === 'no' ? 'Prosjekter' : 'Projetos'} value={profile.stats.projects + ''} />
+          <Stat label={locale === 'en' ? 'Languages' : locale === 'no' ? 'Språk' : 'Idiomas'} value={profile.stats.languages + ''} />
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-xs">📍</span>
+          <span className="text-[10px] text-[#8888a8] font-mono">
+            {locale === 'no' ? 'Natal, Brasil · Åpen for Norge' : locale === 'pt' ? 'Natal, Brasil · Aberto à Noruega' : 'Natal, Brazil · Open to Norway'}
+          </span>
+        </div>
       </div>
 
       {/* Language proficiency */}
@@ -89,7 +92,7 @@ export default function Sidebar() {
       </div>
 
       {/* Testimonials */}
-      <TestimonialsCarousel locale={locale} />
+      <TestimonialsCarousel locale={locale} compact />
 
       {/* Links */}
       <div className="p-4">
@@ -114,14 +117,6 @@ function Stat({ label, value }: { label: string; value: string }) {
   )
 }
 
-function InfoRow({ icon, value }: { icon: string; value: string }) {
-  return (
-    <div className="flex items-center gap-2">
-      <span className="text-xs">{icon}</span>
-      <span className="text-xs text-[#8888a8] font-mono">{value}</span>
-    </div>
-  )
-}
 
 function LangBadge({ flag, lang, level }: { flag: string; lang: string; level: string }) {
   return (
