@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, getTranslations } from 'next-intl/server'
 import { routing } from '@/i18n/routing'
+import { ChatProvider } from '@/context/ChatContext'
 import '../globals.css'
 
 export function generateStaticParams() {
@@ -51,7 +52,9 @@ export default async function LocaleLayout({
     <html lang={locale} className="h-full" suppressHydrationWarning>
       <body className="h-full">
         <NextIntlClientProvider messages={messages}>
-          {children}
+          <ChatProvider>
+            {children}
+          </ChatProvider>
         </NextIntlClientProvider>
       </body>
     </html>

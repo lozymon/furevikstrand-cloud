@@ -16,7 +16,8 @@ import {
   helpReplies,
   resolveTestimonial,
 } from '@/lib/chat'
-import type { Message, Locale } from '@/types'
+import { useChatContext } from '@/context/ChatContext'
+import type { Locale } from '@/types'
 
 function makeId() {
   return Math.random().toString(36).slice(2)
@@ -34,23 +35,19 @@ export default function ChatPage() {
 
   const suggestions = t.raw('suggestions') as string[]
 
-  const [messages, setMessages] = useState<Message[]>([
-    { id: makeId(), role: 'ai', content: t('welcome'), timestamp: new Date() },
-  ])
-  const [isTyping, setIsTyping] = useState(false)
+  const { messages, setMessages, isTyping, setIsTyping, showSuggestions, setShowSuggestions, currentFollowUps, setCurrentFollowUps, isLoaded } = useChatContext()
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
-  const [showSuggestions, setShowSuggestions] = useState(true)
-  const [currentFollowUps, setCurrentFollowUps] = useState<string[]>(suggestions)
 
   const streamingRef = useRef(false)
 
+  // Initialise welcome message only if no stored history
   useEffect(() => {
-    setMessages([{ id: makeId(), role: 'ai', content: t('welcome'), timestamp: new Date() }])
-    setShowSuggestions(true)
-    setCurrentFollowUps(t.raw('suggestions') as string[])
-
+    if (isLoaded && messages.length === 0) {
+      setMessages([{ id: makeId(), role: 'ai', content: t('welcome'), timestamp: new Date() }])
+      setCurrentFollowUps(t.raw('suggestions') as string[])
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locale])
+  }, [isLoaded])
 
   const streamText = useCallback(async (text: string, id: string) => {
     const CHUNK = 3
