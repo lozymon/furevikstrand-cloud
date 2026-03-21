@@ -15,7 +15,7 @@ export interface Message {
   role: 'user' | 'ai'
   content: string
   timestamp: Date
-  source?: 'ollama' | 'fallback' | 'local'
+  source?: 'claude' | 'ollama' | 'fallback' | 'local'
   testimonial?: import('@/data/testimonials').Testimonial
 }
 

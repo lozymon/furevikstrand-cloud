@@ -1,5 +1,6 @@
 export const dynamic = 'force-dynamic'
 
+import Anthropic from '@anthropic-ai/sdk'
 import { NextResponse } from 'next/server'
 import { knowledge } from '@/data/knowledge'
 import { profile } from '@/data/profile'
@@ -33,7 +34,11 @@ function buildSystemPrompt(locale: Locale): string {
         : 'Respond in English.'
 
   const knowledgeSummary = knowledge
-    .map((e) => `[${e.id}]: ${e.replies.en[0]}`)
+    .filter((e) => e.id !== 'greeting')
+    .map((e) => {
+      const allReplies = e.replies.en.join('\n- ')
+      return `### ${e.id}\n- ${allReplies}`
+    })
     .join('\n\n')
 
   return `You are a portfolio assistant for ${profile.name}, a ${profile.role.en}. ${localeInstruction}
@@ -44,6 +49,7 @@ RULES:
 - Keep answers concise: 2-4 sentences unless the user asks for detail.
 - Do not make up information not present in the context below.
 - Do not reveal that you are an LLM — just say you are Kim's portfolio assistant.
+- Use conversation history to understand follow-up questions like "tell me more" or "what about X".
 
 FORMATTING:
 - Use **bold** for names, companies, and emphasis.
@@ -67,6 +73,12 @@ KNOWLEDGE BASE:
 ${knowledgeSummary}`
 }
 
+// ─── History type ─────────────────────────────────────────────────────────────
+interface HistoryMessage {
+  role: 'user' | 'assistant'
+  content: string
+}
+
 // ─── Route handler ────────────────────────────────────────────────────────────
 export async function POST(request: Request) {
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
@@ -77,6 +89,7 @@ export async function POST(request: Request) {
 
   let message: string
   let locale: Locale
+  let history: HistoryMessage[]
   try {
     const body = await request.json()
     message = String(body.message ?? '')
@@ -84,6 +97,15 @@ export async function POST(request: Request) {
       .replace(/<[^>]*>/g, '')
       .trim()
     locale = (['en', 'no', 'pt'].includes(body.locale) ? body.locale : 'en') as Locale
+    history = Array.isArray(body.history)
+      ? body.history
+          .filter((m: unknown) => {
+            if (typeof m !== 'object' || m === null) return false
+            const msg = m as Record<string, unknown>
+            return (msg.role === 'user' || msg.role === 'assistant') && typeof msg.content === 'string' && msg.content.trim()
+          })
+          .slice(-10)
+      : []
   } catch {
     return NextResponse.json({ error: 'Invalid request' }, { status: 400 })
   }
@@ -92,20 +114,67 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Empty message' }, { status: 400 })
   }
 
-  const ollamaHost = process.env.OLLAMA_HOST
-  const model = process.env.OLLAMA_MODEL ?? 'gemma3:4b'
+  const systemPrompt = buildSystemPrompt(locale)
+  const claudeEnabled = process.env.DISABLE_CLAUDE !== 'true'
+  const ollamaEnabled = process.env.DISABLE_OLLAMA !== 'true'
+
+  // ─── Try Claude API ────────────────────────────────────────────────────────
+  if (claudeEnabled && process.env.ANTHROPIC_API_KEY) {
+    try {
+      const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+
+      const stream = anthropic.messages.stream({
+        model: process.env.CLAUDE_MODEL ?? 'claude-haiku-4-5',
+        max_tokens: 512,
+        system: systemPrompt,
+        messages: [
+          ...history,
+          { role: 'user', content: message },
+        ],
+      })
+
+      const encoder = new TextEncoder()
+      const readable = new ReadableStream({
+        async start(controller) {
+          for await (const event of stream) {
+            if (
+              event.type === 'content_block_delta' &&
+              event.delta.type === 'text_delta'
+            ) {
+              controller.enqueue(encoder.encode(event.delta.text))
+            }
+          }
+          controller.close()
+        },
+      })
+
+      return new Response(readable, {
+        headers: {
+          'Content-Type': 'text/plain; charset=utf-8',
+          'X-Reply-Source': 'claude',
+          'Cache-Control': 'no-cache',
+        },
+      })
+    } catch (err) {
+      console.warn('[chat] Claude API error, falling back to Ollama:', err)
+    }
+  }
 
   // ─── Try Ollama ───────────────────────────────────────────────────────────
-  if (ollamaHost) {
+  const ollamaHost = process.env.OLLAMA_HOST
+  const ollamaModel = process.env.OLLAMA_MODEL ?? 'gemma3:4b'
+
+  if (ollamaEnabled && ollamaHost) {
     try {
       const ollamaRes = await fetch(`${ollamaHost}/api/chat`, {
         method: 'POST',
         cache: 'no-store',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model,
+          model: ollamaModel,
           messages: [
-            { role: 'system', content: buildSystemPrompt(locale) },
+            { role: 'system', content: systemPrompt },
+            ...history,
             { role: 'user', content: message },
           ],
           stream: true,

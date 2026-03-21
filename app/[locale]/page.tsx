@@ -150,18 +150,24 @@ export default function ChatPage() {
 
       const id = makeId()
 
+      // Build conversation history for the API (last 10 exchanges, excluding testimonials)
+      const history = messages
+        .filter((m) => !m.testimonial && m.content.trim())
+        .slice(-10)
+        .map((m) => ({ role: m.role === 'ai' ? 'assistant' : 'user', content: m.content }))
+
       try {
         const res = await fetch('/api/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: text, locale }),
+          body: JSON.stringify({ message: text, locale, history }),
         })
 
-        const source = (res.headers.get('X-Reply-Source') ?? 'fallback') as 'ollama' | 'fallback'
+        const source = (res.headers.get('X-Reply-Source') ?? 'fallback') as 'claude' | 'ollama' | 'fallback'
         setIsTyping(false)
         setMessages((prev) => [...prev, { id, role: 'ai', content: '', timestamp: new Date(), source }])
 
-        if (source === 'ollama' && res.body) {
+        if ((source === 'claude' || source === 'ollama') && res.body) {
           const reader = res.body.getReader()
           const decoder = new TextDecoder()
           let accumulated = ''
