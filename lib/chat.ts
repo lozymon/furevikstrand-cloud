@@ -166,6 +166,22 @@ function pick<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)]
 }
 
+// ─── Continuation intent detection ───────────────────────────────────────────
+const CONTINUATION_KEYS = [
+  // English
+  'more', 'tell me more', 'expand', 'elaborate', 'go on', 'continue', 'and then', 'what else',
+  'keep going', 'say more', 'explain more', 'give me more', 'more details', 'more info',
+  // Norwegian
+  'mer', 'fortell mer', 'utvid', 'fortsett', 'hva mer', 'si mer', 'mer detaljer', 'mer info',
+  // Portuguese
+  'mais', 'continue', 'expanda', 'elabore', 'me conta mais', 'mais detalhes', 'pode continuar',
+]
+
+function isContinuation(input: string): boolean {
+  const lower = input.toLowerCase().trim()
+  return CONTINUATION_KEYS.some((k) => lower === k || lower.startsWith(k + ' ') || lower.endsWith(' ' + k))
+}
+
 // ─── Main resolve function ────────────────────────────────────────────────────
 export interface ResolveResult {
   reply: string
@@ -173,24 +189,58 @@ export interface ResolveResult {
   entryId: string
 }
 
-export function resolveReply(input: string, locale: Locale, history: string[] = []): ResolveResult {
+type HistoryMessage = { role: string; content: string }
+
+export function resolveReply(input: string, locale: Locale, messageHistory: HistoryMessage[] = []): ResolveResult {
+  // Continuation intent: re-use last matched entry but pick a different reply variant
+  if (isContinuation(input) && messageHistory.length > 0) {
+    const prevUserMsgs = messageHistory.filter((m) => m.role === 'user')
+    const lastUserContent = prevUserMsgs[prevUserMsgs.length - 1]?.content
+    if (lastUserContent) {
+      const prevScored = knowledge
+        .map((entry) => ({ entry, score: scoreEntry(lastUserContent, entry) }))
+        .filter(({ score }) => score > 0)
+        .sort((a, b) => b.score - a.score)
+      const lastEntry = prevScored[0]?.entry
+      if (lastEntry) {
+        const variants = lastEntry.replies[locale]
+        // Pick a variant different from the last AI reply if possible
+        const lastAiContent = [...messageHistory].reverse().find((m) => m.role === 'assistant')?.content ?? ''
+        const fresh = variants.filter((r) => r !== lastAiContent)
+        return {
+          reply: pick(fresh.length > 0 ? fresh : variants),
+          followUps: lastEntry.followUps[locale],
+          entryId: lastEntry.id,
+        }
+      }
+    }
+  }
+
   const scored = knowledge
     .map((entry) => ({ entry, score: scoreEntry(input, entry) }))
     .filter(({ score }) => score > 0)
     .sort((a, b) => b.score - a.score)
 
-  // Avoid repeating the last entry
-  const lastId = history[history.length - 1]
-  const best = scored.find(({ entry }) => entry.id !== lastId) ?? scored[0]
+  // Avoid repeating the last matched entry
+  const lastEntryId = messageHistory.length > 0
+    ? (() => {
+        const prevUser = [...messageHistory].reverse().find((m) => m.role === 'user')
+        if (!prevUser) return undefined
+        const prevScored = knowledge
+          .map((e) => ({ e, s: scoreEntry(prevUser.content, e) }))
+          .filter(({ s }) => s > 0)
+          .sort((a, b) => b.s - a.s)
+        return prevScored[0]?.e.id
+      })()
+    : undefined
+
+  const best = scored.find(({ entry }) => entry.id !== lastEntryId) ?? scored[0]
 
   if (!best || best.score < (best.entry.minScore ?? 1)) {
     return getFallback(locale)
   }
 
-  const reply = pick(best.entry.replies[locale])
-  const followUps = best.entry.followUps[locale]
-
-  return { reply, followUps, entryId: best.entry.id }
+  return { reply: pick(best.entry.replies[locale]), followUps: best.entry.followUps[locale], entryId: best.entry.id }
 }
 
 // ─── Fallback ─────────────────────────────────────────────────────────────────

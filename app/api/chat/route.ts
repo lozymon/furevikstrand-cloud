@@ -241,7 +241,7 @@ export async function POST(request: Request) {
   }
 
   // ─── Fallback: keyword matcher ────────────────────────────────────────────
-  const { reply } = resolveReply(message, locale)
+  const { reply } = resolveReply(message, locale, history)
   return new Response(reply, {
     headers: {
       'Content-Type': 'text/plain; charset=utf-8',
