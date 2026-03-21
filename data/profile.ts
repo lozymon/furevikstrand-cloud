@@ -11,7 +11,7 @@ export const profile = {
     no: 'Senior programvareutvikler med 10+ års erfaring med å bygge skalerbare, vedlikeholdbare og høytytende webapplikasjoner med TypeScript, Node.js, React og moderne skyarkitekturer. Søker for øyeblikket remote-stillinger hos norske team.',
     pt: 'Engenheiro de software sênior com 10+ anos de experiência construindo aplicações web escaláveis e de alto desempenho usando TypeScript, Node.js, React e arquiteturas de nuvem modernas.',
   },
-  location: 'Natal, Brazil (Moving to Norway)',
+  location: 'Norway / Remote from Brazil',
   email: 'lozymon@gmail.com',
   github: 'https://github.com/lozymon',
   gitlab: 'https://gitlab.com/lozymon',

@@ -45,7 +45,18 @@ export default function Sidebar() {
       {/* Info rows */}
       <div className="p-4 border-b border-[#252535] space-y-2">
         <InfoRow icon="📍" value={t('location')} />
-        <InfoRow icon="🌐" value={t('languages')} />
+      </div>
+
+      {/* Language proficiency */}
+      <div className="p-4 border-b border-[#252535]">
+        <p className="text-[10px] text-[#8888a8] font-mono uppercase tracking-wider mb-3">
+          {locale === 'no' ? 'Språk' : locale === 'pt' ? 'Idiomas' : 'Languages'}
+        </p>
+        <div className="space-y-2">
+          <LangBadge flag="🇳🇴" lang="Norwegian" level={locale === 'no' ? 'Morsmål' : locale === 'pt' ? 'Nativo' : 'Native'} />
+          <LangBadge flag="🇬🇧" lang="English" level={locale === 'no' ? 'Profesjonell' : locale === 'pt' ? 'Profissional' : 'Professional'} />
+          <LangBadge flag="🇧🇷" lang="Portuguese" level={locale === 'no' ? 'Profesjonell' : locale === 'pt' ? 'Profissional' : 'Professional'} />
+        </div>
       </div>
 
       {/* Stack chips */}
@@ -94,6 +105,18 @@ function InfoRow({ icon, value }: { icon: string; value: string }) {
     <div className="flex items-center gap-2">
       <span className="text-xs">{icon}</span>
       <span className="text-xs text-[#8888a8] font-mono">{value}</span>
+    </div>
+  )
+}
+
+function LangBadge({ flag, lang, level }: { flag: string; lang: string; level: string }) {
+  return (
+    <div className="flex items-center justify-between">
+      <div className="flex items-center gap-2">
+        <span className="text-sm">{flag}</span>
+        <span className="text-xs text-[#8888a8] font-mono">{lang}</span>
+      </div>
+      <span className="text-[10px] font-mono px-2 py-0.5 rounded border border-[#252535] bg-[#1e1e2e] text-[#38bdf8]">{level}</span>
     </div>
   )
 }

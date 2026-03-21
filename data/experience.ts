@@ -2,21 +2,38 @@ import type { Experience } from '@/types'
 
 export const experience: Experience[] = [
   {
-    id: 'compass',
+    id: 'compass-sports',
     company: 'Compass.uol',
     role: {
-      en: 'Senior Developer',
-      no: 'Senior Utvikler',
-      pt: 'Desenvolvedor Sênior',
+      en: 'Senior Developer — Sports Super App',
+      no: 'Senior Utvikler — Sports Super App',
+      pt: 'Desenvolvedor Sênior — Sports Super App',
     },
-    period: 'Oct 2022 — Present',
+    period: 'Nov 2023 — Present',
     location: 'Natal, Brazil (Remote)',
     description: {
-      en: 'Building a sports event management platform — microservices backend covering tournament registration, athlete subscriptions, and item sales. Includes a trainer mobile app and an admin backoffice for platform management. Resolved a critical data consistency issue across distributed databases by designing a dedicated replication microservice using the Saga pattern. Optimised multiple slow queries improving overall platform performance. Mentoring 2 junior trainees through code reviews and technical guidance on NestJS and TypeScript.',
-      no: 'Bygger en plattform for idrettsarrangementer — mikrotjenestebackend for turneringsregistrering, utøverabonnementer og varesalg. Inkluderer en trener-mobilapp og admin-backoffice for plattformadministrasjon. Løste et kritisk datakonsistenseproblem på tvers av distribuerte databaser ved å designe en dedikert replikerings-mikrotjeneste med Saga-mønsteret. Optimaliserte flere trege spørringer og forbedret den totale plattformytelsen. Mentorer 2 junior-traineer gjennom kodegjennomganger og teknisk veiledning i NestJS og TypeScript.',
-      pt: 'Construindo uma plataforma de gestão de eventos esportivos — backend de microsserviços para inscrições em torneios, assinaturas de atletas e vendas de itens. Inclui app mobile para treinadores e backoffice administrativo para gestão da plataforma. Resolveu um problema crítico de consistência de dados entre bancos de dados distribuídos projetando um microsserviço de replicação dedicado usando o padrão Saga. Otimizou múltiplas consultas lentas melhorando o desempenho geral da plataforma. Mentorando 2 trainees em NestJS e TypeScript.',
+      en: 'Building a sports event management platform — microservices backend covering tournament registration, athlete subscriptions, and item sales. Includes a trainer mobile app and an admin backoffice. Resolved a critical data consistency issue across distributed databases by designing a dedicated replication microservice using the Saga pattern. Optimised multiple slow queries improving overall platform performance. Mentoring 2 junior trainees in NestJS and TypeScript.',
+      no: 'Bygger en plattform for idrettsarrangementer — mikrotjenestebackend for turneringsregistrering, utøverabonnementer og varesalg. Inkluderer en trener-mobilapp og admin-backoffice. Løste et kritisk datakonsistenseproblem på tvers av distribuerte databaser ved å designe en dedikert replikerings-mikrotjeneste med Saga-mønsteret. Optimaliserte flere trege spørringer og forbedret plattformytelsen. Mentorer 2 junior-traineer i NestJS og TypeScript.',
+      pt: 'Construindo uma plataforma de gestão de eventos esportivos — backend de microsserviços para inscrições em torneios, assinaturas de atletas e vendas de itens. Inclui app mobile para treinadores e backoffice administrativo. Resolveu um problema crítico de consistência de dados projetando um microsserviço de replicação usando o padrão Saga. Otimizou múltiplas consultas lentas. Mentorando 2 trainees em NestJS e TypeScript.',
     },
-    tech: ['TypeScript', 'NestJS', 'React', 'Microservices', 'Saga Pattern', 'MariaDB', 'Docker', 'AWS'],
+    tech: ['TypeScript', 'NestJS', 'React', 'Microservices', 'Saga Pattern', 'AWS SQS', 'DynamoDB', 'MariaDB', 'Docker'],
+  },
+  {
+    id: 'compass-lgpd',
+    company: 'Compass.uol',
+    role: {
+      en: 'Senior Developer — Data Privacy Compliance Portal',
+      no: 'Senior Utvikler — Databeskyttelsesportal',
+      pt: 'Desenvolvedor Sênior — Portal de Conformidade LGPD',
+    },
+    period: 'Oct 2022 — Oct 2023',
+    location: 'Natal, Brazil (Remote)',
+    description: {
+      en: 'Developed a data privacy compliance portal for a major Brazilian retailer to meet LGPD (Brazilian GDPR) requirements. Built features for data subject request management, consent tracking, and audit reporting. Delivered a scalable and auditable solution under tight regulatory deadlines.',
+      no: 'Utviklet en databeskyttelsesportal for en stor brasiliansk forhandler for å oppfylle LGPD-krav (brasiliansk GDPR). Bygde funksjoner for håndtering av registreringsforespørsler, samtykkesporing og revisjonsrapportering. Leverte en skalerbar og revisjonsvennlig løsning innenfor stramme regulatoriske frister.',
+      pt: 'Desenvolveu um portal de conformidade de privacidade de dados para um grande varejista brasileiro para atender aos requisitos da LGPD. Construiu funcionalidades para gerenciamento de solicitações de titulares, rastreamento de consentimento e relatórios de auditoria. Entregou uma solução escalável e auditável dentro de prazos regulatórios apertados.',
+    },
+    tech: ['TypeScript', 'NestJS', 'React', 'PostgreSQL', 'Docker', 'LGPD', 'AWS'],
   },
   {
     id: 'velit',
