@@ -1,6 +1,7 @@
 'use client'
 
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
+import { useRouter } from 'next/navigation'
 import PageNav from './PageNav'
 import LanguageSwitcher from './LanguageSwitcher'
 import { profile } from '@/data/profile'
@@ -14,6 +15,8 @@ interface PageHeaderProps {
 
 export default function PageHeader({ current, maxWidth = 'max-w-5xl', extra }: PageHeaderProps) {
   const locale = useLocale() as Locale
+  const t = useTranslations('topbar')
+  const router = useRouter()
 
   return (
     <nav className="sticky top-0 z-10 border-b border-[#252535] bg-[#0d0d10]/90 backdrop-blur-sm">
@@ -29,10 +32,16 @@ export default function PageHeader({ current, maxWidth = 'max-w-5xl', extra }: P
           </span>
         </div>
 
-        {/* Right — language switcher + nav + optional slot */}
+        {/* Right — language switcher + nav + print CV + optional slot */}
         <div className="flex items-center gap-4">
           <LanguageSwitcher />
           <PageNav current={current} />
+          <button
+            onClick={() => router.push(`/${locale}/classic?print=true`)}
+            className="px-3 py-1 rounded border border-[#a78bfa] text-[#a78bfa] text-xs font-mono hover:bg-[#a78bfa] hover:text-[#0d0d10] transition-colors"
+          >
+            {t('downloadCv')}
+          </button>
           {extra}
         </div>
 

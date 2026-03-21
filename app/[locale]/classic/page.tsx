@@ -52,18 +52,7 @@ export default function ClassicPage() {
     <div className="min-h-screen bg-[#0d0d10] text-[#e2e2f0] font-mono text-[11px] leading-relaxed">
 
       <div className="print:hidden">
-        <PageHeader
-          current="classic"
-          maxWidth="max-w-[820px]"
-          extra={
-            <button
-              onClick={() => window.print()}
-              className="px-3 py-1 rounded border border-[#a78bfa] text-[#a78bfa] text-xs font-mono hover:bg-[#a78bfa] hover:text-[#0d0d10] transition-colors"
-            >
-              {locale === 'no' ? 'Skriv ut' : locale === 'pt' ? 'Imprimir' : 'Print CV'}
-            </button>
-          }
-        />
+        <PageHeader current="classic" />
       </div>
 
       <div className="max-w-[820px] mx-auto px-11 py-10">
