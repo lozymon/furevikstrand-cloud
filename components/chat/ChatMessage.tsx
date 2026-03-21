@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 import type { Message } from '@/types'
 
 interface Props {
@@ -26,17 +27,18 @@ export default function ChatMessage({ message }: Props) {
       className={['flex items-start gap-3 px-4 py-3', isAi ? '' : 'flex-row-reverse'].join(' ')}
     >
       {/* Avatar */}
-      <div
-        aria-hidden="true"
-        className={[
-          'w-7 h-7 rounded-full flex items-center justify-center shrink-0 text-xs font-mono',
-          isAi
-            ? 'bg-[#1e1e2e] border border-[#a78bfa]/40 text-[#a78bfa]'
-            : 'bg-[#252535] border border-[#252535] text-[#8888a8]',
-        ].join(' ')}
-      >
-        {isAi ? 'K' : 'U'}
-      </div>
+      {isAi ? (
+        <div aria-hidden="true" className="relative w-7 h-7 rounded-full overflow-hidden border border-[#a78bfa]/40 shrink-0">
+          <Image src="/profile-image.jpeg" alt="Kim" fill className="object-cover" sizes="28px" />
+        </div>
+      ) : (
+        <div aria-hidden="true" className="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style={{ background: 'linear-gradient(135deg, #38bdf8, #a78bfa)' }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="12" cy="8" r="4" stroke="white" strokeWidth="1.8"/>
+            <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
+          </svg>
+        </div>
+      )}
 
       {/* Bubble */}
       <div
