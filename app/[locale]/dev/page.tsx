@@ -47,6 +47,25 @@ const BOOT_LINES: Record<Locale, string[]> = {
 
 type Line = { id: string; type: 'banner' | 'boot' | 'output' | 'input' | 'ai'; text: string; source?: 'claude' | 'ollama' | 'fallback' | 'local' }
 
+// Render markdown-lite for the terminal — stay within the green palette
+function renderTerminalText(text: string): React.ReactNode {
+  // Split on **bold**, `code`, and *italic* patterns
+  const parts = text.split(/(\*\*[^*]+\*\*|`[^`]+`|\*[^*]+\*)/g)
+  return parts.map((part, i) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return <span key={i} className="text-[#90ff90] font-bold">{part.slice(2, -2)}</span>
+    }
+    if (part.startsWith('`') && part.endsWith('`')) {
+      return <span key={i} className="text-[#28c840] bg-[#0a2a0a] px-1 rounded font-mono text-xs">{part.slice(1, -1)}</span>
+    }
+    if (part.startsWith('*') && part.endsWith('*')) {
+      return <span key={i} className="text-[#4adb4a]">{part.slice(1, -1)}</span>
+    }
+    // Strip link syntax, keep label
+    return part.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+  })
+}
+
 const DEV_STORAGE_KEY = 'dev_chat_history'
 
 function loadFromStorage(): Line[] {
@@ -155,7 +174,7 @@ export default function DevPage() {
       if (slash.type === 'help') {
         const id = makeId()
         setLines((prev) => [...prev, { id, type: 'ai', text: '' }])
-        await streamLine(helpReplies[locale].replace(/\*\*/g, '').replace(/`/g, ''), id)
+        await streamLine(helpReplies[locale], id)
         setBusy(false)
         return
       }
@@ -167,10 +186,9 @@ export default function DevPage() {
       }
       if (slash.type === 'topic') {
         const { reply } = resolveById(slash.entryId, locale)
-        const plain = reply.replace(/\*\*(.*?)\*\*/g, '$1').replace(/\*(.*?)\*/g, '$1').replace(/<[^>]+>/g, '')
         const id = makeId()
         setLines((prev) => [...prev, { id, type: 'ai', text: '', source: 'local' }])
-        await streamLine(plain, id)
+        await streamLine(reply, id)
         setBusy(false)
         return
       }
@@ -217,11 +235,7 @@ export default function DevPage() {
         }
       } else {
         const raw = await res.text()
-        const plain = raw
-          .replace(/\*\*(.*?)\*\*/g, '$1')
-          .replace(/\*(.*?)\*/g, '$1')
-          .replace(/<[^>]+>/g, '')
-        await streamLine(plain, id)
+        await streamLine(raw, id)
       }
     } catch {
       setLines((prev) => [...prev, { id, type: 'ai', text: 'Something went wrong. Please try again.', source: 'fallback' }])
@@ -317,11 +331,13 @@ export default function DevPage() {
             {line.type === 'ai' && (
               <div className="pl-4">
                 {(line.source === 'ollama' || line.source === 'claude') && (
-                  <span className="text-[#1a6b1a] text-[10px] font-mono mr-2 border border-[#1a6b1a] px-1 rounded select-none">AI</span>
+                  <div className="mb-0.5">
+                    <span className="text-[#1a6b1a] text-[10px] font-mono border border-[#1a6b1a] px-1 rounded select-none">AI</span>
+                  </div>
                 )}
-                <span className="text-[#33ff33] whitespace-pre-wrap leading-relaxed">
-                  {line.text}<span className={line.text ? 'hidden' : 'inline-block w-2 h-4 bg-[#33ff33] animate-pulse'} />
-                </span>
+                <div className="text-[#33ff33] whitespace-pre-wrap leading-relaxed">
+                  {line.text ? renderTerminalText(line.text) : <span className="inline-block w-2 h-4 bg-[#33ff33] animate-pulse" />}
+                </div>
               </div>
             )}
           </div>

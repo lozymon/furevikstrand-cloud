@@ -3,6 +3,8 @@
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { useLocale } from 'next-intl'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import type { Message } from '@/types'
 
 interface Props {
@@ -12,28 +14,6 @@ interface Props {
 export default function ChatMessage({ message }: Props) {
   const isAi = message.role === 'ai'
   const locale = useLocale()
-
-  const formatContent = (text: string) => {
-    return text
-      .replace(/\*\*(.*?)\*\*/g, '<strong class="text-[#a78bfa]">$1</strong>')
-      .replace(/\*(.*?)\*/g, '<em class="text-[#38bdf8]">$1</em>')
-      // Markdown links [text](url)
-      .replace(
-        /\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g,
-        '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-[#38bdf8] underline underline-offset-2 hover:text-[#a78bfa] transition-colors">$1</a>'
-      )
-      // Backtick internal paths `/page` → clickable link
-      .replace(
-        /`(\/[a-z]+)`/g,
-        `<a href="/${locale}$1" class="text-[#a78bfa] font-mono text-[11px] px-1.5 py-0.5 bg-[#1e1e2e] border border-[#a78bfa]/30 rounded hover:bg-[#a78bfa]/10 transition-colors">$1</a>`
-      )
-      // Remaining backticks → inline code
-      .replace(
-        /`([^`]+)`/g,
-        '<code class="text-[#38bdf8] font-mono text-[11px] px-1.5 py-0.5 bg-[#1e1e2e] border border-[#252535] rounded">$1</code>'
-      )
-      .replace(/\n/g, '<br />')
-  }
 
   return (
     <motion.div
@@ -67,9 +47,54 @@ export default function ChatMessage({ message }: Props) {
             : 'bg-[#252535] rounded-tr-sm text-[#e2e2f0]',
         ].join(' ')}
       >
-        <div
-          dangerouslySetInnerHTML={{ __html: formatContent(message.content) }}
-        />
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          components={{
+            p: ({ children }) => <p className="mb-1 last:mb-0">{children}</p>,
+            strong: ({ children }) => <strong className="text-[#a78bfa] font-semibold">{children}</strong>,
+            em: ({ children }) => <em className="text-[#38bdf8]">{children}</em>,
+            a: ({ href, children }) => {
+              if (href?.startsWith('http')) {
+                return (
+                  <a href={href} target="_blank" rel="noopener noreferrer" className="text-[#38bdf8] underline underline-offset-2 hover:text-[#a78bfa] transition-colors">
+                    {children}
+                  </a>
+                )
+              }
+              return <a href={href} className="text-[#38bdf8] underline underline-offset-2 hover:text-[#a78bfa] transition-colors">{children}</a>
+            },
+            code: ({ children, className }) => {
+              const text = String(children).replace(/\n$/, '')
+              const isBlock = Boolean(className)
+              // Internal nav link: `code` content that starts with `/`
+              if (!isBlock && text.startsWith('/')) {
+                return (
+                  <a href={`/${locale}${text}`} className="text-[#a78bfa] font-mono text-[11px] px-1.5 py-0.5 bg-[#1e1e2e] border border-[#a78bfa]/30 rounded hover:bg-[#a78bfa]/10 transition-colors">
+                    {text}
+                  </a>
+                )
+              }
+              if (isBlock) {
+                return (
+                  <pre className="my-2 p-3 bg-[#13131f] border border-[#252535] rounded-lg overflow-x-auto">
+                    <code className="text-[#38bdf8] font-mono text-[11px]">{text}</code>
+                  </pre>
+                )
+              }
+              return (
+                <code className="text-[#38bdf8] font-mono text-[11px] px-1.5 py-0.5 bg-[#1e1e2e] border border-[#252535] rounded">
+                  {text}
+                </code>
+              )
+            },
+            pre: ({ children }) => <>{children}</>,
+            ul: ({ children }) => <ul className="list-disc list-inside space-y-0.5 my-1">{children}</ul>,
+            ol: ({ children }) => <ol className="list-decimal list-inside space-y-0.5 my-1">{children}</ol>,
+            li: ({ children }) => <li>{children}</li>,
+          }}
+        >
+          {message.content}
+        </ReactMarkdown>
 
         {/* Testimonial card */}
         {message.testimonial && (
