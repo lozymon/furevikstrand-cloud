@@ -112,7 +112,7 @@ export default function ChatMessage({ message }: Props) {
           <time className="text-[10px] text-[#8888a8] font-mono">
             {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
           </time>
-          {message.source === 'ollama' && (
+          {(message.source === 'claude' || message.source === 'ollama') && (
             <span className="text-[10px] font-mono text-[#a78bfa]/60 border border-[#a78bfa]/30 px-1 rounded leading-tight select-none">AI</span>
           )}
         </div>
