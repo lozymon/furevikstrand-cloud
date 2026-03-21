@@ -2,8 +2,11 @@ export const dynamic = 'force-dynamic'
 
 import Anthropic from '@anthropic-ai/sdk'
 import { NextResponse } from 'next/server'
-import { knowledge } from '@/data/knowledge'
 import { profile } from '@/data/profile'
+import { experience } from '@/data/experience'
+import { projects } from '@/data/projects'
+import { stack } from '@/data/stack'
+import { education } from '@/data/education'
 import { resolveReply } from '@/lib/chat'
 import type { Locale } from '@/types'
 
@@ -33,13 +36,30 @@ function buildSystemPrompt(locale: Locale): string {
         ? 'Respond in Brazilian Portuguese.'
         : 'Respond in English.'
 
-  const knowledgeSummary = knowledge
-    .filter((e) => e.id !== 'greeting')
+  const experienceSection = experience
     .map((e) => {
-      const allReplies = e.replies.en.join('\n- ')
-      return `### ${e.id}\n- ${allReplies}`
+      const desc = locale === 'no' ? e.description.no : locale === 'pt' ? e.description.pt : e.description.en
+      const role = locale === 'no' ? e.role.no : locale === 'pt' ? e.role.pt : e.role.en
+      return `- **${e.company}** — ${role} (${e.period}, ${e.location})\n  ${desc}\n  Tech: ${e.tech.join(', ')}`
     })
     .join('\n\n')
+
+  const projectsSection = projects
+    .map((p) => {
+      const desc = locale === 'no' ? p.description.no : locale === 'pt' ? p.description.pt : p.description.en
+      const repo = p.repo ? ` — [GitHub](${p.repo})` : ''
+      const url = p.url ? ` — [Live](${p.url})` : ''
+      return `- **${p.name}**${repo}${url}: ${desc} (${p.tech.join(', ')})`
+    })
+    .join('\n')
+
+  const stackSection = Object.entries(stack)
+    .map(([category, items]) => `- ${category}: ${(items as string[]).join(', ')}`)
+    .join('\n')
+
+  const educationSection = education
+    .map((e) => `- ${e.school} — ${e.degree} (${e.period})`)
+    .join('\n')
 
   return `You are a portfolio assistant for ${profile.name}, a ${profile.role.en}. ${localeInstruction}
 
@@ -57,20 +77,28 @@ FORMATTING:
 - For external URLs use markdown links: [label](https://url)
 - For internal pages use backtick paths: \`/testimonials\`, \`/certifications\`, \`/classic\`
 - Available internal pages: \`/testimonials\`, \`/certifications\`, \`/classic\` (CV)
-- Kim's external links: GitHub [github.com/lozymon](${profile.github}), LinkedIn [linkedin.com/in/kim-andre-furevikstrand](${profile.linkedin}), Email [lozymon@gmail.com](mailto:${profile.email})
 
 PROFILE:
 Name: ${profile.name}
-Role: ${profile.role.en}
+Role: ${profile.role[locale] ?? profile.role.en}
 Location: ${profile.location}
-Bio: ${profile.bio.en}
+Bio: ${profile.bio[locale] ?? profile.bio.en}
 GitHub: ${profile.github}
 LinkedIn: ${profile.linkedin}
 Email: ${profile.email}
-Available: ${profile.availability.open ? 'Yes, open to opportunities' : 'Not currently available'}
+Available: ${profile.availability.open ? profile.availability.label[locale] : 'Not currently available'}
 
-KNOWLEDGE BASE:
-${knowledgeSummary}`
+EXPERIENCE:
+${experienceSection}
+
+PROJECTS:
+${projectsSection}
+
+TECH STACK:
+${stackSection}
+
+EDUCATION:
+${educationSection}`
 }
 
 // ─── History type ─────────────────────────────────────────────────────────────
