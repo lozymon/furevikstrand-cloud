@@ -171,19 +171,20 @@ export async function POST(request: Request) {
       const encoder = new TextEncoder()
       const readable = new ReadableStream({
         async start(controller) {
+          let accumulated = ''
           for await (const event of stream) {
             if (
               event.type === 'content_block_delta' &&
               event.delta.type === 'text_delta'
             ) {
               controller.enqueue(encoder.encode(event.delta.text))
+              accumulated += event.delta.text
             }
           }
           controller.close()
+          logChatEvent({ session_id: sessionId, locale, reply_source: 'claude', topic: null, message_index: messageIndex, page, user_message: message, ai_reply: accumulated })
         },
       })
-
-      logChatEvent({ session_id: sessionId, locale, reply_source: 'claude', topic: null, message_index: messageIndex, page })
       return new Response(readable, {
         headers: {
           'Content-Type': 'text/plain; charset=utf-8',
@@ -220,6 +221,7 @@ export async function POST(request: Request) {
 
       if (ollamaRes.ok && ollamaRes.body) {
         const decoder = new TextDecoder()
+        let ollamaAccumulated = ''
         const stream = new TransformStream<Uint8Array, Uint8Array>({
           transform(chunk, controller) {
             const lines = decoder.decode(chunk, { stream: true }).split('\n').filter(Boolean)
@@ -227,15 +229,19 @@ export async function POST(request: Request) {
               try {
                 const json = JSON.parse(line)
                 const token: string = json.message?.content ?? ''
-                if (token) controller.enqueue(new TextEncoder().encode(token))
+                if (token) {
+                  controller.enqueue(new TextEncoder().encode(token))
+                  ollamaAccumulated += token
+                }
               } catch {
                 // skip malformed NDJSON lines
               }
             }
           },
+          flush() {
+            logChatEvent({ session_id: sessionId, locale, reply_source: 'ollama', topic: null, message_index: messageIndex, page, user_message: message, ai_reply: ollamaAccumulated })
+          },
         })
-
-        logChatEvent({ session_id: sessionId, locale, reply_source: 'ollama', topic: null, message_index: messageIndex, page })
         return new Response(ollamaRes.body.pipeThrough(stream), {
           headers: {
             'Content-Type': 'text/plain; charset=utf-8',
@@ -251,7 +257,7 @@ export async function POST(request: Request) {
 
   // ─── Fallback: keyword matcher ────────────────────────────────────────────
   const { reply } = resolveReply(message, locale, history)
-  logChatEvent({ session_id: sessionId, locale, reply_source: 'fallback', topic: null, message_index: messageIndex, page })
+  logChatEvent({ session_id: sessionId, locale, reply_source: 'fallback', topic: null, message_index: messageIndex, page, user_message: message, ai_reply: reply })
   return new Response(reply, {
     headers: {
       'Content-Type': 'text/plain; charset=utf-8',
