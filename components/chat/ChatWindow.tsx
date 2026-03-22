@@ -3,9 +3,10 @@
 import { useEffect, useRef } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import ChatMessage from './ChatMessage'
+import ContactPromptCard from './ContactPromptCard'
 import TypingIndicator from './TypingIndicator'
 import Suggestions from './Suggestions'
-import type { Message } from '@/types'
+import type { Message, Locale } from '@/types'
 
 interface Props {
   messages: Message[]
@@ -13,9 +14,12 @@ interface Props {
   suggestions: string[]
   showSuggestions: boolean
   onSuggestion: (text: string) => void
+  showContactPrompt: boolean
+  onDismissContactPrompt: () => void
+  locale: Locale
 }
 
-export default function ChatWindow({ messages, isTyping, suggestions, showSuggestions, onSuggestion }: Props) {
+export default function ChatWindow({ messages, isTyping, suggestions, showSuggestions, onSuggestion, showContactPrompt, onDismissContactPrompt, locale }: Props) {
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -30,6 +34,12 @@ export default function ChatWindow({ messages, isTyping, suggestions, showSugges
         {messages.map((msg) => (
           <ChatMessage key={msg.id} message={msg} />
         ))}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showContactPrompt && (
+          <ContactPromptCard key="contact-prompt" locale={locale} onDismiss={onDismissContactPrompt} />
+        )}
       </AnimatePresence>
 
       <AnimatePresence>

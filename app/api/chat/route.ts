@@ -8,6 +8,7 @@ import { projects } from '@/data/projects'
 import { stack } from '@/data/stack'
 import { education } from '@/data/education'
 import { resolveReply } from '@/lib/chat'
+import { logChatEvent } from '@/lib/logEvent'
 import type { Locale } from '@/types'
 
 // ─── In-memory rate limiter ───────────────────────────────────────────────────
@@ -118,6 +119,9 @@ export async function POST(request: Request) {
   let message: string
   let locale: Locale
   let history: HistoryMessage[]
+  let sessionId: string
+  let messageIndex: number
+  let page: 'chat' | 'dev'
   try {
     const body = await request.json()
     message = String(body.message ?? '')
@@ -134,6 +138,9 @@ export async function POST(request: Request) {
           })
           .slice(-10)
       : []
+    sessionId = typeof body.sessionId === 'string' ? body.sessionId.slice(0, 36) : 'unknown'
+    messageIndex = typeof body.messageIndex === 'number' ? body.messageIndex : 0
+    page = (body.page === 'dev' ? 'dev' : 'chat') as 'chat' | 'dev'
   } catch {
     return NextResponse.json({ error: 'Invalid request' }, { status: 400 })
   }
@@ -176,6 +183,7 @@ export async function POST(request: Request) {
         },
       })
 
+      logChatEvent({ session_id: sessionId, locale, reply_source: 'claude', topic: null, message_index: messageIndex, page })
       return new Response(readable, {
         headers: {
           'Content-Type': 'text/plain; charset=utf-8',
@@ -227,6 +235,7 @@ export async function POST(request: Request) {
           },
         })
 
+        logChatEvent({ session_id: sessionId, locale, reply_source: 'ollama', topic: null, message_index: messageIndex, page })
         return new Response(ollamaRes.body.pipeThrough(stream), {
           headers: {
             'Content-Type': 'text/plain; charset=utf-8',
@@ -242,6 +251,7 @@ export async function POST(request: Request) {
 
   // ─── Fallback: keyword matcher ────────────────────────────────────────────
   const { reply } = resolveReply(message, locale, history)
+  logChatEvent({ session_id: sessionId, locale, reply_source: 'fallback', topic: null, message_index: messageIndex, page })
   return new Response(reply, {
     headers: {
       'Content-Type': 'text/plain; charset=utf-8',

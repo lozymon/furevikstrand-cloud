@@ -35,8 +35,19 @@ export default function ChatPage() {
 
   const suggestions = t.raw('suggestions') as string[]
 
-  const { messages, setMessages, isTyping, setIsTyping, showSuggestions, setShowSuggestions, currentFollowUps, setCurrentFollowUps, isLoaded } = useChatContext()
+  const { messages, setMessages, isTyping, setIsTyping, showSuggestions, setShowSuggestions, currentFollowUps, setCurrentFollowUps, isLoaded, sessionId } = useChatContext()
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
+  const [contactPromptDismissed, setContactPromptDismissed] = useState(() => {
+    try { return sessionStorage.getItem('contact_prompt_dismissed') === '1' } catch { return false }
+  })
+
+  const userMessageCount = messages.filter((m) => m.role === 'user').length
+  const showContactPrompt = userMessageCount >= 4 && !contactPromptDismissed
+
+  function dismissContactPrompt() {
+    try { sessionStorage.setItem('contact_prompt_dismissed', '1') } catch { /* ignore */ }
+    setContactPromptDismissed(true)
+  }
 
   const streamingRef = useRef(false)
 
@@ -169,10 +180,12 @@ export default function ChatPage() {
         .map((m) => ({ role: m.role === 'ai' ? 'assistant' : 'user', content: m.content }))
 
       try {
+        const messageIndex = messages.filter((m) => m.role === 'user').length + 1
+
         const res = await fetch('/api/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: text, locale, history }),
+          body: JSON.stringify({ message: text, locale, history, sessionId, messageIndex, page: 'chat' }),
         })
 
         const source = (res.headers.get('X-Reply-Source') ?? 'fallback') as 'claude' | 'ollama' | 'fallback'
@@ -220,6 +233,9 @@ export default function ChatPage() {
               suggestions={currentFollowUps}
               showSuggestions={showSuggestions && !isTyping}
               onSuggestion={handleSend}
+              showContactPrompt={showContactPrompt}
+              onDismissContactPrompt={dismissContactPrompt}
+              locale={locale}
             />
             <ChatInput onSend={handleSend} onClear={handleClear} disabled={isTyping} />
           </main>

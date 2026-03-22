@@ -1,6 +1,7 @@
 'use client'
 
 import { createContext, useContext, useState, useEffect } from 'react'
+import { getOrCreateSessionId } from '@/lib/session'
 import type { Message } from '@/types'
 
 function storageKey(locale: string) { return `chat_history_${locale}` }
@@ -34,6 +35,7 @@ interface ChatContextValue {
   currentFollowUps: string[]
   setCurrentFollowUps: React.Dispatch<React.SetStateAction<string[]>>
   isLoaded: boolean
+  sessionId: string
 }
 
 const ChatContext = createContext<ChatContextValue | null>(null)
@@ -44,11 +46,13 @@ export function ChatProvider({ children, locale }: { children: React.ReactNode; 
   const [showSuggestions, setShowSuggestions] = useState(true)
   const [currentFollowUps, setCurrentFollowUps] = useState<string[]>([])
   const [isLoaded, setIsLoaded] = useState(false)
+  const [sessionId, setSessionId] = useState('')
 
   // Restore from sessionStorage on mount
   useEffect(() => {
     const stored = loadFromStorage(locale)
     if (stored.length > 0) setMessages(stored)
+    setSessionId(getOrCreateSessionId())
     setIsLoaded(true)
   }, [])
 
@@ -60,7 +64,7 @@ export function ChatProvider({ children, locale }: { children: React.ReactNode; 
   }, [messages, isLoaded])
 
   return (
-    <ChatContext.Provider value={{ messages, setMessages, isTyping, setIsTyping, showSuggestions, setShowSuggestions, currentFollowUps, setCurrentFollowUps, isLoaded }}>
+    <ChatContext.Provider value={{ messages, setMessages, isTyping, setIsTyping, showSuggestions, setShowSuggestions, currentFollowUps, setCurrentFollowUps, isLoaded, sessionId }}>
       {children}
     </ChatContext.Provider>
   )

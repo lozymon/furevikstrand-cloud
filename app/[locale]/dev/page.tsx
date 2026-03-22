@@ -6,6 +6,7 @@ import { useRouter, usePathname } from 'next/navigation'
 import PageNav from '@/components/layout/PageNav'
 import LanguageSwitcher from '@/components/layout/LanguageSwitcher'
 import { resolveById, detectLocale, handleSlashCommand, helpReplies, SLASH_COMMANDS } from '@/lib/chat'
+import { getOrCreateSessionId } from '@/lib/session'
 import type { Locale } from '@/types'
 import { profile } from '@/data/profile'
 
@@ -214,10 +215,13 @@ export default function DevPage() {
       .map((l) => ({ role: l.type === 'input' ? 'user' : 'assistant', content: l.text }))
 
     try {
+      const messageIndex = lines.filter((l) => l.type === 'input').length
+      const sessionId = getOrCreateSessionId()
+
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text, locale, history }),
+        body: JSON.stringify({ message: text, locale, history, sessionId, messageIndex, page: 'dev' }),
       })
 
       const source = (res.headers.get('X-Reply-Source') ?? 'fallback') as 'claude' | 'ollama' | 'fallback'

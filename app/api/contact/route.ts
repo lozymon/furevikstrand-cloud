@@ -2,19 +2,27 @@ import { NextResponse } from 'next/server'
 
 export async function POST(request: Request) {
   const apiKey = process.env.RESEND_API_KEY
+  const toEmail = process.env.RESEND_TO_EMAIL ?? 'kim@furevikstrand.cloud'
 
   try {
-    const { name, email, message } = await request.json()
+    const body = await request.json()
+    const name = String(body.name ?? '').trim()
+    const email = String(body.email ?? '').trim()
+    const note = String(body.note ?? body.message ?? '').trim()
 
-    if (!name || !email || !message) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
+    if (!email) {
+      return NextResponse.json({ error: 'Email is required' }, { status: 400 })
     }
 
-    // If no API key configured, stub response for development
     if (!apiKey) {
-      console.log('[contact] RESEND_API_KEY not set — stubbed:', { name, email, message })
+      console.log('[contact] RESEND_API_KEY not set — stubbed:', { name, email, note })
       return NextResponse.json({ ok: true })
     }
+
+    const subject = name ? `Portfolio contact from ${name}` : 'Portfolio contact'
+    const text = [name && `Name: ${name}`, `Email: ${email}`, note && `\n${note}`]
+      .filter(Boolean)
+      .join('\n')
 
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -24,9 +32,9 @@ export async function POST(request: Request) {
       },
       body: JSON.stringify({
         from: 'portfolio@furevikstrand.cloud',
-        to: 'kim@furevikstrand.cloud',
-        subject: `Portfolio contact from ${name}`,
-        text: `Name: ${name}\nEmail: ${email}\n\n${message}`,
+        to: toEmail,
+        subject,
+        text,
         reply_to: email,
       }),
     })
