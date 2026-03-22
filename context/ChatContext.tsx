@@ -46,13 +46,12 @@ export function ChatProvider({ children, locale }: { children: React.ReactNode; 
   const [showSuggestions, setShowSuggestions] = useState(true)
   const [currentFollowUps, setCurrentFollowUps] = useState<string[]>([])
   const [isLoaded, setIsLoaded] = useState(false)
-  const [sessionId, setSessionId] = useState('')
+  const [sessionId] = useState(() => getOrCreateSessionId())
 
   // Restore from sessionStorage on mount
   useEffect(() => {
     const stored = loadFromStorage(locale)
     if (stored.length > 0) setMessages(stored)
-    setSessionId(getOrCreateSessionId())
     setIsLoaded(true)
   }, [])
 
