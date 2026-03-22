@@ -3,7 +3,7 @@ import type { Experience } from '@/types'
 export const experience: Experience[] = [
   {
     id: 'compass-sports',
-    company: 'Compass.uol',
+    company: 'Compass UOL',
     role: {
       en: 'Senior Developer — Sports Super App',
       no: 'Senior Utvikler — Sports Super App',
@@ -20,7 +20,7 @@ export const experience: Experience[] = [
   },
   {
     id: 'compass-lgpd',
-    company: 'Compass.uol',
+    company: 'Compass UOL',
     role: {
       en: 'Senior Developer — Data Privacy Compliance Portal',
       no: 'Senior Utvikler — Databeskyttelsesportal',
