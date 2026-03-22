@@ -3,11 +3,11 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 import type { Message } from '@/types'
 
-const STORAGE_KEY = 'chat_history'
+function storageKey(locale: string) { return `chat_history_${locale}` }
 
-function loadFromStorage(): Message[] {
+function loadFromStorage(locale: string): Message[] {
   try {
-    const raw = sessionStorage.getItem(STORAGE_KEY)
+    const raw = sessionStorage.getItem(storageKey(locale))
     if (!raw) return []
     const parsed = JSON.parse(raw) as Array<Omit<Message, 'timestamp'> & { timestamp: string }>
     return parsed.map((m) => ({ ...m, timestamp: new Date(m.timestamp) }))
@@ -16,9 +16,9 @@ function loadFromStorage(): Message[] {
   }
 }
 
-function saveToStorage(messages: Message[]) {
+function saveToStorage(messages: Message[], locale: string) {
   try {
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(messages))
+    sessionStorage.setItem(storageKey(locale), JSON.stringify(messages))
   } catch {
     // ignore storage quota errors
   }
@@ -38,7 +38,7 @@ interface ChatContextValue {
 
 const ChatContext = createContext<ChatContextValue | null>(null)
 
-export function ChatProvider({ children }: { children: React.ReactNode }) {
+export function ChatProvider({ children, locale }: { children: React.ReactNode; locale: string }) {
   const [messages, setMessages] = useState<Message[]>([])
   const [isTyping, setIsTyping] = useState(false)
   const [showSuggestions, setShowSuggestions] = useState(true)
@@ -47,7 +47,7 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
 
   // Restore from sessionStorage on mount
   useEffect(() => {
-    const stored = loadFromStorage()
+    const stored = loadFromStorage(locale)
     if (stored.length > 0) setMessages(stored)
     setIsLoaded(true)
   }, [])
@@ -55,7 +55,7 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
   // Persist messages to sessionStorage whenever they change
   useEffect(() => {
     if (isLoaded && messages.length > 0) {
-      saveToStorage(messages)
+      saveToStorage(messages, locale)
     }
   }, [messages, isLoaded])
 

@@ -52,7 +52,7 @@ export default async function LocaleLayout({
     <html lang={locale} className="h-full" suppressHydrationWarning>
       <body className="h-full">
         <NextIntlClientProvider messages={messages}>
-          <ChatProvider>
+          <ChatProvider locale={locale}>
             {children}
           </ChatProvider>
         </NextIntlClientProvider>
