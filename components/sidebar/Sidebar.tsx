@@ -60,6 +60,8 @@ export default function Sidebar() {
           <LangBadge flag="🇳🇴" lang="Norwegian" level={locale === 'no' ? 'Morsmål' : locale === 'pt' ? 'Nativo' : 'Native'} />
           <LangBadge flag="🇬🇧" lang="English" level={locale === 'no' ? 'Profesjonell' : locale === 'pt' ? 'Profissional' : 'Professional'} />
           <LangBadge flag="🇧🇷" lang="Portuguese" level={locale === 'no' ? 'Profesjonell' : locale === 'pt' ? 'Profissional' : 'Professional'} />
+          <LangBadge flag="🇸🇪" lang="Swedish" level={locale === 'no' ? 'Begrenset' : locale === 'pt' ? 'Limitado' : 'Limited'} />
+          <LangBadge flag="🇩🇰" lang="Danish" level={locale === 'no' ? 'Begrenset' : locale === 'pt' ? 'Limitado' : 'Limited'} />
         </div>
       </div>
 

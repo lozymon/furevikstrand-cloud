@@ -28,6 +28,6 @@ export const profile = {
   stats: {
     experience: '10+',
     projects: '30+',
-    languages: 3,
+    languages: 5,
   },
 }
