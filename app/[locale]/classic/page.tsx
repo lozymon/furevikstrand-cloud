@@ -186,9 +186,11 @@ export default function ClassicPage() {
             {/* Languages spoken */}
             <section className="mb-[22px]">
               <SectionTitle>// {locale === 'no' ? 'Språk' : locale === 'pt' ? 'Idiomas' : 'Languages'}</SectionTitle>
-              <LangEntry flag="🇳🇴" lang="Norwegian" level={locale === 'no' ? 'Morsmål'     : locale === 'pt' ? 'Nativo'      : 'Native'} />
-              <LangEntry flag="🇬🇧" lang="English"   level={locale === 'no' ? 'Profesjonell' : locale === 'pt' ? 'Profissional' : 'Professional'} />
+              <LangEntry flag="🇳🇴" lang="Norwegian"  level={locale === 'no' ? 'Morsmål'     : locale === 'pt' ? 'Nativo'      : 'Native'} />
+              <LangEntry flag="🇬🇧" lang="English"    level={locale === 'no' ? 'Profesjonell' : locale === 'pt' ? 'Profissional' : 'Professional'} />
               <LangEntry flag="🇧🇷" lang="Portuguese" level={locale === 'no' ? 'Profesjonell' : locale === 'pt' ? 'Profissional' : 'Professional'} />
+              <LangEntry flag="🇸🇪" lang="Swedish"    level={locale === 'no' ? 'Begrenset'    : locale === 'pt' ? 'Limitado'     : 'Limited'} />
+              <LangEntry flag="🇩🇰" lang="Danish"     level={locale === 'no' ? 'Begrenset'    : locale === 'pt' ? 'Limitado'     : 'Limited'} />
             </section>
 
             {/* Education */}
