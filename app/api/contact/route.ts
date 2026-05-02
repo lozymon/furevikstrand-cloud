@@ -22,6 +22,14 @@ export async function POST(request: Request) {
     const name = String(body.name ?? '').trim()
     const email = String(body.email ?? '').trim()
     const note = String(body.note ?? body.message ?? '').trim()
+    const honeypot = String(body.website ?? '').trim()
+
+    // Honeypot: real users never see/fill the `website` input. If it's set,
+    // silently return success without sending anything — don't tip off the bot.
+    if (honeypot) {
+      console.warn('[contact] honeypot triggered, ip:', ip)
+      return NextResponse.json({ ok: true })
+    }
 
     if (!email) {
       return NextResponse.json({ error: 'Email is required' }, { status: 400 })

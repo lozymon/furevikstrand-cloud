@@ -84,8 +84,8 @@ ESLint shows 29 errors + 10 warnings in pre-existing code. Group and fix in dedi
 
 ### Security headers
 
-- [ ] **Add a `headers()` block to `next.config.ts`.** Today there are no security headers at all. Wire at minimum: `Content-Security-Policy` (carefully — Plausible + Resend need allow-listing), `Strict-Transport-Security`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy`. Test in https://securityheaders.com after deploy.
-- [ ] **Add a honeypot field to the contact form** (hidden input that bots will fill). Cheap spam filter on top of the rate-limit.
+- [x] **Security headers wired in `next.config.ts`.** `Content-Security-Policy` (with `'unsafe-inline'` for inline styles/scripts; `'unsafe-eval'` and `ws:`/`wss:` only in dev for Turbopack/HMR), `Strict-Transport-Security` (2yr + preload), `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy` (camera/mic/geo/cohort/topics off). Verified via `curl -I` and zero CSP violations across `/en`, `/en/classic`, `/en/testimonials` in Playwright. After Plausible is wired, add its origin to `script-src` + `connect-src`.
+- [x] **Honeypot field on contact form.** Hidden `name="website"` input in `ContactPromptCard` (off-screen + `tabIndex=-1` + `aria-hidden`). Server-side check in `app/api/contact/route.ts` returns 200 silently (logs `[contact] honeypot triggered, ip: ...`) so bots can't differentiate. Confirmed legit submissions still pass through.
 
 ### Tests
 

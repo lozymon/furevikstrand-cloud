@@ -54,6 +54,7 @@ export default function ContactPromptCard({ locale, onDismiss }: Props) {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [note, setNote] = useState('')
+  const [website, setWebsite] = useState('')
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle')
 
   async function handleSubmit(e: React.FormEvent) {
@@ -64,7 +65,7 @@ export default function ContactPromptCard({ locale, onDismiss }: Props) {
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, note }),
+        body: JSON.stringify({ name, email, note, website }),
       })
       setStatus(res.ok ? 'success' : 'error')
     } catch {
@@ -102,6 +103,23 @@ export default function ContactPromptCard({ locale, onDismiss }: Props) {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="flex flex-col gap-2">
+              {/* Honeypot — hidden from real users; bots auto-fill it */}
+              <input
+                type="text"
+                name="website"
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                value={website}
+                onChange={(e) => setWebsite(e.target.value)}
+                style={{
+                  position: 'absolute',
+                  left: '-10000px',
+                  width: '1px',
+                  height: '1px',
+                  opacity: 0,
+                }}
+              />
               <input
                 type="text"
                 value={name}
