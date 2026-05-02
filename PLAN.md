@@ -42,13 +42,8 @@ Status legend: `[ ]` open · `[~]` in progress · `[x]` done · `[-]` dropped
 
 ESLint shows 29 errors + 10 warnings in pre-existing code. Group and fix in dedicated PRs (don't bundle with feature work):
 
-- **Mechanical / safe to auto-fix or near-auto** (~24 issues):
-  - 10 × `react/no-unescaped-entities` — escape `"`/`'` in JSX text
-  - 9 × `react/jsx-no-comment-textnodes` — `// foo` text inside JSX (e.g. classic page section titles); wrap in `{'// foo'}` or use a different separator
-  - 3 × `next/no-html-link-for-pages` — swap `<a>` to `<Link>` for internal nav
-  - 1 × `jsx-a11y/role-supports-aria-props` — drop `aria-expanded` from textarea (or change role)
-  - 1 × `import/no-anonymous-default-export` (already fixed in `eslint.config.mjs`)
-- **Needs human review** (~14 issues):
+- [x] **Mechanical fixes done.** Resolved 10 unescaped quote chars (`&ldquo;/&rdquo;` in testimonial blockquotes), 9 jsx-no-comment-textnodes (wrapped `// ` in classic page section titles), 3 html-link-for-pages (swap to `next/link` in `app/[locale]/error.tsx`), 1 textarea `aria-expanded` (dropped — proper combobox pattern is out of scope). Lint went from 39 → 16 problems.
+- **Needs human review** (16 problems remaining, all `react-hooks/*`):
   - 6 × `react-hooks/refs` — ref reads/writes that may be unsafe
   - 6 × `react-hooks/exhaustive-deps` — missing dep arrays (some are deliberate, some real bugs)
   - 3 × `react-hooks/set-state-in-effect` — anti-pattern; either restructure or justify per case

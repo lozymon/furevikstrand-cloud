@@ -118,7 +118,6 @@ export default function ChatInput({ onSend, onClear, disabled }: Props) {
           rows={1}
           aria-label={t('placeholder')}
           aria-autocomplete="list"
-          aria-expanded={showMenu}
           style={{ outline: 'none', boxShadow: 'none' }}
           className="flex-1 bg-[#1e1e2e] border border-[#252535] rounded-lg px-3 py-2 text-base sm:text-sm text-[#e2e2f0] placeholder-[#8888a8] font-mono resize-none focus:border-[#a78bfa]/50 transition-colors disabled:opacity-50"
         />

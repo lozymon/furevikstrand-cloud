@@ -57,7 +57,7 @@ export default function TestimonialsPage() {
               {/* Translation */}
               <div className="p-5 flex flex-col gap-4 flex-1">
                 <blockquote className="text-sm text-[#c0c0d8] leading-relaxed italic">
-                  "{t.quote[locale]}"
+                  &ldquo;{t.quote[locale]}&rdquo;
                 </blockquote>
 
                 <div className="mt-auto flex items-center justify-between gap-3">

@@ -95,13 +95,13 @@ export default function ClassicPage() {
 
             {/* About */}
             <section className="mb-[22px]">
-              <SectionTitle>// {locale === 'no' ? 'Om meg' : locale === 'pt' ? 'Sobre' : 'About'}</SectionTitle>
+              <SectionTitle>{'// '}{locale === 'no' ? 'Om meg' : locale === 'pt' ? 'Sobre' : 'About'}</SectionTitle>
               <p className="text-[10.5px] text-[#8888a8] leading-[1.8]">{profile.bio[locale]}</p>
             </section>
 
             {/* Experience */}
             <section className="mb-[22px]">
-              <SectionTitle>// {locale === 'no' ? 'Erfaring' : locale === 'pt' ? 'Experiência' : 'Experience'}</SectionTitle>
+              <SectionTitle>{'// '}{locale === 'no' ? 'Erfaring' : locale === 'pt' ? 'Experiência' : 'Experience'}</SectionTitle>
               {expGroups.map((group) => (
                 <div key={group.company} className="mb-4 pl-3 border-l-2 border-[#252535] relative last:mb-0">
                   <span className="absolute -left-[5px] top-1 w-[7px] h-[7px] rounded-full bg-[#a78bfa] border-2 border-[#0d0d10]" />
@@ -127,10 +127,10 @@ export default function ClassicPage() {
 
             {/* Testimonials */}
             <section className="mb-[22px]">
-              <SectionTitle>// {locale === 'no' ? 'Anbefalinger' : locale === 'pt' ? 'Recomendações' : 'Testimonials'}</SectionTitle>
+              <SectionTitle>{'// '}{locale === 'no' ? 'Anbefalinger' : locale === 'pt' ? 'Recomendações' : 'Testimonials'}</SectionTitle>
               {testimonials.slice(0, 3).map((t) => (
                 <div key={t.name} className="mb-[10px] p-[9px_11px] bg-[#161620] border border-[#252535] rounded-[6px] last:mb-0">
-                  <p className="text-[10px] text-[#8888a8] leading-[1.7] mb-2 italic">"{t.quote[locale]}"</p>
+                  <p className="text-[10px] text-[#8888a8] leading-[1.7] mb-2 italic">&ldquo;{t.quote[locale]}&rdquo;</p>
                   <div className="flex justify-between items-baseline">
                     <span className="text-[10px] font-semibold text-[#e2e2f0]">{t.name}</span>
                     <span className="text-[9px] text-[#8888a8]">{t.date}</span>
@@ -142,7 +142,7 @@ export default function ClassicPage() {
 
             {/* Projects */}
             <section className="mb-[22px]">
-              <SectionTitle>// {locale === 'no' ? 'Prosjekter' : locale === 'pt' ? 'Projetos Selecionados' : 'Selected Projects'}</SectionTitle>
+              <SectionTitle>{'// '}{locale === 'no' ? 'Prosjekter' : locale === 'pt' ? 'Projetos Selecionados' : 'Selected Projects'}</SectionTitle>
               {highlighted.map((p) => (
                 <div key={p.id} className="mb-[9px] p-[9px_11px] bg-[#161620] border border-[#252535] rounded-[6px] last:mb-0">
                   <div className="flex justify-between items-baseline mb-1">
@@ -175,7 +175,7 @@ export default function ClassicPage() {
 
             {/* Skills */}
             <section className="mb-[22px]">
-              <SectionTitle>// {locale === 'no' ? 'Ferdigheter' : locale === 'pt' ? 'Habilidades' : 'Skills'}</SectionTitle>
+              <SectionTitle>{'// '}{locale === 'no' ? 'Ferdigheter' : locale === 'pt' ? 'Habilidades' : 'Skills'}</SectionTitle>
               <SkillGroup label={locale === 'no' ? 'Topp ferdigheter' : 'Top Skills'} items={['NestJS', 'Microservices', 'TypeScript', 'AWS', 'AI / LLMs']} />
               <SkillGroup label="Frontend"   items={stack.frontend} />
               <SkillGroup label="Backend"    items={stack.backend} />
@@ -185,7 +185,7 @@ export default function ClassicPage() {
 
             {/* Languages spoken */}
             <section className="mb-[22px]">
-              <SectionTitle>// {locale === 'no' ? 'Språk' : locale === 'pt' ? 'Idiomas' : 'Languages'}</SectionTitle>
+              <SectionTitle>{'// '}{locale === 'no' ? 'Språk' : locale === 'pt' ? 'Idiomas' : 'Languages'}</SectionTitle>
               <LangEntry flag="🇳🇴" lang="Norwegian"  level={locale === 'no' ? 'Morsmål'     : locale === 'pt' ? 'Nativo'      : 'Native'} />
               <LangEntry flag="🇬🇧" lang="English"    level={locale === 'no' ? 'Profesjonell' : locale === 'pt' ? 'Profissional' : 'Professional'} />
               <LangEntry flag="🇧🇷" lang="Portuguese" level={locale === 'no' ? 'Profesjonell' : locale === 'pt' ? 'Profissional' : 'Professional'} />
@@ -195,7 +195,7 @@ export default function ClassicPage() {
 
             {/* Education */}
             <section className="mb-[22px]">
-              <SectionTitle>// {locale === 'no' ? 'Utdanning' : locale === 'pt' ? 'Educação' : 'Education'}</SectionTitle>
+              <SectionTitle>{'// '}{locale === 'no' ? 'Utdanning' : locale === 'pt' ? 'Educação' : 'Education'}</SectionTitle>
               {education.filter((e) => e.country === 'br').map((ed) => (
                 <div key={ed.school} className="mb-2 last:mb-0">
                   <p className="text-[10px] font-semibold text-[#e2e2f0]">{ed.school}</p>
@@ -207,7 +207,7 @@ export default function ClassicPage() {
 
             {/* Certifications */}
             <section className="mb-[22px]">
-              <SectionTitle>// {locale === 'no' ? 'Sertifiseringer' : locale === 'pt' ? 'Certificações' : 'Certifications'}</SectionTitle>
+              <SectionTitle>{'// '}{locale === 'no' ? 'Sertifiseringer' : locale === 'pt' ? 'Certificações' : 'Certifications'}</SectionTitle>
               {certifications.slice(0, 5).map((cert) => (
                 <div key={cert.name} className="py-1 border-b border-[#252535] last:border-0 text-[9px] text-[#8888a8] leading-relaxed">
                   {cert.name}
@@ -217,7 +217,7 @@ export default function ClassicPage() {
 
             {/* Info */}
             <section className="mb-[22px]">
-              <SectionTitle>// Info</SectionTitle>
+              <SectionTitle>{'// Info'}</SectionTitle>
               <InfoRow k={locale === 'no' ? 'Lokasjon'    : locale === 'pt' ? 'Localização'   : 'Location'}  v="Natal, Brazil" />
               <InfoRow k={locale === 'no' ? 'Relokasjon' : locale === 'pt' ? 'Relocação' : 'Relocation'} v={locale === 'no' ? 'Åpen for Norge' : locale === 'pt' ? 'Aberto à Noruega' : 'Open to Norway'} />
               <InfoRow k={locale === 'no' ? 'Arbeidstype' : locale === 'pt' ? 'Tipo trabalho' : 'Work type'} v="Remote · On-site" />

@@ -31,7 +31,7 @@ export default function TestimonialsCarousel({ locale, compact = false }: { loca
         </div>
         <Link href={`/${routeLocale}/testimonials`} className="group block hover:opacity-80 transition-opacity">
           <blockquote className="text-[10px] text-[#c0c0d8] italic line-clamp-2 mb-1.5">
-            "{t.quote[locale]}"
+            &ldquo;{t.quote[locale]}&rdquo;
           </blockquote>
           <p className="text-[10px] text-[#8888a8] font-mono truncate group-hover:text-[#38bdf8] transition-colors">
             — {t.name}
@@ -67,7 +67,7 @@ export default function TestimonialsCarousel({ locale, compact = false }: { loca
       </div>
 
       <blockquote className="text-[11px] text-[#c0c0d8] leading-relaxed italic mb-3 line-clamp-3">
-        "{t.quote[locale]}"
+        &ldquo;{t.quote[locale]}&rdquo;
       </blockquote>
 
       <div className="flex items-center gap-2">
