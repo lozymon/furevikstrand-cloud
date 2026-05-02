@@ -12,10 +12,27 @@ import { logChatEvent } from '@/lib/logEvent'
 import { checkRateLimit, clientIp } from '@/lib/rateLimit'
 import type { Locale } from '@/types'
 
+// Rate limit is enforced via an in-memory Map keyed by IP (see `lib/rateLimit.ts`).
+// This is single-instance only — counters reset on process restart and aren't shared
+// across replicas. Fine for the current single-container Docker deploy; a horizontal
+// scale-out would silently lose enforcement and need Redis (or similar) backing.
 const RATE_LIMIT = 20
 const RATE_WINDOW_MS = 60 * 60 * 1000
 
 // ─── System prompt ────────────────────────────────────────────────────────────
+// The prompt is built from import-time data (profile, experience, projects,
+// stack, education) so it's stable for the lifetime of the process. Cache
+// per-locale to skip the rebuild on every request.
+const systemPromptCache = new Map<Locale, string>()
+
+function systemPromptFor(locale: Locale): string {
+  const cached = systemPromptCache.get(locale)
+  if (cached) return cached
+  const built = buildSystemPrompt(locale)
+  systemPromptCache.set(locale, built)
+  return built
+}
+
 function buildSystemPrompt(locale: Locale): string {
   const localeInstruction =
     locale === 'no'
@@ -145,7 +162,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Empty message' }, { status: 400 })
   }
 
-  const systemPrompt = buildSystemPrompt(locale)
+  const systemPrompt = systemPromptFor(locale)
   const claudeEnabled = process.env.DISABLE_CLAUDE !== 'true'
   const ollamaEnabled = process.env.DISABLE_OLLAMA !== 'true'
 

@@ -64,11 +64,11 @@ ESLint shows 29 errors + 10 warnings in pre-existing code. Group and fix in dedi
 
 ### Chat pipeline
 
-- [ ] **Memoize the system prompt** in `app/api/chat/route.ts:32-103`. It's rebuilt from 5 data files on every request. Cache by locale in module scope; data is import-time so the cache is valid for the lifetime of the process. Saves ~1ms per request and several string concatenations.
-- [ ] **Stop running locale detection twice.** `lib/chat.ts:35` (`detectLocale`) is called client-side in `app/[locale]/page.tsx:164`, but the server then independently parses again. The current behaviour is fine, but if we add server-side autodetect we should pick one place. Add a comment noting the split today, or remove the server-side path.
+- [x] **System prompt memoized** per-locale in `app/api/chat/route.ts`. New `systemPromptCache: Map<Locale, string>` at module scope; `systemPromptFor(locale)` consults it before building. Data sources (profile, experience, projects, stack, education) are all import-time constants, so the cache is valid for the lifetime of the process.
+- [-] **"Run locale detection twice" — claim was stale.** Verified by grepping: `detectLocale` is only called client-side (`app/[locale]/page.tsx`, `app/[locale]/dev/page.tsx`). The server reads `body.locale` directly. No deduplication needed. Dropped.
 - [ ] **Persist `entryId` with each AI reply** so the keyword-matcher continuation logic in `lib/chat.ts:194-217` doesn't have to re-score the prior user message to guess which entry it matched. Pass it back in the response (extra header or JSON envelope on fallback) and store on `Message`.
 - [ ] **Split `data/knowledge.ts`** (570 lines, single array) into `data/knowledge/{about,stack,projects,...}.ts` and re-export from an index. Reduces merge conflicts and makes intent obvious.
-- [ ] **Document the rate limit's single-instance assumption** in `app/api/chat/route.ts:14-29`. The in-memory `Map` resets on restart and isn't shared across replicas — fine for the current Docker single-container deploy, but a future scale-out would silently break it. One-line comment + maybe a CLAUDE.md note.
+- [x] **Rate-limit single-instance assumption documented** at the call site in `app/api/chat/route.ts` (above `RATE_LIMIT`). CLAUDE.md already covers it; comment in `lib/rateLimit.ts` already covers the limiter itself. The new comment makes the constraint discoverable from the consumer.
 
 ### Accessibility
 
