@@ -55,16 +55,16 @@ export default function ClassicPage() {
         <PageHeader current="classic" />
       </div>
 
-      <div className="max-w-[820px] mx-auto px-11 py-10">
+      <div className="max-w-[820px] mx-auto px-4 sm:px-6 lg:px-11 py-6 sm:py-10">
 
         {/* ── Header ─────────────────────────────────────────────── */}
-        <header className="grid grid-cols-[1fr_auto] gap-6 pb-[22px] border-b border-[#252535] mb-[26px]">
-          <div className="flex items-start gap-4">
+        <header className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-4 sm:gap-6 pb-[22px] border-b border-[#252535] mb-[26px]">
+          <div className="flex items-start gap-4 min-w-0">
             <div className="relative w-[70px] h-[70px] rounded-xl overflow-hidden border-2 border-[#252535] shrink-0 print:hidden">
               <Image src="/profile-image.jpeg" alt={profile.name} fill className="object-cover" sizes="70px" priority />
             </div>
-            <div>
-            <h1 className="text-[26px] font-bold tracking-tight leading-none">
+            <div className="min-w-0">
+            <h1 className="text-[22px] sm:text-[26px] font-bold tracking-tight leading-none">
               Kim Andrè <span className="text-[#a78bfa]">Furevikstrand</span>
             </h1>
             <p className="text-[12px] text-[#38bdf8] mt-[5px] leading-snug">
@@ -76,7 +76,7 @@ export default function ClassicPage() {
             </div>
             </div>
           </div>
-          <div className="flex flex-col gap-[5px] items-end text-right">
+          <div className="flex flex-col gap-[5px] items-start text-left sm:items-end sm:text-right">
             <ContactItem label="Email"    value={profile.email} />
             <ContactItem label="Phone"    value={profile.phone} />
             <ContactItem label="Web"      value="furevikstrand.cloud" />
@@ -88,7 +88,7 @@ export default function ClassicPage() {
         </header>
 
         {/* ── Body ───────────────────────────────────────────────── */}
-        <div className="grid grid-cols-[1fr_245px] gap-7 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_245px] gap-7 items-start">
 
           {/* Left column */}
           <div>
@@ -254,9 +254,9 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
 
 function ContactItem({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center gap-1.5">
-      <span className="text-[9px] uppercase tracking-[0.08em] text-[#8888a8]">{label}</span>
-      <span className="text-[10px] text-[#e2e2f0]">{value}</span>
+    <div className="flex items-center gap-1.5 max-w-full">
+      <span className="text-[9px] uppercase tracking-[0.08em] text-[#8888a8] shrink-0">{label}</span>
+      <span className="text-[10px] text-[#e2e2f0] break-all">{value}</span>
     </div>
   )
 }

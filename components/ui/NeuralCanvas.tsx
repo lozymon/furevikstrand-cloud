@@ -24,8 +24,9 @@ export default function NeuralCanvas() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    const NODE_COUNT = 60
-    const CONNECTION_DISTANCE = 150
+    const isSmall = window.innerWidth < 640
+    const NODE_COUNT = isSmall ? 25 : 60
+    const CONNECTION_DISTANCE = isSmall ? 110 : 150
     const nodes: Node[] = []
     let animId: number
 

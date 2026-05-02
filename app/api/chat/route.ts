@@ -9,24 +9,11 @@ import { stack } from '@/data/stack'
 import { education } from '@/data/education'
 import { resolveReply } from '@/lib/chat'
 import { logChatEvent } from '@/lib/logEvent'
+import { checkRateLimit, clientIp } from '@/lib/rateLimit'
 import type { Locale } from '@/types'
 
-// ─── In-memory rate limiter ───────────────────────────────────────────────────
-const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
 const RATE_LIMIT = 20
 const RATE_WINDOW_MS = 60 * 60 * 1000
-
-function checkRateLimit(ip: string): boolean {
-  const now = Date.now()
-  const entry = rateLimitMap.get(ip)
-  if (!entry || now > entry.resetAt) {
-    rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_WINDOW_MS })
-    return true
-  }
-  if (entry.count >= RATE_LIMIT) return false
-  entry.count++
-  return true
-}
 
 // ─── System prompt ────────────────────────────────────────────────────────────
 function buildSystemPrompt(locale: Locale): string {
@@ -110,9 +97,9 @@ interface HistoryMessage {
 
 // ─── Route handler ────────────────────────────────────────────────────────────
 export async function POST(request: Request) {
-  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
+  const ip = clientIp(request)
 
-  if (!checkRateLimit(ip)) {
+  if (!checkRateLimit('chat', ip, RATE_LIMIT, RATE_WINDOW_MS)) {
     return NextResponse.json({ error: 'Rate limit exceeded. Please try again later.' }, { status: 429 })
   }
 

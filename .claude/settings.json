@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Edit",
+      "Write",
+      "Bash(git status)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git show*)",
+      "Bash(git branch*)",
+      "Bash(git stash*)",
+      "Bash(git add *)",
+      "Bash(git commit*)",
+      "Bash(git push)",
+      "Bash(git push origin*)",
+      "Bash(git checkout *)",
+      "Bash(git switch *)",
+      "Bash(git fetch*)",
+      "Bash(git pull*)",
+      "Bash(gh issue*)",
+      "Bash(gh pr*)",
+      "Bash(gh repo*)",
+      "Bash(gh auth status)",
+      "Bash(npx create-next-app*)",
+      "Bash(npx shadcn@latest*)",
+      "Bash(npx prisma*)",
+      "Bash(ls*)",
+      "Bash(mkdir -p *)"
+    ],
+    "deny": [
+      "Bash(pnpm prisma migrate deploy)",
+      "Bash(git push --force*)",
+      "Bash(git reset --hard*)",
+      "Bash(git clean -f*)",
+      "Bash(git branch -D *)",
+      "Bash(rm -rf *)"
+    ]
+  }
+}

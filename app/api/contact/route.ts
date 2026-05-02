@@ -1,6 +1,16 @@
 import { NextResponse } from 'next/server'
+import { checkRateLimit, clientIp } from '@/lib/rateLimit'
+
+const RATE_LIMIT = 5
+const RATE_WINDOW_MS = 60 * 60 * 1000
 
 export async function POST(request: Request) {
+  const ip = clientIp(request)
+
+  if (!checkRateLimit('contact', ip, RATE_LIMIT, RATE_WINDOW_MS)) {
+    return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 })
+  }
+
   const apiKey = process.env.RESEND_API_KEY
   const toEmail = process.env.RESEND_TO_EMAIL ?? 'kim@furevikstrand.cloud'
 

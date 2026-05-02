@@ -97,7 +97,7 @@ export default function ChatInput({ onSend, onClear, disabled }: Props) {
   }
 
   return (
-    <div className="relative border-t border-[#252535] bg-[#161620]">
+    <div className="relative border-t border-[#252535] bg-[#161620] pb-[env(safe-area-inset-bottom)]">
       {showMenu && (
         <SlashMenu
           query={value}
@@ -120,14 +120,14 @@ export default function ChatInput({ onSend, onClear, disabled }: Props) {
           aria-autocomplete="list"
           aria-expanded={showMenu}
           style={{ outline: 'none', boxShadow: 'none' }}
-          className="flex-1 bg-[#1e1e2e] border border-[#252535] rounded-lg px-3 py-2 text-sm text-[#e2e2f0] placeholder-[#8888a8] font-mono resize-none focus:border-[#a78bfa]/50 transition-colors disabled:opacity-50"
+          className="flex-1 bg-[#1e1e2e] border border-[#252535] rounded-lg px-3 py-2 text-base sm:text-sm text-[#e2e2f0] placeholder-[#8888a8] font-mono resize-none focus:border-[#a78bfa]/50 transition-colors disabled:opacity-50"
         />
         <button
           type="button"
           onClick={onClear}
           disabled={disabled}
           aria-label="Clear chat"
-          className="w-9 h-9 rounded-lg border border-[#252535] flex items-center justify-center hover:border-[#a78bfa]/50 hover:text-[#a78bfa] text-[#8888a8] transition-colors disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
+          className="w-11 h-11 sm:w-9 sm:h-9 rounded-lg border border-[#252535] flex items-center justify-center hover:border-[#a78bfa]/50 hover:text-[#a78bfa] text-[#8888a8] transition-colors disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <polyline points="3 6 5 6 21 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
@@ -140,7 +140,7 @@ export default function ChatInput({ onSend, onClear, disabled }: Props) {
           type="submit"
           disabled={disabled || !value.trim()}
           aria-label={t('send')}
-          className="w-9 h-9 rounded-lg bg-[#a78bfa] flex items-center justify-center hover:bg-[#9370e8] transition-colors disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
+          className="w-11 h-11 sm:w-9 sm:h-9 rounded-lg bg-[#a78bfa] flex items-center justify-center hover:bg-[#9370e8] transition-colors disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
             <path d="M2 8L14 8M14 8L9 3M14 8L9 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-[#0d0d10]" />
