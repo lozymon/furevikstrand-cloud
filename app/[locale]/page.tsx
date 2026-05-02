@@ -165,9 +165,12 @@ export default function ChatPage() {
           return
         }
         if (slash.type === 'topic') {
-          const { reply, followUps } = resolveById(slash.entryId, locale)
+          const { reply, followUps, entryId } = resolveById(slash.entryId, locale)
           const id = makeId()
-          setMessages((prev) => [...prev, { id, role: 'ai', content: '', timestamp: new Date() }])
+          setMessages((prev) => [
+            ...prev,
+            { id, role: 'ai', content: '', timestamp: new Date(), source: 'fallback', entryId },
+          ])
           await streamText(reply, id, signal)
           setCurrentFollowUps(followUps)
           setShowSuggestions(true)
@@ -208,7 +211,11 @@ export default function ChatPage() {
       const history = messages
         .filter((m) => !m.testimonial && m.content.trim())
         .slice(-10)
-        .map((m) => ({ role: m.role === 'ai' ? 'assistant' : 'user', content: m.content }))
+        .map((m) => ({
+          role: m.role === 'ai' ? 'assistant' : 'user',
+          content: m.content,
+          ...(m.entryId ? { entryId: m.entryId } : {}),
+        }))
 
       try {
         const messageIndex = messages.filter((m) => m.role === 'user').length + 1
@@ -231,10 +238,18 @@ export default function ChatPage() {
           | 'claude'
           | 'ollama'
           | 'fallback'
+        const entryId = res.headers.get('X-Reply-Entry-Id') ?? undefined
         setIsTyping(false)
         setMessages((prev) => [
           ...prev,
-          { id, role: 'ai', content: '', timestamp: new Date(), source },
+          {
+            id,
+            role: 'ai',
+            content: '',
+            timestamp: new Date(),
+            source,
+            ...(entryId ? { entryId } : {}),
+          },
         ])
 
         if ((source === 'claude' || source === 'ollama') && res.body) {

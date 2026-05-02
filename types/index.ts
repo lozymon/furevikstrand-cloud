@@ -17,6 +17,9 @@ export interface Message {
   timestamp: Date
   source?: 'claude' | 'ollama' | 'fallback' | 'local'
   testimonial?: import('@/data/testimonials').Testimonial
+  // Set on AI messages from the keyword matcher (slash topic + fallback path)
+  // so the continuation logic can skip re-scoring the prior user message.
+  entryId?: string
 }
 
 export interface Project {

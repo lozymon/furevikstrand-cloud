@@ -112,6 +112,10 @@ ${educationSection}`
 interface HistoryMessage {
   role: 'user' | 'assistant'
   content: string
+  // Set on assistant turns when the prior reply came from the keyword matcher
+  // (slash topic command or fallback). Lets the matcher's continuation logic
+  // skip re-scoring the prior user message when the user says "tell me more".
+  entryId?: string
 }
 
 // ─── Route handler ────────────────────────────────────────────────────────────
@@ -149,6 +153,11 @@ export async function POST(request: Request) {
               msg.content.trim()
             )
           })
+          .map((m: Record<string, unknown>) => ({
+            role: m.role as 'user' | 'assistant',
+            content: m.content as string,
+            ...(typeof m.entryId === 'string' ? { entryId: m.entryId } : {}),
+          }))
           .slice(-10)
       : []
     sessionId = typeof body.sessionId === 'string' ? body.sessionId.slice(0, 36) : 'unknown'
@@ -281,12 +290,12 @@ export async function POST(request: Request) {
   }
 
   // ─── Fallback: keyword matcher ────────────────────────────────────────────
-  const { reply } = resolveReply(message, locale, history)
+  const { reply, entryId } = resolveReply(message, locale, history)
   logChatEvent({
     session_id: sessionId,
     locale,
     reply_source: 'fallback',
-    topic: null,
+    topic: entryId,
     message_index: messageIndex,
     page,
     user_message: message,
@@ -296,6 +305,7 @@ export async function POST(request: Request) {
     headers: {
       'Content-Type': 'text/plain; charset=utf-8',
       'X-Reply-Source': 'fallback',
+      'X-Reply-Entry-Id': entryId,
     },
   })
 }

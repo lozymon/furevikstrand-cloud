@@ -55,6 +55,7 @@ type Line = {
   type: 'banner' | 'boot' | 'output' | 'input' | 'ai'
   text: string
   source?: 'claude' | 'ollama' | 'fallback' | 'local'
+  entryId?: string
 }
 
 // Render markdown-lite for the terminal — stay within the green palette
@@ -220,9 +221,9 @@ export default function DevPage() {
           return
         }
         if (slash.type === 'topic') {
-          const { reply } = resolveById(slash.entryId, locale)
+          const { reply, entryId } = resolveById(slash.entryId, locale)
           const id = makeId()
-          setLines((prev) => [...prev, { id, type: 'ai', text: '', source: 'local' }])
+          setLines((prev) => [...prev, { id, type: 'ai', text: '', source: 'local', entryId }])
           await streamLine(reply, id)
           setBusy(false)
           return
@@ -246,7 +247,11 @@ export default function DevPage() {
       const history = lines
         .filter((l) => (l.type === 'input' || l.type === 'ai') && l.text.trim())
         .slice(-10)
-        .map((l) => ({ role: l.type === 'input' ? 'user' : 'assistant', content: l.text }))
+        .map((l) => ({
+          role: l.type === 'input' ? 'user' : 'assistant',
+          content: l.text,
+          ...(l.entryId ? { entryId: l.entryId } : {}),
+        }))
 
       try {
         const messageIndex = lines.filter((l) => l.type === 'input').length
@@ -269,7 +274,11 @@ export default function DevPage() {
           | 'claude'
           | 'ollama'
           | 'fallback'
-        setLines((prev) => [...prev, { id, type: 'ai', text: '', source }])
+        const entryId = res.headers.get('X-Reply-Entry-Id') ?? undefined
+        setLines((prev) => [
+          ...prev,
+          { id, type: 'ai', text: '', source, ...(entryId ? { entryId } : {}) },
+        ])
 
         if ((source === 'claude' || source === 'ollama') && res.body) {
           streamingRef.current = true

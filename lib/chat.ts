@@ -289,7 +289,24 @@ export interface ResolveResult {
   entryId: string
 }
 
-type HistoryMessage = { role: string; content: string }
+type HistoryMessage = { role: string; content: string; entryId?: string }
+
+// Find the most recent assistant message and return its entryId if the client
+// persisted one. Falls back to re-scoring the prior user message — used when
+// the assistant reply came from Claude/Ollama (no entry concept) or from an
+// older session before entryId was wired up.
+function lastEntryIdFrom(messageHistory: HistoryMessage[]): string | undefined {
+  const lastAssistant = [...messageHistory].reverse().find((m) => m.role === 'assistant')
+  if (lastAssistant?.entryId) return lastAssistant.entryId
+
+  const prevUser = [...messageHistory].reverse().find((m) => m.role === 'user')
+  if (!prevUser) return undefined
+  const prevScored = knowledge
+    .map((entry) => ({ entry, score: scoreEntry(prevUser.content, entry) }))
+    .filter(({ score }) => score > 0)
+    .sort((a, b) => b.score - a.score)
+  return prevScored[0]?.entry.id
+}
 
 export function resolveReply(
   input: string,
@@ -298,25 +315,18 @@ export function resolveReply(
 ): ResolveResult {
   // Continuation intent: re-use last matched entry but pick a different reply variant
   if (isContinuation(input) && messageHistory.length > 0) {
-    const prevUserMsgs = messageHistory.filter((m) => m.role === 'user')
-    const lastUserContent = prevUserMsgs[prevUserMsgs.length - 1]?.content
-    if (lastUserContent) {
-      const prevScored = knowledge
-        .map((entry) => ({ entry, score: scoreEntry(lastUserContent, entry) }))
-        .filter(({ score }) => score > 0)
-        .sort((a, b) => b.score - a.score)
-      const lastEntry = prevScored[0]?.entry
-      if (lastEntry) {
-        const variants = lastEntry.replies[locale]
-        // Pick a variant different from the last AI reply if possible
-        const lastAiContent =
-          [...messageHistory].reverse().find((m) => m.role === 'assistant')?.content ?? ''
-        const fresh = variants.filter((r) => r !== lastAiContent)
-        return {
-          reply: pick(fresh.length > 0 ? fresh : variants),
-          followUps: lastEntry.followUps[locale],
-          entryId: lastEntry.id,
-        }
+    const lastEntryId = lastEntryIdFrom(messageHistory)
+    const lastEntry = lastEntryId ? knowledge.find((e) => e.id === lastEntryId) : undefined
+    if (lastEntry) {
+      const variants = lastEntry.replies[locale]
+      // Pick a variant different from the last AI reply if possible
+      const lastAiContent =
+        [...messageHistory].reverse().find((m) => m.role === 'assistant')?.content ?? ''
+      const fresh = variants.filter((r) => r !== lastAiContent)
+      return {
+        reply: pick(fresh.length > 0 ? fresh : variants),
+        followUps: lastEntry.followUps[locale],
+        entryId: lastEntry.id,
       }
     }
   }
@@ -327,18 +337,7 @@ export function resolveReply(
     .sort((a, b) => b.score - a.score)
 
   // Avoid repeating the last matched entry
-  const lastEntryId =
-    messageHistory.length > 0
-      ? (() => {
-          const prevUser = [...messageHistory].reverse().find((m) => m.role === 'user')
-          if (!prevUser) return undefined
-          const prevScored = knowledge
-            .map((e) => ({ e, s: scoreEntry(prevUser.content, e) }))
-            .filter(({ s }) => s > 0)
-            .sort((a, b) => b.s - a.s)
-          return prevScored[0]?.e.id
-        })()
-      : undefined
+  const lastEntryId = messageHistory.length > 0 ? lastEntryIdFrom(messageHistory) : undefined
 
   const best = scored.find(({ entry }) => entry.id !== lastEntryId) ?? scored[0]
 
