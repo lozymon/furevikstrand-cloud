@@ -35,8 +35,25 @@ Status legend: `[ ]` open · `[~]` in progress · `[x]` done · `[-]` dropped
 
 ### DX & tooling gaps
 
-- [ ] **Add lint + format scripts** to `package.json`. Currently only `dev/build/start`. Wire `eslint` (Next has `eslint-config-next` ready) and `prettier`. Adds a `npm run lint` and `npm run typecheck` (the latter just `tsc --noEmit`).
-- [ ] **Add a pre-commit hook** (lint-staged + husky, or just a git hook) so the missing lint/format pipeline doesn't immediately drift again.
+- [x] **Lint + format + typecheck scripts.** Added `eslint` (flat config via `eslint-config-next` 16 + `eslint-config-prettier`), `prettier` 3 (`{ semi: false, singleQuote: true, trailingComma: 'es5', printWidth: 100 }` to match existing style), and scripts: `lint`, `lint:fix`, `format`, `format:check`, `typecheck`. Pinned Node via `engines: { node: '>=20' }`.
+- [ ] **Pre-commit hook** (lint-staged + husky, or just a git hook) so the new lint/format pipeline doesn't drift. Hold until existing lint debt below is cleaned up — otherwise every commit fails.
+
+### Lint debt (newly surfaced by ESLint setup)
+
+ESLint shows 29 errors + 10 warnings in pre-existing code. Group and fix in dedicated PRs (don't bundle with feature work):
+
+- **Mechanical / safe to auto-fix or near-auto** (~24 issues):
+  - 10 × `react/no-unescaped-entities` — escape `"`/`'` in JSX text
+  - 9 × `react/jsx-no-comment-textnodes` — `// foo` text inside JSX (e.g. classic page section titles); wrap in `{'// foo'}` or use a different separator
+  - 3 × `next/no-html-link-for-pages` — swap `<a>` to `<Link>` for internal nav
+  - 1 × `jsx-a11y/role-supports-aria-props` — drop `aria-expanded` from textarea (or change role)
+  - 1 × `import/no-anonymous-default-export` (already fixed in `eslint.config.mjs`)
+- **Needs human review** (~14 issues):
+  - 6 × `react-hooks/refs` — ref reads/writes that may be unsafe
+  - 6 × `react-hooks/exhaustive-deps` — missing dep arrays (some are deliberate, some real bugs)
+  - 3 × `react-hooks/set-state-in-effect` — anti-pattern; either restructure or justify per case
+  - 1 × `react-hooks/immutability`
+- **Prettier** — 37 files diverge from `.prettierrc.json`. Run `npm run format` once, commit as a single dedicated `chore: prettier sweep` so the diff is reviewable in isolation.
 
 ### Robustness & resilience
 
