@@ -27,10 +27,14 @@ export default function ChatInput({ onSend, onClear, onStop, isResponding }: Pro
       : []
   const showMenu = filtered.length > 0
 
-  // Reset active index when filtered list changes
-  useEffect(() => {
+  // Reset active index when input value changes — calculated during render
+  // (React 19 "reset state on prop change" pattern) instead of an effect
+  // that would cause a cascading re-render.
+  const [prevValue, setPrevValue] = useState(value)
+  if (prevValue !== value) {
+    setPrevValue(value)
     setActiveIndex(0)
-  }, [value])
+  }
 
   // Re-focus when AI finishes responding
   useEffect(() => {

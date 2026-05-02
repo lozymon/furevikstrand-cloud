@@ -50,19 +50,24 @@ export function ChatProvider({ children, locale }: { children: React.ReactNode; 
   const [isLoaded, setIsLoaded] = useState(false)
   const [sessionId] = useState(() => getOrCreateSessionId())
 
-  // Restore from sessionStorage on mount
+  // Restore from sessionStorage on mount. The locale dep is stable for the
+  // lifetime of this provider (a locale change remounts the layout), so this
+  // effect runs exactly once. setState here is unavoidable: sessionStorage
+  // can't be read inside a useState initialiser without a hydration mismatch
+  // since SSR has no `window`.
   useEffect(() => {
     const stored = loadFromStorage(locale)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (stored.length > 0) setMessages(stored)
     setIsLoaded(true)
-  }, [])
+  }, [locale])
 
   // Persist messages to sessionStorage whenever they change
   useEffect(() => {
     if (isLoaded && messages.length > 0) {
       saveToStorage(messages, locale)
     }
-  }, [messages, isLoaded])
+  }, [messages, isLoaded, locale])
 
   return (
     <ChatContext.Provider

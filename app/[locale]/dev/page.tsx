@@ -120,15 +120,21 @@ export default function DevPage() {
   const [input, setInput] = useState('')
   const [busy, setBusy] = useState(false)
   const [booted, setBooted] = useState(false)
+  const [activeIndex, setActiveIndex] = useState(0)
+  const [isStreaming, setIsStreaming] = useState(false)
 
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const streamingRef = useRef(false)
 
-  // Boot sequence — skip if there's a stored session
+  // Boot sequence — skip if there's a stored session. The locale dep is
+  // stable for this provider's lifetime (locale change remounts the layout).
+  // setState here is the init pattern; sessionStorage can't be read inside
+  // a useState lazy initialiser without SSR hydration mismatch.
   useEffect(() => {
     const stored = loadFromStorage(locale)
     if (stored.length > 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setLines([{ id: 'banner', type: 'banner', text: BANNER }, ...stored])
       setBooted(true)
       return
@@ -150,8 +156,7 @@ export default function DevPage() {
     return () => {
       cancelled = true
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [locale])
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -160,18 +165,20 @@ export default function DevPage() {
   // Persist conversation lines to sessionStorage
   useEffect(() => {
     if (booted) saveToStorage(lines, locale)
-  }, [lines, booted])
+  }, [lines, booted, locale])
 
   const streamLine = useCallback(async (text: string, id: string) => {
     const CHUNK = 3
     const TICK = 14
     streamingRef.current = true
+    setIsStreaming(true)
     for (let i = 0; i <= text.length; i += CHUNK) {
       setLines((prev) => prev.map((l) => (l.id === id ? { ...l, text: text.slice(0, i) } : l)))
       await delay(TICK)
     }
     setLines((prev) => prev.map((l) => (l.id === id ? { ...l, text } : l)))
     streamingRef.current = false
+    setIsStreaming(false)
   }, [])
 
   // Re-focus when AI finishes responding
@@ -265,14 +272,21 @@ export default function DevPage() {
         setLines((prev) => [...prev, { id, type: 'ai', text: '', source }])
 
         if ((source === 'claude' || source === 'ollama') && res.body) {
+          streamingRef.current = true
+          setIsStreaming(true)
           const reader = res.body.getReader()
           const decoder = new TextDecoder()
           let accumulated = ''
-          while (true) {
-            const { done, value } = await reader.read()
-            if (done) break
-            accumulated += decoder.decode(value, { stream: true })
-            setLines((prev) => prev.map((l) => (l.id === id ? { ...l, text: accumulated } : l)))
+          try {
+            while (true) {
+              const { done, value } = await reader.read()
+              if (done) break
+              accumulated += decoder.decode(value, { stream: true })
+              setLines((prev) => prev.map((l) => (l.id === id ? { ...l, text: accumulated } : l)))
+            }
+          } finally {
+            streamingRef.current = false
+            setIsStreaming(false)
           }
         } else {
           const raw = await res.text()
@@ -287,12 +301,10 @@ export default function DevPage() {
 
       setBusy(false)
     },
-    [busy, lines, locale, pathname, router, streamLine]
+    [busy, lines, locale, pathname, router, streamLine, t]
   )
 
   const handleSubmit = useCallback(() => submitText(input.trim()), [submitText, input])
-
-  const [activeIndex, setActiveIndex] = useState(0)
 
   const slashSuggestions =
     input.startsWith('/') && !input.includes(' ')
@@ -301,9 +313,14 @@ export default function DevPage() {
         : SLASH_COMMANDS.filter((c) => c.cmd.startsWith(input))
       : []
 
-  useEffect(() => {
+  // Reset active index when input changes — calculate during render rather
+  // than via useEffect to avoid an extra re-render. See React docs:
+  // https://react.dev/reference/react/useState#storing-information-from-previous-renders
+  const [prevInput, setPrevInput] = useState(input)
+  if (prevInput !== input) {
+    setPrevInput(input)
     setActiveIndex(0)
-  }, [input])
+  }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (slashSuggestions.length > 0) {
@@ -414,7 +431,7 @@ export default function DevPage() {
           </div>
         ))}
 
-        {busy && !streamingRef.current && (
+        {busy && !isStreaming && (
           <p className="text-[#1a6b1a] text-xs animate-pulse">processing...</p>
         )}
 

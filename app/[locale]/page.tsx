@@ -96,29 +96,32 @@ export default function ChatPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [t])
 
-  const streamText = useCallback(async (text: string, id: string, signal?: AbortSignal) => {
-    const CHUNK = 3
-    const TICK = 18
-    streamingRef.current = true
-    setIsStreaming(true)
-    for (let i = 0; i <= text.length; i += CHUNK) {
-      if (signal?.aborted) {
-        setMessages((prev) =>
-          prev.map((m) => (m.id === id ? { ...m, content: text.slice(0, i) } : m))
-        )
-        streamingRef.current = false
-        setIsStreaming(false)
-        return
+  const streamText = useCallback(
+    async (text: string, id: string, signal?: AbortSignal) => {
+      const CHUNK = 3
+      const TICK = 18
+      streamingRef.current = true
+      setIsStreaming(true)
+      for (let i = 0; i <= text.length; i += CHUNK) {
+        if (signal?.aborted) {
+          setMessages((prev) =>
+            prev.map((m) => (m.id === id ? { ...m, content: text.slice(0, i) } : m))
+          )
+          streamingRef.current = false
+          setIsStreaming(false)
+          return
+        }
+        const partial = text.slice(0, i)
+        setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, content: partial } : m)))
+        await delay(TICK)
       }
-      const partial = text.slice(0, i)
-      setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, content: partial } : m)))
-      await delay(TICK)
-    }
-    // Ensure full text is set
-    setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, content: text } : m)))
-    streamingRef.current = false
-    setIsStreaming(false)
-  }, [])
+      // Ensure full text is set
+      setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, content: text } : m)))
+      streamingRef.current = false
+      setIsStreaming(false)
+    },
+    [setMessages]
+  )
 
   const handleSend = useCallback(
     async (text: string) => {
@@ -278,7 +281,21 @@ export default function ChatPage() {
 
       setShowSuggestions(true)
     },
-    [handleClear, locale, pathname, router, suggestions, streamText]
+    [
+      handleClear,
+      locale,
+      messages,
+      pathname,
+      router,
+      sessionId,
+      setCurrentFollowUps,
+      setIsTyping,
+      setMessages,
+      setShowSuggestions,
+      streamText,
+      suggestions,
+      t,
+    ]
   )
 
   return (
