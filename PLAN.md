@@ -36,7 +36,7 @@ Status legend: `[ ]` open · `[~]` in progress · `[x]` done · `[-]` dropped
 ### DX & tooling gaps
 
 - [x] **Lint + format + typecheck scripts.** Added `eslint` (flat config via `eslint-config-next` 16 + `eslint-config-prettier`), `prettier` 3 (`{ semi: false, singleQuote: true, trailingComma: 'es5', printWidth: 100 }` to match existing style), and scripts: `lint`, `lint:fix`, `format`, `format:check`, `typecheck`. Pinned Node via `engines: { node: '>=20' }`.
-- [ ] **Pre-commit hook** (lint-staged + husky, or just a git hook) so the new lint/format pipeline doesn't drift. Hold until existing lint debt below is cleaned up — otherwise every commit fails.
+- [x] **Pre-commit hook wired** with `husky` + `lint-staged`. `.husky/pre-commit` runs `npx lint-staged`; config in `package.json` runs `eslint --fix` + `prettier --write` on staged JS/TS, and `prettier --write` on staged JSON/MD/CSS/MJS/CJS/YAML. `prepare: husky` script bootstraps the hook on `npm install`, so contributors get it automatically. Verified by staging a malformatted file — it was reformatted on commit.
 
 ### Lint debt (newly surfaced by ESLint setup)
 
