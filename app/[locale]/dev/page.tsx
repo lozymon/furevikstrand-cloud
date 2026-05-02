@@ -1,11 +1,11 @@
 'use client'
 
 import { useState, useCallback, useEffect, useRef } from 'react'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { useRouter, usePathname } from 'next/navigation'
 import PageNav from '@/components/layout/PageNav'
 import LanguageSwitcher from '@/components/layout/LanguageSwitcher'
-import { resolveById, detectLocale, handleSlashCommand, helpReplies, SLASH_COMMANDS } from '@/lib/chat'
+import { resolveById, detectLocale, handleSlashCommand, SLASH_COMMANDS } from '@/lib/chat'
 import { getOrCreateSessionId } from '@/lib/session'
 import type { Locale } from '@/types'
 import { profile } from '@/data/profile'
@@ -89,6 +89,7 @@ function saveToStorage(lines: Line[], locale: string) {
 
 export default function DevPage() {
   const locale = useLocale() as Locale
+  const t = useTranslations('chat')
   const router = useRouter()
   const pathname = usePathname()
 
@@ -175,7 +176,7 @@ export default function DevPage() {
       if (slash.type === 'help') {
         const id = makeId()
         setLines((prev) => [...prev, { id, type: 'ai', text: '' }])
-        await streamLine(helpReplies[locale], id)
+        await streamLine(t('help'), id)
         setBusy(false)
         return
       }

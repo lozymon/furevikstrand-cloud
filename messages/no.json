@@ -33,6 +33,9 @@
       "Hvordan kan jeg kontakte deg?"
     ],
     "welcome": "Hei! Jeg er Kims AI-assistent. Spør meg om hans erfaring, prosjekter eller tilgjengelighet.",
+    "testimonialReply": "Her er hva **{name}** sa:",
+    "error": "Noe gikk galt. Prøv igjen.",
+    "help": "**Tilgjengelige kommandoer:**\n\n*Emner*\n`/about` — Hvem er Kim\n`/experience` — Arbeidshistorikk\n`/stack` — Teknologistakk\n`/skills` — Kompetanseoversikt\n`/projects` — Åpen kildekode-prosjekter\n`/hire` — Tilgjengelighet\n`/contact` — Kontaktinfo\n`/cv` — Last ned CV\n`/location` — Hvor jeg er basert\n`/databases` — Databaseerfaring\n`/devops` — Docker og utrulling\n`/mentoring` — Lederskap og mentoring\n`/style` — Hvordan jeg jobber\n`/certifications` — Sertifikater og kurs\n`/education` — Utdanningsbakgrunn\n`/testimonials` — Hva kolleger sier\n\n*Språk*\n`/en` `/no` `/pt` — Bytt språk\n\n*Annet*\n`/help` — Vis denne meldingen\n`/clear` — Tøm skjermen\n\nEller bare spør naturlig på hvilket som helst språk.",
     "fallback": [
       "Jeg er ikke sikker på at jeg forstod det. Prøv å spørre om stakk, erfaring, prosjekter eller tilgjengelighet.",
       "Kan du omformulere det? Du kan spørre om tekniske ferdigheter, arbeidshistorie eller kontaktinformasjon.",

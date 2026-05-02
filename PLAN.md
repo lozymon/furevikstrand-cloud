@@ -21,17 +21,17 @@ Status legend: `[ ]` open · `[~]` in progress · `[x]` done · `[-]` dropped
 
 ### SEO & social
 
-- [ ] **Add an OG image.** No `public/og*.png` exists, so LinkedIn/Twitter/Slack previews render with no card art. Generate one (1200×630) — either static in `public/og-image.png` or dynamic via `app/[locale]/opengraph-image.tsx` using `next/og`. Wire it into `openGraph.images` in `app/[locale]/layout.tsx:31-37`.
-- [ ] **Add `twitter` card metadata** in `app/[locale]/layout.tsx`. Same image, `card: 'summary_large_image'`.
-- [ ] **Add `alternates.canonical`** to `generateMetadata` in `app/[locale]/layout.tsx:24-29`. Right now we set `languages` but no canonical, so each locale page can be seen as a duplicate of the default.
-- [ ] **Expand `app/sitemap.ts`** — currently lists only `/{locale}` (3 URLs). Add `/testimonials`, `/certifications`, `/classic`, `/contact` (and any others in `lib/nav.ts`) for each locale. Use `alternates.languages` per entry for proper hreflang in the sitemap.
-- [ ] **Add JSON-LD `Person` structured data** to the locale layout. One small `<script type="application/ld+json">` block with name, role, sameAs (GitHub, LinkedIn) — pulls Google rich-result eligibility for free.
+- [x] **OG image** — already implemented in `app/[locale]/opengraph-image.tsx` (themed, locale-aware, with stats badge). Auto-detected by Next, verified via curl on `/en/opengraph-image`.
+- [x] **Twitter card metadata** — added `twitter: { card: 'summary_large_image', title, description }` in `generateMetadata`.
+- [x] **`alternates.canonical`** + `x-default` hreflang — wired in `generateMetadata`. Verified `<link rel="canonical">` in HTML.
+- [x] **Expanded `app/sitemap.ts`** — now emits 12 URLs (4 routes × 3 locales) with full `xhtml:link rel="alternate"` hreflang per entry plus `x-default`.
+- [x] **JSON-LD `Person` structured data** — injected as `<script type="application/ld+json">` in the locale layout body. Includes name, jobTitle, description, email, sameAs (GitHub, GitLab, LinkedIn).
 
 ### i18n drift (hardcoded strings)
 
-- [ ] **Move testimonial reply strings** out of `app/[locale]/page.tsx:150-154`. Add a `chat.testimonialReply` key with `{name}` interpolation to all three `messages/*.json` and call `t('testimonialReply', { name: testimonial.name })`.
-- [ ] **Move the chat error string** out of `app/[locale]/page.tsx:213` (`'Something went wrong. Please try again.'`). Add `chat.error` to all three message files.
-- [ ] **Move `helpReplies` out of `lib/chat.ts:306-310`.** Currently three large blocks of markdown live in TS. Move each to `messages/{locale}.json` under `chat.help` so translations live with all the other UI strings.
+- [x] **Testimonial reply strings** — moved to `chat.testimonialReply` with `{name}` interpolation in all three `messages/*.json`. Page uses `t('testimonialReply', { name })`.
+- [x] **Chat error string** — moved to `chat.error` in all three message files.
+- [x] **`helpReplies`** — moved to `chat.help` in `messages/*.json`. Removed from `lib/chat.ts`. Both `app/[locale]/page.tsx` and `app/[locale]/dev/page.tsx` consume via `useTranslations('chat')`.
 
 ### DX & tooling gaps
 

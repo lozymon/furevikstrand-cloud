@@ -13,7 +13,6 @@ import {
   resolveById,
   detectLocale,
   handleSlashCommand,
-  helpReplies,
   resolveTestimonial,
 } from '@/lib/chat'
 import { useChatContext } from '@/context/ChatContext'
@@ -123,7 +122,7 @@ export default function ChatPage() {
         if (slash.type === 'help') {
           const id = makeId()
           setMessages((prev) => [...prev, { id, role: 'ai', content: '', timestamp: new Date() }])
-          await streamText(helpReplies[locale], id)
+          await streamText(t('help'), id)
           setShowSuggestions(true)
           return
         }
@@ -147,14 +146,9 @@ export default function ChatPage() {
       if (testimonial) {
         await delay(350)
         setIsTyping(false)
-        const testimonialReplies: Record<string, string> = {
-          en: `Here's what **${testimonial.name}** said:`,
-          no: `Her er hva **${testimonial.name}** sa:`,
-          pt: `Veja o que **${testimonial.name}** disse:`,
-        }
         const id = makeId()
         setMessages((prev) => [...prev, { id, role: 'ai', content: '', timestamp: new Date(), testimonial }])
-        await streamText(testimonialReplies[locale] ?? testimonialReplies.en, id)
+        await streamText(t('testimonialReply', { name: testimonial.name }), id)
         setCurrentFollowUps(suggestions)
         setShowSuggestions(true)
         return
@@ -210,7 +204,7 @@ export default function ChatPage() {
         }
       } catch {
         setIsTyping(false)
-        setMessages((prev) => [...prev, { id, role: 'ai', content: 'Something went wrong. Please try again.', timestamp: new Date(), source: 'fallback' }])
+        setMessages((prev) => [...prev, { id, role: 'ai', content: t('error'), timestamp: new Date(), source: 'fallback' }])
       }
 
       setShowSuggestions(true)
