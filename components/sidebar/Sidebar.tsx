@@ -189,7 +189,12 @@ function SocialLink({ href, label, icon }: { href: string; label: string; icon: 
       rel="noopener noreferrer"
       className="flex items-center gap-2 text-xs text-[#8888a8] hover:text-[#38bdf8] transition-colors font-mono group"
     >
-      <span className="text-[#252535] group-hover:text-[#38bdf8] transition-colors">{icon}</span>
+      <span
+        aria-hidden="true"
+        className="text-[#8888a8] group-hover:text-[#38bdf8] transition-colors"
+      >
+        {icon}
+      </span>
       <span className="truncate">{label}</span>
     </a>
   )

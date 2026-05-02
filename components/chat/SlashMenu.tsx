@@ -4,13 +4,14 @@ import { useEffect, useRef } from 'react'
 import type { SlashCommand } from '@/lib/chat'
 
 interface Props {
+  listboxId: string
   query: string
   commands: SlashCommand[]
   activeIndex: number
   onSelect: (cmd: string) => void
 }
 
-export default function SlashMenu({ query, commands, activeIndex, onSelect }: Props) {
+export default function SlashMenu({ listboxId, query, commands, activeIndex, onSelect }: Props) {
   const filtered = query === '/' ? commands : commands.filter((c) => c.cmd.startsWith(query))
 
   const activeRef = useRef<HTMLButtonElement>(null)
@@ -28,11 +29,16 @@ export default function SlashMenu({ query, commands, activeIndex, onSelect }: Pr
           commands · ↑↓ navigate · Enter select
         </span>
       </div>
-      <ul className="max-h-52 overflow-y-auto" role="listbox" aria-label="Slash commands">
+      <ul
+        id={listboxId}
+        className="max-h-52 overflow-y-auto"
+        role="listbox"
+        aria-label="Slash commands"
+      >
         {filtered.map((c, i) => {
           const isActive = i === activeIndex
           return (
-            <li key={c.cmd} role="option" aria-selected={isActive}>
+            <li key={c.cmd} id={`slash-option-${i}`} role="option" aria-selected={isActive}>
               <button
                 ref={isActive ? activeRef : undefined}
                 onMouseDown={(e) => {

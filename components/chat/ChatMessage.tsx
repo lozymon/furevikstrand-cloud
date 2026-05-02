@@ -171,7 +171,7 @@ export default function ChatMessage({ message }: Props) {
               </p>
               <a
                 href={`/${locale}/testimonials/${message.testimonial.slug}`}
-                className="inline-flex items-center gap-1 mt-2 text-[10px] text-[#a78bfa]/70 hover:text-[#a78bfa] transition-colors font-mono"
+                className="inline-flex items-center gap-1 mt-2 text-[10px] text-[#a78bfa] hover:text-[#c4b5fd] transition-colors font-mono"
               >
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <path
@@ -209,7 +209,7 @@ export default function ChatMessage({ message }: Props) {
             {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
           </time>
           {(message.source === 'claude' || message.source === 'ollama') && (
-            <span className="text-[10px] font-mono text-[#a78bfa]/60 border border-[#a78bfa]/30 px-1 rounded leading-tight select-none">
+            <span className="text-[10px] font-mono text-[#c4b5fd] border border-[#a78bfa]/30 px-1 rounded leading-tight select-none">
               AI
             </span>
           )}

@@ -72,9 +72,9 @@ ESLint shows 29 errors + 10 warnings in pre-existing code. Group and fix in dedi
 
 ### Accessibility
 
-- [ ] **Audit ARIA on the chat surface.** Ensure `ChatWindow` has `role="log"` + `aria-live="polite"`, `ChatInput` is properly labelled, `SlashMenu` is a real listbox with arrow-key navigation and `aria-activedescendant`, focus returns to input after sending. Use the `a11y-check` skill or run axe-core in the browser.
-- [ ] **Verify color contrast** of the dark theme (`#0d0d10` background) against text colors used in `ChatMessage`/`Sidebar`. Tailwind defaults can dip below 4.5:1.
-- [ ] **Add a "skip to chat" link** at the top of `app/[locale]/page.tsx` for keyboard users — the page leads with `NeuralCanvas` + sidebars before the main chat.
+- [x] **Chat surface ARIA wired.** `ChatWindow` was already `role="log"` + `aria-live="polite"`. Promoted `SlashMenu` to a proper combobox: textarea now has `role="combobox"`, `aria-controls="slash-listbox"`, `aria-expanded`, `aria-haspopup="listbox"`, and `aria-activedescendant` pointing at `slash-option-{i}` IDs on each `<li role="option">`. Verified rendered HTML carries every attribute. Focus returns to input after send (already in place via `useEffect` on `disabled`).
+- [x] **Color contrast audited.** Computed WCAG ratios for every text color × background combination in `ChatMessage`/`Sidebar`. Three real failures fixed: AI source badge (`text-[#a78bfa]/60` → `text-[#c4b5fd]`, was 3.04:1), testimonial CTA link (`text-[#a78bfa]/70` → full opacity, was 3.92:1), and SocialLink icon (`text-[#252535]` was 1.19:1, basically invisible — bumped to `text-[#8888a8]` and marked `aria-hidden`). Everything else clears AA (4.5:1) by a wide margin.
+- [x] **Skip-to-chat link added.** First focusable element in `app/[locale]/page.tsx`, hidden via `sr-only` until focused, jumps to the textarea via `#chat-input`. i18n key `chat.skipToInput` added in en/no/pt.
 
 ### Performance
 

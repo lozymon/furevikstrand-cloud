@@ -26,6 +26,8 @@ export default function ChatInput({ onSend, onClear, onStop, isResponding }: Pro
         : SLASH_COMMANDS.filter((c) => c.cmd.startsWith(value))
       : []
   const showMenu = filtered.length > 0
+  const SLASH_LISTBOX_ID = 'slash-listbox'
+  const activeOptionId = showMenu ? `slash-option-${activeIndex}` : undefined
 
   // Reset active index when input value changes — calculated during render
   // (React 19 "reset state on prop change" pattern) instead of an effect
@@ -111,6 +113,7 @@ export default function ChatInput({ onSend, onClear, onStop, isResponding }: Pro
     <div className="relative border-t border-[#252535] bg-[#161620] pb-[env(safe-area-inset-bottom)]">
       {showMenu && (
         <SlashMenu
+          listboxId={SLASH_LISTBOX_ID}
           query={value}
           commands={SLASH_COMMANDS}
           activeIndex={activeIndex}
@@ -120,6 +123,7 @@ export default function ChatInput({ onSend, onClear, onStop, isResponding }: Pro
       <form onSubmit={handleSubmit} className="p-3 flex items-end gap-2">
         <textarea
           ref={textareaRef}
+          id="chat-input"
           value={value}
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={handleKeyDown}
@@ -128,7 +132,12 @@ export default function ChatInput({ onSend, onClear, onStop, isResponding }: Pro
           placeholder={t('placeholder')}
           rows={1}
           aria-label={t('placeholder')}
+          role="combobox"
+          aria-controls={SLASH_LISTBOX_ID}
+          aria-expanded={showMenu}
+          aria-haspopup="listbox"
           aria-autocomplete="list"
+          aria-activedescendant={activeOptionId}
           style={{ outline: 'none', boxShadow: 'none' }}
           className="flex-1 bg-[#1e1e2e] border border-[#252535] rounded-lg px-3 py-2 text-base sm:text-sm text-[#e2e2f0] placeholder-[#8888a8] font-mono resize-none focus:border-[#a78bfa]/50 transition-colors disabled:opacity-50"
         />

@@ -315,6 +315,12 @@ export default function ChatPage() {
 
   return (
     <div className="relative flex flex-col h-full overflow-hidden bg-[#0d0d10]">
+      <a
+        href="#chat-input"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:rounded-lg focus:bg-[#1e1e2e] focus:px-3 focus:py-2 focus:text-sm focus:text-[#e2e2f0] focus:outline focus:outline-2 focus:outline-[#a78bfa]"
+      >
+        {t('skipToInput')}
+      </a>
       <NeuralCanvas />
       <div className="relative z-10 flex flex-col h-full">
         <TopBar onMenuOpen={() => setMobileSidebarOpen(true)} />
