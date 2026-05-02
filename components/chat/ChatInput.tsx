@@ -8,10 +8,12 @@ import SlashMenu from './SlashMenu'
 interface Props {
   onSend: (text: string) => void
   onClear: () => void
-  disabled?: boolean
+  onStop?: () => void
+  isResponding?: boolean
 }
 
-export default function ChatInput({ onSend, onClear, disabled }: Props) {
+export default function ChatInput({ onSend, onClear, onStop, isResponding }: Props) {
+  const disabled = isResponding
   const t = useTranslations('chat')
   const [value, setValue] = useState('')
   const [activeIndex, setActiveIndex] = useState(0)
@@ -163,23 +165,36 @@ export default function ChatInput({ onSend, onClear, disabled }: Props) {
             />
           </svg>
         </button>
-        <button
-          type="submit"
-          disabled={disabled || !value.trim()}
-          aria-label={t('send')}
-          className="w-11 h-11 sm:w-9 sm:h-9 rounded-lg bg-[#a78bfa] flex items-center justify-center hover:bg-[#9370e8] transition-colors disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
-        >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-            <path
-              d="M2 8L14 8M14 8L9 3M14 8L9 13"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="text-[#0d0d10]"
-            />
-          </svg>
-        </button>
+        {isResponding && onStop ? (
+          <button
+            type="button"
+            onClick={onStop}
+            aria-label="Stop responding"
+            className="w-11 h-11 sm:w-9 sm:h-9 rounded-lg bg-[#a78bfa] flex items-center justify-center hover:bg-[#9370e8] transition-colors shrink-0"
+          >
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <rect x="2" y="2" width="10" height="10" rx="1.5" fill="#0d0d10" />
+            </svg>
+          </button>
+        ) : (
+          <button
+            type="submit"
+            disabled={disabled || !value.trim()}
+            aria-label={t('send')}
+            className="w-11 h-11 sm:w-9 sm:h-9 rounded-lg bg-[#a78bfa] flex items-center justify-center hover:bg-[#9370e8] transition-colors disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
+          >
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path
+                d="M2 8L14 8M14 8L9 3M14 8L9 13"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="text-[#0d0d10]"
+              />
+            </svg>
+          </button>
+        )}
       </form>
     </div>
   )

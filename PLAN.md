@@ -93,8 +93,8 @@ ESLint shows 29 errors + 10 warnings in pre-existing code. Group and fix in dedi
 
 ### Chat UX
 
-- [ ] **Add a "Stop" button while streaming.** Long Claude replies can't currently be cancelled — the user has to wait. Wire an `AbortController` from `app/[locale]/page.tsx`'s fetch call and surface a stop button next to the typing indicator.
-- [ ] **Copy-to-clipboard on AI messages.** Single-icon button next to the timestamp in `components/chat/ChatMessage.tsx`. Common chat-UI affordance, low effort.
+- [x] **Stop button while responding.** `AbortController` per `handleSend` in `app/[locale]/page.tsx`, signal threaded through both the `fetch('/api/chat')` and the synthetic `streamText` loop. `ChatInput` swaps Send → Stop while `isResponding`. AbortError on user-initiated stop is silently absorbed.
+- [x] **Copy-to-clipboard on AI messages.** Small icon button in `components/chat/ChatMessage.tsx` next to the timestamp; uses `navigator.clipboard.writeText(message.content)` and flips to a check icon (`aria-label="Copied"`) for 1.5s.
 
 ---
 

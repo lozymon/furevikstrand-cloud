@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { useLocale } from 'next-intl'
@@ -14,6 +15,19 @@ interface Props {
 export default function ChatMessage({ message }: Props) {
   const isAi = message.role === 'ai'
   const locale = useLocale()
+  const [copied, setCopied] = useState(false)
+
+  async function handleCopy() {
+    try {
+      await navigator.clipboard.writeText(message.content)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 1500)
+    } catch {
+      // clipboard API may be unavailable in insecure contexts; silently no-op
+    }
+  }
+
+  const showCopy = isAi && message.content.trim().length > 0
 
   return (
     <motion.div
@@ -198,6 +212,44 @@ export default function ChatMessage({ message }: Props) {
             <span className="text-[10px] font-mono text-[#a78bfa]/60 border border-[#a78bfa]/30 px-1 rounded leading-tight select-none">
               AI
             </span>
+          )}
+          {showCopy && (
+            <button
+              type="button"
+              onClick={handleCopy}
+              aria-label={copied ? 'Copied' : 'Copy message'}
+              className="text-[#8888a8] hover:text-[#a78bfa] transition-colors"
+            >
+              {copied ? (
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <polyline
+                    points="20 6 9 17 4 12"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              ) : (
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <rect
+                    x="9"
+                    y="9"
+                    width="11"
+                    height="11"
+                    rx="2"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                  />
+                  <path
+                    d="M5 15V5a2 2 0 0 1 2-2h10"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              )}
+            </button>
           )}
         </div>
       </div>

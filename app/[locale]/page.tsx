@@ -63,6 +63,13 @@ export default function ChatPage() {
   }
 
   const streamingRef = useRef(false)
+  const abortControllerRef = useRef<AbortController | null>(null)
+  const [isStreaming, setIsStreaming] = useState(false)
+  const isResponding = isTyping || isStreaming
+
+  const handleStop = useCallback(() => {
+    abortControllerRef.current?.abort()
+  }, [])
 
   // Initialise welcome message only if no stored history
   useEffect(() => {
@@ -89,11 +96,20 @@ export default function ChatPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [t])
 
-  const streamText = useCallback(async (text: string, id: string) => {
+  const streamText = useCallback(async (text: string, id: string, signal?: AbortSignal) => {
     const CHUNK = 3
     const TICK = 18
     streamingRef.current = true
+    setIsStreaming(true)
     for (let i = 0; i <= text.length; i += CHUNK) {
+      if (signal?.aborted) {
+        setMessages((prev) =>
+          prev.map((m) => (m.id === id ? { ...m, content: text.slice(0, i) } : m))
+        )
+        streamingRef.current = false
+        setIsStreaming(false)
+        return
+      }
       const partial = text.slice(0, i)
       setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, content: partial } : m)))
       await delay(TICK)
@@ -101,11 +117,16 @@ export default function ChatPage() {
     // Ensure full text is set
     setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, content: text } : m)))
     streamingRef.current = false
+    setIsStreaming(false)
   }, [])
 
   const handleSend = useCallback(
     async (text: string) => {
       if (streamingRef.current) return
+
+      const controller = new AbortController()
+      abortControllerRef.current = controller
+      const { signal } = controller
 
       setMessages((prev) => [
         ...prev,
@@ -132,7 +153,7 @@ export default function ChatPage() {
         if (slash.type === 'help') {
           const id = makeId()
           setMessages((prev) => [...prev, { id, role: 'ai', content: '', timestamp: new Date() }])
-          await streamText(t('help'), id)
+          await streamText(t('help'), id, signal)
           setShowSuggestions(true)
           return
         }
@@ -144,7 +165,7 @@ export default function ChatPage() {
           const { reply, followUps } = resolveById(slash.entryId, locale)
           const id = makeId()
           setMessages((prev) => [...prev, { id, role: 'ai', content: '', timestamp: new Date() }])
-          await streamText(reply, id)
+          await streamText(reply, id, signal)
           setCurrentFollowUps(followUps)
           setShowSuggestions(true)
           return
@@ -161,7 +182,7 @@ export default function ChatPage() {
           ...prev,
           { id, role: 'ai', content: '', timestamp: new Date(), testimonial },
         ])
-        await streamText(t('testimonialReply', { name: testimonial.name }), id)
+        await streamText(t('testimonialReply', { name: testimonial.name }), id, signal)
         setCurrentFollowUps(suggestions)
         setShowSuggestions(true)
         return
@@ -200,6 +221,7 @@ export default function ChatPage() {
             messageIndex,
             page: 'chat',
           }),
+          signal,
         })
 
         const source = (res.headers.get('X-Reply-Source') ?? 'fallback') as
@@ -213,25 +235,41 @@ export default function ChatPage() {
         ])
 
         if ((source === 'claude' || source === 'ollama') && res.body) {
+          setIsStreaming(true)
+          streamingRef.current = true
           const reader = res.body.getReader()
           const decoder = new TextDecoder()
           let accumulated = ''
-          while (true) {
-            const { done, value } = await reader.read()
-            if (done) break
-            accumulated += decoder.decode(value, { stream: true })
-            setMessages((prev) =>
-              prev.map((m) => (m.id === id ? { ...m, content: accumulated } : m))
-            )
+          try {
+            while (true) {
+              const { done, value } = await reader.read()
+              if (done) break
+              accumulated += decoder.decode(value, { stream: true })
+              setMessages((prev) =>
+                prev.map((m) => (m.id === id ? { ...m, content: accumulated } : m))
+              )
+            }
+          } catch (err) {
+            // AbortError on user-stop is expected; keep whatever was streamed.
+            if (!(err instanceof DOMException && err.name === 'AbortError')) throw err
+          } finally {
+            streamingRef.current = false
+            setIsStreaming(false)
           }
           setCurrentFollowUps(suggestions)
         } else {
           const raw = await res.text()
-          await streamText(raw, id)
+          await streamText(raw, id, signal)
           setCurrentFollowUps(suggestions)
         }
-      } catch {
+      } catch (err) {
         setIsTyping(false)
+        setIsStreaming(false)
+        streamingRef.current = false
+        // User-initiated stop on the initial fetch — don't show error.
+        if (err instanceof DOMException && err.name === 'AbortError') {
+          return
+        }
         setMessages((prev) => [
           ...prev,
           { id, role: 'ai', content: t('error'), timestamp: new Date(), source: 'fallback' },
@@ -262,7 +300,12 @@ export default function ChatPage() {
               onDismissContactPrompt={dismissContactPrompt}
               locale={locale}
             />
-            <ChatInput onSend={handleSend} onClear={handleClear} disabled={isTyping} />
+            <ChatInput
+              onSend={handleSend}
+              onClear={handleClear}
+              onStop={handleStop}
+              isResponding={isResponding}
+            />
           </main>
         </div>
       </div>
