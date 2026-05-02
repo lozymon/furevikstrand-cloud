@@ -1,9 +1,9 @@
 export interface Certification {
-  name: string;
-  authority: string;
-  url?: string;
-  date: string;
-  category: 'typescript' | 'backend' | 'devops' | 'architecture' | 'ai' | 'frontend';
+  name: string
+  authority: string
+  url?: string
+  date: string
+  category: 'typescript' | 'backend' | 'devops' | 'architecture' | 'ai' | 'frontend'
 }
 
 export const certifications: Certification[] = [

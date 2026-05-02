@@ -20,13 +20,17 @@ export default function PageHeader({ current, maxWidth = 'max-w-5xl', extra }: P
 
   return (
     <nav className="sticky top-0 z-10 border-b border-[#252535] bg-[#0d0d10]/90 backdrop-blur-sm">
-      <div className={`${maxWidth} mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-2`}>
-
+      <div
+        className={`${maxWidth} mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-2`}
+      >
         {/* Left — logo + availability */}
         <div className="flex items-center gap-3 min-w-0">
           <span className="text-sm font-mono text-[#a78bfa] truncate">kim.furevikstrand</span>
           <span className="hidden sm:inline text-[#252535] text-xs">|</span>
-          <span className="w-1.5 h-1.5 rounded-full bg-[#34d399] animate-pulse shrink-0" aria-label={profile.availability.label[locale]} />
+          <span
+            className="w-1.5 h-1.5 rounded-full bg-[#34d399] animate-pulse shrink-0"
+            aria-label={profile.availability.label[locale]}
+          />
           <span className="text-xs text-[#34d399] font-mono hidden sm:block whitespace-nowrap truncate">
             {profile.availability.label[locale]}
           </span>
@@ -48,7 +52,6 @@ export default function PageHeader({ current, maxWidth = 'max-w-5xl', extra }: P
           </button>
           {extra}
         </div>
-
       </div>
     </nav>
   )

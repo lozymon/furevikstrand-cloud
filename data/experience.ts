@@ -16,7 +16,17 @@ export const experience: Experience[] = [
       no: 'Bygger en plattform for idrettsarrangementer — mikrotjenestebackend for turneringsregistrering, utøverabonnementer og varesalg. Inkluderer en trener-mobilapp og admin-backoffice. Løste et kritisk datakonsistenseproblem på tvers av distribuerte databaser ved å designe en dedikert replikerings-mikrotjeneste med Saga-mønsteret. Optimaliserte flere trege spørringer og forbedret plattformytelsen. Mentorer 2 junior-traineer i NestJS og TypeScript.',
       pt: 'Construindo uma plataforma de gestão de eventos esportivos — backend de microsserviços para inscrições em torneios, assinaturas de atletas e vendas de itens. Inclui app mobile para treinadores e backoffice administrativo. Resolveu um problema crítico de consistência de dados projetando um microsserviço de replicação usando o padrão Saga. Otimizou múltiplas consultas lentas. Mentorando 2 trainees em NestJS e TypeScript.',
     },
-    tech: ['TypeScript', 'NestJS', 'React', 'Microservices', 'Saga Pattern', 'AWS SQS', 'DynamoDB', 'MariaDB', 'Docker'],
+    tech: [
+      'TypeScript',
+      'NestJS',
+      'React',
+      'Microservices',
+      'Saga Pattern',
+      'AWS SQS',
+      'DynamoDB',
+      'MariaDB',
+      'Docker',
+    ],
   },
   {
     id: 'compass-lgpd',
@@ -63,7 +73,7 @@ export const experience: Experience[] = [
     period: 'Jan 2005 — Nov 2009',
     location: 'Modalen, Norway',
     description: {
-      en: 'Started as a report developer creating custom reports for clients, then progressively took on greater responsibility — moving from Support Level 1 through to Support Level 3, where developers resolve issues that L1 and L2 cannot fix. One of the main developers behind the company\'s live update distribution system — a solution that automated and simplified how ERP updates were delivered to clients across Norway.',
+      en: "Started as a report developer creating custom reports for clients, then progressively took on greater responsibility — moving from Support Level 1 through to Support Level 3, where developers resolve issues that L1 and L2 cannot fix. One of the main developers behind the company's live update distribution system — a solution that automated and simplified how ERP updates were delivered to clients across Norway.",
       no: 'Startet som rapportutvikler og laget tilpassede rapporter for klienter, deretter tok gradvis på seg mer ansvar — fra Support Level 1 til Support Level 3, der utviklere løser problemer som L1 og L2 ikke kan fikse. En av hovedutviklerne bak selskapets distribusjonssystem for live-oppdateringer — en løsning som automatiserte og forenklet hvordan ERP-oppdateringer ble levert til klienter over hele Norge.',
       pt: 'Começou como desenvolvedor de relatórios criando relatórios personalizados para clientes, e progressivamente assumiu maiores responsabilidades — avançando do Suporte Nível 1 ao Nível 3, onde desenvolvedores resolvem problemas que L1 e L2 não conseguem corrigir. Um dos principais desenvolvedores do sistema de distribuição de atualizações ao vivo da empresa — uma solução que automatizou e simplificou como as atualizações do ERP eram entregues aos clientes em toda a Noruega.',
     },

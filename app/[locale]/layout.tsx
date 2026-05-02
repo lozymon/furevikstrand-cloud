@@ -84,9 +84,7 @@ export default async function LocaleLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
         />
         <NextIntlClientProvider messages={messages}>
-          <ChatProvider locale={locale}>
-            {children}
-          </ChatProvider>
+          <ChatProvider locale={locale}>{children}</ChatProvider>
         </NextIntlClientProvider>
       </body>
     </html>

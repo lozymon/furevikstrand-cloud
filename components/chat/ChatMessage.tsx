@@ -24,14 +24,26 @@ export default function ChatMessage({ message }: Props) {
     >
       {/* Avatar */}
       {isAi ? (
-        <div aria-hidden="true" className="relative w-7 h-7 rounded-full overflow-hidden border border-[#a78bfa]/40 shrink-0">
+        <div
+          aria-hidden="true"
+          className="relative w-7 h-7 rounded-full overflow-hidden border border-[#a78bfa]/40 shrink-0"
+        >
           <Image src="/profile-image.jpeg" alt="Kim" fill className="object-cover" sizes="28px" />
         </div>
       ) : (
-        <div aria-hidden="true" className="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style={{ background: 'linear-gradient(135deg, #38bdf8, #a78bfa)' }}>
+        <div
+          aria-hidden="true"
+          className="w-7 h-7 rounded-full flex items-center justify-center shrink-0"
+          style={{ background: 'linear-gradient(135deg, #38bdf8, #a78bfa)' }}
+        >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <circle cx="12" cy="8" r="4" stroke="white" strokeWidth="1.8"/>
-            <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
+            <circle cx="12" cy="8" r="4" stroke="white" strokeWidth="1.8" />
+            <path
+              d="M4 20c0-4 3.6-7 8-7s8 3 8 7"
+              stroke="white"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+            />
           </svg>
         </div>
       )}
@@ -51,17 +63,31 @@ export default function ChatMessage({ message }: Props) {
           remarkPlugins={[remarkGfm]}
           components={{
             p: ({ children }) => <p className="mb-1 last:mb-0">{children}</p>,
-            strong: ({ children }) => <strong className="text-[#a78bfa] font-semibold">{children}</strong>,
+            strong: ({ children }) => (
+              <strong className="text-[#a78bfa] font-semibold">{children}</strong>
+            ),
             em: ({ children }) => <em className="text-[#38bdf8]">{children}</em>,
             a: ({ href, children }) => {
               if (href?.startsWith('http')) {
                 return (
-                  <a href={href} target="_blank" rel="noopener noreferrer" className="text-[#38bdf8] underline underline-offset-2 hover:text-[#a78bfa] transition-colors">
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#38bdf8] underline underline-offset-2 hover:text-[#a78bfa] transition-colors"
+                  >
                     {children}
                   </a>
                 )
               }
-              return <a href={href} className="text-[#38bdf8] underline underline-offset-2 hover:text-[#a78bfa] transition-colors">{children}</a>
+              return (
+                <a
+                  href={href}
+                  className="text-[#38bdf8] underline underline-offset-2 hover:text-[#a78bfa] transition-colors"
+                >
+                  {children}
+                </a>
+              )
             },
             code: ({ children, className }) => {
               const text = String(children).replace(/\n$/, '')
@@ -69,7 +95,10 @@ export default function ChatMessage({ message }: Props) {
               // Internal nav link: `code` content that starts with `/`
               if (!isBlock && text.startsWith('/')) {
                 return (
-                  <a href={`/${locale}${text}`} className="text-[#a78bfa] font-mono text-[11px] px-1.5 py-0.5 bg-[#1e1e2e] border border-[#a78bfa]/30 rounded hover:bg-[#a78bfa]/10 transition-colors">
+                  <a
+                    href={`/${locale}${text}`}
+                    className="text-[#a78bfa] font-mono text-[11px] px-1.5 py-0.5 bg-[#1e1e2e] border border-[#a78bfa]/30 rounded hover:bg-[#a78bfa]/10 transition-colors"
+                  >
                     {text}
                   </a>
                 )
@@ -88,8 +117,12 @@ export default function ChatMessage({ message }: Props) {
               )
             },
             pre: ({ children }) => <>{children}</>,
-            ul: ({ children }) => <ul className="list-disc list-inside space-y-0.5 my-1">{children}</ul>,
-            ol: ({ children }) => <ol className="list-decimal list-inside space-y-0.5 my-1">{children}</ol>,
+            ul: ({ children }) => (
+              <ul className="list-disc list-inside space-y-0.5 my-1">{children}</ul>
+            ),
+            ol: ({ children }) => (
+              <ol className="list-decimal list-inside space-y-0.5 my-1">{children}</ol>
+            ),
             li: ({ children }) => <li>{children}</li>,
           }}
         >
@@ -112,8 +145,12 @@ export default function ChatMessage({ message }: Props) {
             )}
             <div className="px-3 pb-3">
               <div className="mb-1.5">
-                <p className="text-[12px] font-semibold text-[#e2e2f0] leading-tight">{message.testimonial.name}</p>
-                <p className="text-[10px] text-[#8888a8]">{message.testimonial.role ?? message.testimonial.company}</p>
+                <p className="text-[12px] font-semibold text-[#e2e2f0] leading-tight">
+                  {message.testimonial.name}
+                </p>
+                <p className="text-[10px] text-[#8888a8]">
+                  {message.testimonial.role ?? message.testimonial.company}
+                </p>
               </div>
               <p className="text-[11px] text-[#c4c4d8] leading-relaxed italic border-l-2 border-[#a78bfa]/30 pl-2.5">
                 &ldquo;{message.testimonial.quote[locale as 'en' | 'no' | 'pt']}&rdquo;
@@ -123,9 +160,29 @@ export default function ChatMessage({ message }: Props) {
                 className="inline-flex items-center gap-1 mt-2 text-[10px] text-[#a78bfa]/70 hover:text-[#a78bfa] transition-colors font-mono"
               >
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <polyline points="15 3 21 3 21 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <line x1="10" y1="14" x2="21" y2="3" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  <path
+                    d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <polyline
+                    points="15 3 21 3 21 9"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <line
+                    x1="10"
+                    y1="14"
+                    x2="21"
+                    y2="3"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
                 </svg>
                 /testimonials/{message.testimonial.slug}
               </a>
@@ -138,7 +195,9 @@ export default function ChatMessage({ message }: Props) {
             {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
           </time>
           {(message.source === 'claude' || message.source === 'ollama') && (
-            <span className="text-[10px] font-mono text-[#a78bfa]/60 border border-[#a78bfa]/30 px-1 rounded leading-tight select-none">AI</span>
+            <span className="text-[10px] font-mono text-[#a78bfa]/60 border border-[#a78bfa]/30 px-1 rounded leading-tight select-none">
+              AI
+            </span>
           )}
         </div>
       </div>

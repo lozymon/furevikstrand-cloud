@@ -19,7 +19,16 @@ interface Props {
   locale: Locale
 }
 
-export default function ChatWindow({ messages, isTyping, suggestions, showSuggestions, onSuggestion, showContactPrompt, onDismissContactPrompt, locale }: Props) {
+export default function ChatWindow({
+  messages,
+  isTyping,
+  suggestions,
+  showSuggestions,
+  onSuggestion,
+  showContactPrompt,
+  onDismissContactPrompt,
+  locale,
+}: Props) {
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -27,7 +36,12 @@ export default function ChatWindow({ messages, isTyping, suggestions, showSugges
   }, [messages, isTyping])
 
   return (
-    <div className="flex-1 overflow-y-auto flex flex-col" role="log" aria-live="polite" aria-label="Chat messages">
+    <div
+      className="flex-1 overflow-y-auto flex flex-col"
+      role="log"
+      aria-live="polite"
+      aria-label="Chat messages"
+    >
       <div className="flex-1" />
 
       <AnimatePresence initial={false}>
@@ -38,13 +52,15 @@ export default function ChatWindow({ messages, isTyping, suggestions, showSugges
 
       <AnimatePresence>
         {showContactPrompt && (
-          <ContactPromptCard key="contact-prompt" locale={locale} onDismiss={onDismissContactPrompt} />
+          <ContactPromptCard
+            key="contact-prompt"
+            locale={locale}
+            onDismiss={onDismissContactPrompt}
+          />
         )}
       </AnimatePresence>
 
-      <AnimatePresence>
-        {isTyping && <TypingIndicator key="typing" />}
-      </AnimatePresence>
+      <AnimatePresence>{isTyping && <TypingIndicator key="typing" />}</AnimatePresence>
 
       <AnimatePresence>
         {showSuggestions && suggestions.length > 0 && (

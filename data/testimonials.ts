@@ -1,16 +1,16 @@
 export interface Testimonial {
-  slug: string;
-  name: string;
-  company: string;
-  role?: string;
-  source: 'linkedin' | 'we-share';
-  photo?: string;
-  date: string;
+  slug: string
+  name: string
+  company: string
+  role?: string
+  source: 'linkedin' | 'we-share'
+  photo?: string
+  date: string
   quote: {
-    en: string;
-    no: string;
-    pt: string;
-  };
+    en: string
+    no: string
+    pt: string
+  }
 }
 
 export const testimonials: Testimonial[] = [
@@ -37,7 +37,7 @@ export const testimonials: Testimonial[] = [
     date: '2025-03-14',
     quote: {
       pt: 'Quero parabenizar o Kim Andre pelo excelente trabalho nas últimas semanas. Sua habilidade em resolver problemas complexos, aliada à entrega de ótimos resultados, tem sido essencial para o sucesso do time. Além disso, sua alta disponibilidade e comprometimento fazem a diferença no dia a dia, garantindo que os desafios sejam superados com eficiência. Seu profissionalismo e dedicação são inspiradores. Parabéns e continue com esse ótimo trabalho!',
-      en: 'I want to congratulate Kim Andre for the excellent work over the last few weeks. His ability to solve complex problems, combined with the delivery of great results, has been essential to the team\'s success. In addition, his high availability and commitment make a difference every day, ensuring that challenges are overcome efficiently. His professionalism and dedication are inspiring. Congratulations and keep up the great work!',
+      en: "I want to congratulate Kim Andre for the excellent work over the last few weeks. His ability to solve complex problems, combined with the delivery of great results, has been essential to the team's success. In addition, his high availability and commitment make a difference every day, ensuring that challenges are overcome efficiently. His professionalism and dedication are inspiring. Congratulations and keep up the great work!",
       no: 'Jeg vil gratulere Kim Andre med det utmerkede arbeidet de siste ukene. Hans evne til å løse komplekse problemer, kombinert med levering av gode resultater, har vært avgjørende for teamets suksess. I tillegg gjør hans høye tilgjengelighet og engasjement en forskjell hver dag, og sikrer at utfordringer overvinnes effektivt. Hans profesjonalitet og dedikasjon er inspirerende. Gratulerer og fortsett det gode arbeidet!',
     },
   },
@@ -128,7 +128,7 @@ export const testimonials: Testimonial[] = [
     date: '2020-12-29',
     quote: {
       pt: 'Durante meu tempo na Velit, tive a grande oportunidade de trabalhar com Andrè. Atuando como desenvolvedor sênior, ele se destacou pela sua capacidade de entregar tarefas complexas dentro do prazo e por assumir a liderança nos projetos mais desafiadores da empresa, demonstrando suas habilidades tanto no front-end quanto no back-end. Andrè também compartilhou sua vasta expertise para ajudar os novos desenvolvedores da empresa em suas dificuldades com JavaScript e DevOps.',
-      en: 'During my time at Velit, I had the great opportunity to work with Andrè. Working as a senior developer, he stood out for his ability to deliver complex tasks in a timely manner and for taking the lead on the most challenging projects in the company, demonstrating his skills on both front-end and back-end. Andrè also shared his vast expertise to help the company\'s new developers with their struggles with JavaScript and DevOps.',
+      en: "During my time at Velit, I had the great opportunity to work with Andrè. Working as a senior developer, he stood out for his ability to deliver complex tasks in a timely manner and for taking the lead on the most challenging projects in the company, demonstrating his skills on both front-end and back-end. Andrè also shared his vast expertise to help the company's new developers with their struggles with JavaScript and DevOps.",
       no: 'I løpet av min tid hos Velit hadde jeg den store muligheten til å jobbe med Andrè. Som senior-utvikler utmerket han seg med evnen til å levere komplekse oppgaver til rett tid og ta lederrollen på de mest utfordrende prosjektene i selskapet, og demonstrerte sine ferdigheter innen både front-end og back-end. Andrè delte også sin brede ekspertise for å hjelpe selskapets nye utviklere med deres utfordringer innen JavaScript og DevOps.',
     },
   },

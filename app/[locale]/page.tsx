@@ -9,12 +9,7 @@ import Sidebar from '@/components/sidebar/Sidebar'
 import MobileSidebar from '@/components/layout/MobileSidebar'
 import ChatWindow from '@/components/chat/ChatWindow'
 import ChatInput from '@/components/chat/ChatInput'
-import {
-  resolveById,
-  detectLocale,
-  handleSlashCommand,
-  resolveTestimonial,
-} from '@/lib/chat'
+import { resolveById, detectLocale, handleSlashCommand, resolveTestimonial } from '@/lib/chat'
 import { useChatContext } from '@/context/ChatContext'
 import type { Locale } from '@/types'
 
@@ -34,17 +29,36 @@ export default function ChatPage() {
 
   const suggestions = t.raw('suggestions') as string[]
 
-  const { messages, setMessages, isTyping, setIsTyping, showSuggestions, setShowSuggestions, currentFollowUps, setCurrentFollowUps, isLoaded, sessionId } = useChatContext()
+  const {
+    messages,
+    setMessages,
+    isTyping,
+    setIsTyping,
+    showSuggestions,
+    setShowSuggestions,
+    currentFollowUps,
+    setCurrentFollowUps,
+    isLoaded,
+    sessionId,
+  } = useChatContext()
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
   const [contactPromptDismissed, setContactPromptDismissed] = useState(() => {
-    try { return sessionStorage.getItem('contact_prompt_dismissed') === '1' } catch { return false }
+    try {
+      return sessionStorage.getItem('contact_prompt_dismissed') === '1'
+    } catch {
+      return false
+    }
   })
 
   const userMessageCount = messages.filter((m) => m.role === 'user').length
   const showContactPrompt = userMessageCount >= 4 && !contactPromptDismissed
 
   function dismissContactPrompt() {
-    try { sessionStorage.setItem('contact_prompt_dismissed', '1') } catch { /* ignore */ }
+    try {
+      sessionStorage.setItem('contact_prompt_dismissed', '1')
+    } catch {
+      /* ignore */
+    }
     setContactPromptDismissed(true)
   }
 
@@ -56,7 +70,7 @@ export default function ChatPage() {
       setMessages([{ id: makeId(), role: 'ai', content: t('welcome'), timestamp: new Date() }])
       setCurrentFollowUps(t.raw('suggestions') as string[])
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded])
 
   // Update welcome message when locale changes (if chat only has the welcome message)
@@ -65,14 +79,14 @@ export default function ChatPage() {
       setMessages([{ id: makeId(), role: 'ai', content: t('welcome'), timestamp: new Date() }])
       setCurrentFollowUps(t.raw('suggestions') as string[])
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locale])
 
   const handleClear = useCallback(() => {
     setMessages([{ id: makeId(), role: 'ai', content: t('welcome'), timestamp: new Date() }])
     setCurrentFollowUps(t.raw('suggestions') as string[])
     setShowSuggestions(true)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [t])
 
   const streamText = useCallback(async (text: string, id: string) => {
@@ -81,15 +95,11 @@ export default function ChatPage() {
     streamingRef.current = true
     for (let i = 0; i <= text.length; i += CHUNK) {
       const partial = text.slice(0, i)
-      setMessages((prev) =>
-        prev.map((m) => (m.id === id ? { ...m, content: partial } : m))
-      )
+      setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, content: partial } : m)))
       await delay(TICK)
     }
     // Ensure full text is set
-    setMessages((prev) =>
-      prev.map((m) => (m.id === id ? { ...m, content: text } : m))
-    )
+    setMessages((prev) => prev.map((m) => (m.id === id ? { ...m, content: text } : m)))
     streamingRef.current = false
   }, [])
 
@@ -147,7 +157,10 @@ export default function ChatPage() {
         await delay(350)
         setIsTyping(false)
         const id = makeId()
-        setMessages((prev) => [...prev, { id, role: 'ai', content: '', timestamp: new Date(), testimonial }])
+        setMessages((prev) => [
+          ...prev,
+          { id, role: 'ai', content: '', timestamp: new Date(), testimonial },
+        ])
         await streamText(t('testimonialReply', { name: testimonial.name }), id)
         setCurrentFollowUps(suggestions)
         setShowSuggestions(true)
@@ -179,12 +192,25 @@ export default function ChatPage() {
         const res = await fetch('/api/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: text, locale, history, sessionId, messageIndex, page: 'chat' }),
+          body: JSON.stringify({
+            message: text,
+            locale,
+            history,
+            sessionId,
+            messageIndex,
+            page: 'chat',
+          }),
         })
 
-        const source = (res.headers.get('X-Reply-Source') ?? 'fallback') as 'claude' | 'ollama' | 'fallback'
+        const source = (res.headers.get('X-Reply-Source') ?? 'fallback') as
+          | 'claude'
+          | 'ollama'
+          | 'fallback'
         setIsTyping(false)
-        setMessages((prev) => [...prev, { id, role: 'ai', content: '', timestamp: new Date(), source }])
+        setMessages((prev) => [
+          ...prev,
+          { id, role: 'ai', content: '', timestamp: new Date(), source },
+        ])
 
         if ((source === 'claude' || source === 'ollama') && res.body) {
           const reader = res.body.getReader()
@@ -194,7 +220,9 @@ export default function ChatPage() {
             const { done, value } = await reader.read()
             if (done) break
             accumulated += decoder.decode(value, { stream: true })
-            setMessages((prev) => prev.map((m) => m.id === id ? { ...m, content: accumulated } : m))
+            setMessages((prev) =>
+              prev.map((m) => (m.id === id ? { ...m, content: accumulated } : m))
+            )
           }
           setCurrentFollowUps(suggestions)
         } else {
@@ -204,7 +232,10 @@ export default function ChatPage() {
         }
       } catch {
         setIsTyping(false)
-        setMessages((prev) => [...prev, { id, role: 'ai', content: t('error'), timestamp: new Date(), source: 'fallback' }])
+        setMessages((prev) => [
+          ...prev,
+          { id, role: 'ai', content: t('error'), timestamp: new Date(), source: 'fallback' },
+        ])
       }
 
       setShowSuggestions(true)

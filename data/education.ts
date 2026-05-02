@@ -1,8 +1,8 @@
 export interface EducationEntry {
-  school: string;
-  degree: string;
-  period: string;
-  country: 'no' | 'br';
+  school: string
+  degree: string
+  period: string
+  country: 'no' | 'br'
 }
 
 export const education: EducationEntry[] = [

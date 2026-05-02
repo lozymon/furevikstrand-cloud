@@ -14,7 +14,7 @@ const copy = {
     notePlaceholder: 'What would you like to discuss? (optional)',
     send: 'Send',
     sending: 'Sending…',
-    success: 'Message sent! I\'ll get back to you soon.',
+    success: "Message sent! I'll get back to you soon.",
     error: 'Something went wrong. Try again or email me directly.',
   },
   no: {
@@ -124,9 +124,7 @@ export default function ContactPromptCard({ locale, onDismiss }: Props) {
                 rows={2}
                 className="w-full bg-[#13131f] border border-[#252535] rounded-lg px-3 py-2 text-sm text-[#e2e2f0] placeholder:text-[#8888a8] focus:outline-none focus:border-[#a78bfa]/50 resize-none"
               />
-              {status === 'error' && (
-                <p className="text-xs text-red-400">{t.error}</p>
-              )}
+              {status === 'error' && <p className="text-xs text-red-400">{t.error}</p>}
               <div className="flex items-center gap-2">
                 <button
                   type="submit"

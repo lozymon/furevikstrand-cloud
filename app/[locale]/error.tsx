@@ -22,9 +22,7 @@ export default function Error({
         <p className="text-sm text-[#8888a8] mb-8 leading-relaxed">
           An unexpected error occurred. You can try again, or head back to the chat.
         </p>
-        {error.digest && (
-          <p className="text-[10px] text-[#8888a8] mb-6">ref: {error.digest}</p>
-        )}
+        {error.digest && <p className="text-[10px] text-[#8888a8] mb-6">ref: {error.digest}</p>}
         <div className="flex items-center justify-center gap-2 text-xs">
           <button
             onClick={reset}

@@ -8,7 +8,10 @@ export async function POST(request: Request) {
   const ip = clientIp(request)
 
   if (!checkRateLimit('contact', ip, RATE_LIMIT, RATE_WINDOW_MS)) {
-    return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 })
+    return NextResponse.json(
+      { error: 'Too many requests. Please try again later.' },
+      { status: 429 }
+    )
   }
 
   const apiKey = process.env.RESEND_API_KEY

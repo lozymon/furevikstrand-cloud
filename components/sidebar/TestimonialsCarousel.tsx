@@ -7,7 +7,13 @@ import { useLocale } from 'next-intl'
 import { testimonials } from '@/data/testimonials'
 import type { Locale } from '@/types'
 
-export default function TestimonialsCarousel({ locale, compact = false }: { locale: Locale; compact?: boolean }) {
+export default function TestimonialsCarousel({
+  locale,
+  compact = false,
+}: {
+  locale: Locale
+  compact?: boolean
+}) {
   const [index, setIndex] = useState(0)
   const routeLocale = useLocale()
   const t = testimonials[index]
@@ -24,12 +30,29 @@ export default function TestimonialsCarousel({ locale, compact = false }: { loca
         <div className="flex items-center justify-between mb-2">
           <p className="text-[10px] text-[#8888a8] font-mono uppercase tracking-wider">{label}</p>
           <div className="flex items-center gap-1">
-            <button onClick={prev} aria-label="Previous testimonial" className="w-4 h-4 flex items-center justify-center text-[#8888a8] hover:text-[#a78bfa] transition-colors">‹</button>
-            <span className="text-[10px] text-[#8888a8] font-mono">{index + 1}/{testimonials.length}</span>
-            <button onClick={next} aria-label="Next testimonial" className="w-4 h-4 flex items-center justify-center text-[#8888a8] hover:text-[#a78bfa] transition-colors">›</button>
+            <button
+              onClick={prev}
+              aria-label="Previous testimonial"
+              className="w-4 h-4 flex items-center justify-center text-[#8888a8] hover:text-[#a78bfa] transition-colors"
+            >
+              ‹
+            </button>
+            <span className="text-[10px] text-[#8888a8] font-mono">
+              {index + 1}/{testimonials.length}
+            </span>
+            <button
+              onClick={next}
+              aria-label="Next testimonial"
+              className="w-4 h-4 flex items-center justify-center text-[#8888a8] hover:text-[#a78bfa] transition-colors"
+            >
+              ›
+            </button>
           </div>
         </div>
-        <Link href={`/${routeLocale}/testimonials`} className="group block hover:opacity-80 transition-opacity">
+        <Link
+          href={`/${routeLocale}/testimonials`}
+          className="group block hover:opacity-80 transition-opacity"
+        >
           <blockquote className="text-[10px] text-[#c0c0d8] italic line-clamp-2 mb-1.5">
             &ldquo;{t.quote[locale]}&rdquo;
           </blockquote>
@@ -83,7 +106,9 @@ export default function TestimonialsCarousel({ locale, compact = false }: { loca
         <div className="min-w-0">
           <p className="text-[10px] text-[#e2e2f0] font-semibold truncate">{t.name}</p>
           <p className="text-[10px] text-[#8888a8] font-mono truncate">
-            {t.role ? `${t.role} · ` : ''}{t.company} · {new Date(t.date).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}
+            {t.role ? `${t.role} · ` : ''}
+            {t.company} ·{' '}
+            {new Date(t.date).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}
           </p>
         </div>
       </div>

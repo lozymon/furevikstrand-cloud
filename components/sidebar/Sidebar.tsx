@@ -39,14 +39,30 @@ export default function Sidebar() {
       {/* Stats + location */}
       <div className="p-4 border-b border-[#252535]">
         <div className="grid grid-cols-3 gap-3 mb-3">
-          <Stat label={locale === 'en' ? 'Experience' : locale === 'no' ? 'Erfaring' : 'Experiência'} value={profile.stats.experience + (locale === 'no' ? ' år' : locale === 'pt' ? ' anos' : ' yrs')} />
-          <Stat label={locale === 'en' ? 'Projects' : locale === 'no' ? 'Prosjekter' : 'Projetos'} value={profile.stats.projects + ''} />
-          <Stat label={locale === 'en' ? 'Languages' : locale === 'no' ? 'Språk' : 'Idiomas'} value={profile.stats.languages + ''} />
+          <Stat
+            label={locale === 'en' ? 'Experience' : locale === 'no' ? 'Erfaring' : 'Experiência'}
+            value={
+              profile.stats.experience +
+              (locale === 'no' ? ' år' : locale === 'pt' ? ' anos' : ' yrs')
+            }
+          />
+          <Stat
+            label={locale === 'en' ? 'Projects' : locale === 'no' ? 'Prosjekter' : 'Projetos'}
+            value={profile.stats.projects + ''}
+          />
+          <Stat
+            label={locale === 'en' ? 'Languages' : locale === 'no' ? 'Språk' : 'Idiomas'}
+            value={profile.stats.languages + ''}
+          />
         </div>
         <div className="flex items-center gap-2">
           <span className="text-xs">📍</span>
           <span className="text-[10px] text-[#8888a8] font-mono">
-            {locale === 'no' ? 'Natal, Brasil · Åpen for Norge' : locale === 'pt' ? 'Natal, Brasil · Aberto à Noruega' : 'Natal, Brazil · Open to Norway'}
+            {locale === 'no'
+              ? 'Natal, Brasil · Åpen for Norge'
+              : locale === 'pt'
+                ? 'Natal, Brasil · Aberto à Noruega'
+                : 'Natal, Brazil · Open to Norway'}
           </span>
         </div>
       </div>
@@ -57,17 +73,43 @@ export default function Sidebar() {
           {locale === 'no' ? 'Språk' : locale === 'pt' ? 'Idiomas' : 'Languages'}
         </p>
         <div className="space-y-2">
-          <LangBadge flag="🇳🇴" lang="Norwegian" level={locale === 'no' ? 'Morsmål' : locale === 'pt' ? 'Nativo' : 'Native'} />
-          <LangBadge flag="🇬🇧" lang="English" level={locale === 'no' ? 'Profesjonell' : locale === 'pt' ? 'Profissional' : 'Professional'} />
-          <LangBadge flag="🇧🇷" lang="Portuguese" level={locale === 'no' ? 'Profesjonell' : locale === 'pt' ? 'Profissional' : 'Professional'} />
-          <LangBadge flag="🇸🇪" lang="Swedish" level={locale === 'no' ? 'Begrenset' : locale === 'pt' ? 'Limitado' : 'Limited'} />
-          <LangBadge flag="🇩🇰" lang="Danish" level={locale === 'no' ? 'Begrenset' : locale === 'pt' ? 'Limitado' : 'Limited'} />
+          <LangBadge
+            flag="🇳🇴"
+            lang="Norwegian"
+            level={locale === 'no' ? 'Morsmål' : locale === 'pt' ? 'Nativo' : 'Native'}
+          />
+          <LangBadge
+            flag="🇬🇧"
+            lang="English"
+            level={
+              locale === 'no' ? 'Profesjonell' : locale === 'pt' ? 'Profissional' : 'Professional'
+            }
+          />
+          <LangBadge
+            flag="🇧🇷"
+            lang="Portuguese"
+            level={
+              locale === 'no' ? 'Profesjonell' : locale === 'pt' ? 'Profissional' : 'Professional'
+            }
+          />
+          <LangBadge
+            flag="🇸🇪"
+            lang="Swedish"
+            level={locale === 'no' ? 'Begrenset' : locale === 'pt' ? 'Limitado' : 'Limited'}
+          />
+          <LangBadge
+            flag="🇩🇰"
+            lang="Danish"
+            level={locale === 'no' ? 'Begrenset' : locale === 'pt' ? 'Limitado' : 'Limited'}
+          />
         </div>
       </div>
 
       {/* Stack chips */}
       <div className="p-4 border-b border-[#252535]">
-        <p className="text-[10px] text-[#8888a8] font-mono uppercase tracking-wider mb-3">{t('sections.stack')}</p>
+        <p className="text-[10px] text-[#8888a8] font-mono uppercase tracking-wider mb-3">
+          {t('sections.stack')}
+        </p>
         <div className="flex flex-wrap gap-1.5">
           {topChips.map((chip) => (
             <span
@@ -85,12 +127,16 @@ export default function Sidebar() {
         <p className="text-[10px] text-[#8888a8] font-mono uppercase tracking-wider mb-3">
           {locale === 'no' ? 'Utdanning' : locale === 'pt' ? 'Educação' : 'Education'}
         </p>
-        {education.filter((e) => e.country === 'br').map((ed) => (
-          <div key={ed.school}>
-            <p className="text-xs text-[#e2e2f0]">{ed.school}</p>
-            <p className="text-[10px] text-[#8888a8] font-mono mt-0.5">{ed.degree} · {ed.period}</p>
-          </div>
-        ))}
+        {education
+          .filter((e) => e.country === 'br')
+          .map((ed) => (
+            <div key={ed.school}>
+              <p className="text-xs text-[#e2e2f0]">{ed.school}</p>
+              <p className="text-[10px] text-[#8888a8] font-mono mt-0.5">
+                {ed.degree} · {ed.period}
+              </p>
+            </div>
+          ))}
       </div>
 
       {/* Testimonials */}
@@ -98,7 +144,9 @@ export default function Sidebar() {
 
       {/* Links */}
       <div className="p-4">
-        <p className="text-[10px] text-[#8888a8] font-mono uppercase tracking-wider mb-3">{t('sections.links')}</p>
+        <p className="text-[10px] text-[#8888a8] font-mono uppercase tracking-wider mb-3">
+          {t('sections.links')}
+        </p>
         <div className="space-y-2">
           <SocialLink href={profile.github} label="GitHub" icon="⌥" />
           <SocialLink href={profile.gitlab} label="GitLab" icon="⌥" />
@@ -119,7 +167,6 @@ function Stat({ label, value }: { label: string; value: string }) {
   )
 }
 
-
 function LangBadge({ flag, lang, level }: { flag: string; lang: string; level: string }) {
   return (
     <div className="flex items-center justify-between">
@@ -127,7 +174,9 @@ function LangBadge({ flag, lang, level }: { flag: string; lang: string; level: s
         <span className="text-sm">{flag}</span>
         <span className="text-xs text-[#8888a8] font-mono">{lang}</span>
       </div>
-      <span className="text-[10px] font-mono px-2 py-0.5 rounded border border-[#252535] bg-[#1e1e2e] text-[#38bdf8]">{level}</span>
+      <span className="text-[10px] font-mono px-2 py-0.5 rounded border border-[#252535] bg-[#1e1e2e] text-[#38bdf8]">
+        {level}
+      </span>
     </div>
   )
 }

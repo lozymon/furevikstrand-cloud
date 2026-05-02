@@ -10,9 +10,24 @@ export default function NotFound() {
           The page you&apos;re looking for doesn&apos;t exist (or has moved).
         </p>
         <div className="flex items-center justify-center gap-2 text-xs">
-          <Link href="/en" className="px-3 py-1.5 rounded border border-[#a78bfa] text-[#a78bfa] hover:bg-[#a78bfa] hover:text-[#0d0d10] transition-colors">EN</Link>
-          <Link href="/no" className="px-3 py-1.5 rounded border border-[#252535] text-[#8888a8] hover:border-[#a78bfa] hover:text-[#a78bfa] transition-colors">NO</Link>
-          <Link href="/pt" className="px-3 py-1.5 rounded border border-[#252535] text-[#8888a8] hover:border-[#a78bfa] hover:text-[#a78bfa] transition-colors">PT</Link>
+          <Link
+            href="/en"
+            className="px-3 py-1.5 rounded border border-[#a78bfa] text-[#a78bfa] hover:bg-[#a78bfa] hover:text-[#0d0d10] transition-colors"
+          >
+            EN
+          </Link>
+          <Link
+            href="/no"
+            className="px-3 py-1.5 rounded border border-[#252535] text-[#8888a8] hover:border-[#a78bfa] hover:text-[#a78bfa] transition-colors"
+          >
+            NO
+          </Link>
+          <Link
+            href="/pt"
+            className="px-3 py-1.5 rounded border border-[#252535] text-[#8888a8] hover:border-[#a78bfa] hover:text-[#a78bfa] transition-colors"
+          >
+            PT
+          </Link>
         </div>
       </div>
     </div>

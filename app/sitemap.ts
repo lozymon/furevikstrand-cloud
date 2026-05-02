@@ -14,9 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date()
   return locales.flatMap((locale) =>
     routes.map(({ path, priority, changeFrequency }) => {
-      const url = path
-        ? `${BASE_URL}/${locale}/${path}`
-        : `${BASE_URL}/${locale}`
+      const url = path ? `${BASE_URL}/${locale}/${path}` : `${BASE_URL}/${locale}`
       const languages: Record<string, string> = Object.fromEntries(
         locales.map((l) => [l, path ? `${BASE_URL}/${l}/${path}` : `${BASE_URL}/${l}`])
       )

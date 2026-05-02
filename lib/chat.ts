@@ -11,9 +11,10 @@ function levenshtein(a: string, b: string): number {
   )
   for (let i = 1; i <= m; i++) {
     for (let j = 1; j <= n; j++) {
-      dp[i][j] = a[i - 1] === b[j - 1]
-        ? dp[i - 1][j - 1]
-        : 1 + Math.min(dp[i - 1][j - 1], dp[i - 1][j], dp[i][j - 1])
+      dp[i][j] =
+        a[i - 1] === b[j - 1]
+          ? dp[i - 1][j - 1]
+          : 1 + Math.min(dp[i - 1][j - 1], dp[i - 1][j], dp[i][j - 1])
     }
   }
   return dp[m][n]
@@ -29,8 +30,79 @@ function fuzzyMatch(word: string, key: string): boolean {
 }
 
 // ─── Language detection ──────────────────────────────────────────────────────
-const noSignals = ['hei', 'hva', 'er', 'du', 'og', 'ikke', 'kan', 'jeg', 'for', 'med', 'på', 'til', 'av', 'det', 'den', 'har', 'som', 'vil', 'mer', 'seg', 'sin', 'fra', 'ved', 'om', 'når', 'så', 'men', 'om', 'god', 'morgen', 'hallo', 'tusen takk', 'takk', 'norsk', 'norge']
-const ptSignals = ['oi', 'olá', 'ola', 'você', 'voce', 'obrigado', 'sim', 'não', 'nao', 'estou', 'está', 'por', 'favor', 'bom', 'dia', 'tarde', 'noite', 'muito', 'bem', 'quero', 'qual', 'me', 'fale', 'sobre', 'seu', 'sua', 'são', 'disponível', 'disponivel', 'como', 'posso', 'contato', 'contratar', 'trabalho']
+const noSignals = [
+  'hei',
+  'hva',
+  'er',
+  'du',
+  'og',
+  'ikke',
+  'kan',
+  'jeg',
+  'for',
+  'med',
+  'på',
+  'til',
+  'av',
+  'det',
+  'den',
+  'har',
+  'som',
+  'vil',
+  'mer',
+  'seg',
+  'sin',
+  'fra',
+  'ved',
+  'om',
+  'når',
+  'så',
+  'men',
+  'om',
+  'god',
+  'morgen',
+  'hallo',
+  'tusen takk',
+  'takk',
+  'norsk',
+  'norge',
+]
+const ptSignals = [
+  'oi',
+  'olá',
+  'ola',
+  'você',
+  'voce',
+  'obrigado',
+  'sim',
+  'não',
+  'nao',
+  'estou',
+  'está',
+  'por',
+  'favor',
+  'bom',
+  'dia',
+  'tarde',
+  'noite',
+  'muito',
+  'bem',
+  'quero',
+  'qual',
+  'me',
+  'fale',
+  'sobre',
+  'seu',
+  'sua',
+  'são',
+  'disponível',
+  'disponivel',
+  'como',
+  'posso',
+  'contato',
+  'contratar',
+  'trabalho',
+]
 
 export function detectLocale(text: string, current: Locale): Locale {
   const lower = text.toLowerCase()
@@ -64,50 +136,50 @@ export interface SlashCommand {
 }
 
 export const SLASH_COMMANDS: SlashCommand[] = [
-  { cmd: '/about',        description: 'Who is Kim' },
-  { cmd: '/experience',   description: 'Work history' },
-  { cmd: '/stack',        description: 'Tech stack' },
-  { cmd: '/projects',     description: 'Open-source projects' },
-  { cmd: '/hire',         description: 'Availability for hire' },
-  { cmd: '/contact',      description: 'Contact information' },
-  { cmd: '/cv',           description: 'Download CV' },
-  { cmd: '/location',     description: 'Where I\'m based' },
-  { cmd: '/databases',    description: 'Database experience' },
-  { cmd: '/devops',       description: 'Docker & deployment' },
-  { cmd: '/mentoring',    description: 'Leadership & mentoring' },
-  { cmd: '/style',        description: 'How I work' },
-  { cmd: '/skills',         description: 'Competency breakdown' },
+  { cmd: '/about', description: 'Who is Kim' },
+  { cmd: '/experience', description: 'Work history' },
+  { cmd: '/stack', description: 'Tech stack' },
+  { cmd: '/projects', description: 'Open-source projects' },
+  { cmd: '/hire', description: 'Availability for hire' },
+  { cmd: '/contact', description: 'Contact information' },
+  { cmd: '/cv', description: 'Download CV' },
+  { cmd: '/location', description: "Where I'm based" },
+  { cmd: '/databases', description: 'Database experience' },
+  { cmd: '/devops', description: 'Docker & deployment' },
+  { cmd: '/mentoring', description: 'Leadership & mentoring' },
+  { cmd: '/style', description: 'How I work' },
+  { cmd: '/skills', description: 'Competency breakdown' },
   { cmd: '/certifications', description: 'Certificates & courses' },
-  { cmd: '/education',     description: 'Academic background' },
-  { cmd: '/testimonials',  description: 'What colleagues say' },
-  { cmd: '/help',         description: 'Show all commands' },
-  { cmd: '/clear',        description: 'Clear the screen' },
-  { cmd: '/en',           description: 'Switch to English' },
-  { cmd: '/no',           description: 'Switch to Norwegian' },
-  { cmd: '/pt',           description: 'Switch to Portuguese' },
+  { cmd: '/education', description: 'Academic background' },
+  { cmd: '/testimonials', description: 'What colleagues say' },
+  { cmd: '/help', description: 'Show all commands' },
+  { cmd: '/clear', description: 'Clear the screen' },
+  { cmd: '/en', description: 'Switch to English' },
+  { cmd: '/no', description: 'Switch to Norwegian' },
+  { cmd: '/pt', description: 'Switch to Portuguese' },
 ]
 
 const TOPIC_COMMANDS: Record<string, string> = {
-  '/about':          'about',
-  '/experience':     'experience',
-  '/stack':          'stack',
-  '/tech':           'stack',
-  '/projects':       'projects',
-  '/hire':           'available',
-  '/available':      'available',
-  '/contact':        'contact',
-  '/cv':             'cv',
-  '/location':       'location',
-  '/databases':      'databases',
-  '/db':             'databases',
-  '/devops':         'devops',
-  '/mentoring':      'mentoring',
-  '/style':          'work-style',
+  '/about': 'about',
+  '/experience': 'experience',
+  '/stack': 'stack',
+  '/tech': 'stack',
+  '/projects': 'projects',
+  '/hire': 'available',
+  '/available': 'available',
+  '/contact': 'contact',
+  '/cv': 'cv',
+  '/location': 'location',
+  '/databases': 'databases',
+  '/db': 'databases',
+  '/devops': 'devops',
+  '/mentoring': 'mentoring',
+  '/style': 'work-style',
   '/certifications': 'certifications',
-  '/certs':          'certifications',
-  '/education':      'education',
-  '/skills':         'skills',
-  '/competencies':   'skills',
+  '/certs': 'certifications',
+  '/education': 'education',
+  '/skills': 'skills',
+  '/competencies': 'skills',
 }
 
 export function handleSlashCommand(input: string): SlashResult {
@@ -118,7 +190,8 @@ export function handleSlashCommand(input: string): SlashResult {
   if (cmd === '/help') return { type: 'help' }
   if (cmd === '/clear') return { type: 'clear' }
   if (cmd === '/testimonials') return { type: 'navigate', path: 'testimonials' }
-  if (cmd === '/certifications' || cmd === '/certs') return { type: 'navigate', path: 'certifications' }
+  if (cmd === '/certifications' || cmd === '/certs')
+    return { type: 'navigate', path: 'certifications' }
   if (TOPIC_COMMANDS[cmd]) return { type: 'topic', entryId: TOPIC_COMMANDS[cmd] }
   return null
 }
@@ -169,17 +242,44 @@ function pick<T>(arr: T[]): T {
 // ─── Continuation intent detection ───────────────────────────────────────────
 const CONTINUATION_KEYS = [
   // English
-  'more', 'tell me more', 'expand', 'elaborate', 'go on', 'continue', 'and then', 'what else',
-  'keep going', 'say more', 'explain more', 'give me more', 'more details', 'more info',
+  'more',
+  'tell me more',
+  'expand',
+  'elaborate',
+  'go on',
+  'continue',
+  'and then',
+  'what else',
+  'keep going',
+  'say more',
+  'explain more',
+  'give me more',
+  'more details',
+  'more info',
   // Norwegian
-  'mer', 'fortell mer', 'utvid', 'fortsett', 'hva mer', 'si mer', 'mer detaljer', 'mer info',
+  'mer',
+  'fortell mer',
+  'utvid',
+  'fortsett',
+  'hva mer',
+  'si mer',
+  'mer detaljer',
+  'mer info',
   // Portuguese
-  'mais', 'continue', 'expanda', 'elabore', 'me conta mais', 'mais detalhes', 'pode continuar',
+  'mais',
+  'continue',
+  'expanda',
+  'elabore',
+  'me conta mais',
+  'mais detalhes',
+  'pode continuar',
 ]
 
 function isContinuation(input: string): boolean {
   const lower = input.toLowerCase().trim()
-  return CONTINUATION_KEYS.some((k) => lower === k || lower.startsWith(k + ' ') || lower.endsWith(' ' + k))
+  return CONTINUATION_KEYS.some(
+    (k) => lower === k || lower.startsWith(k + ' ') || lower.endsWith(' ' + k)
+  )
 }
 
 // ─── Main resolve function ────────────────────────────────────────────────────
@@ -191,7 +291,11 @@ export interface ResolveResult {
 
 type HistoryMessage = { role: string; content: string }
 
-export function resolveReply(input: string, locale: Locale, messageHistory: HistoryMessage[] = []): ResolveResult {
+export function resolveReply(
+  input: string,
+  locale: Locale,
+  messageHistory: HistoryMessage[] = []
+): ResolveResult {
   // Continuation intent: re-use last matched entry but pick a different reply variant
   if (isContinuation(input) && messageHistory.length > 0) {
     const prevUserMsgs = messageHistory.filter((m) => m.role === 'user')
@@ -205,7 +309,8 @@ export function resolveReply(input: string, locale: Locale, messageHistory: Hist
       if (lastEntry) {
         const variants = lastEntry.replies[locale]
         // Pick a variant different from the last AI reply if possible
-        const lastAiContent = [...messageHistory].reverse().find((m) => m.role === 'assistant')?.content ?? ''
+        const lastAiContent =
+          [...messageHistory].reverse().find((m) => m.role === 'assistant')?.content ?? ''
         const fresh = variants.filter((r) => r !== lastAiContent)
         return {
           reply: pick(fresh.length > 0 ? fresh : variants),
@@ -222,17 +327,18 @@ export function resolveReply(input: string, locale: Locale, messageHistory: Hist
     .sort((a, b) => b.score - a.score)
 
   // Avoid repeating the last matched entry
-  const lastEntryId = messageHistory.length > 0
-    ? (() => {
-        const prevUser = [...messageHistory].reverse().find((m) => m.role === 'user')
-        if (!prevUser) return undefined
-        const prevScored = knowledge
-          .map((e) => ({ e, s: scoreEntry(prevUser.content, e) }))
-          .filter(({ s }) => s > 0)
-          .sort((a, b) => b.s - a.s)
-        return prevScored[0]?.e.id
-      })()
-    : undefined
+  const lastEntryId =
+    messageHistory.length > 0
+      ? (() => {
+          const prevUser = [...messageHistory].reverse().find((m) => m.role === 'user')
+          if (!prevUser) return undefined
+          const prevScored = knowledge
+            .map((e) => ({ e, s: scoreEntry(prevUser.content, e) }))
+            .filter(({ s }) => s > 0)
+            .sort((a, b) => b.s - a.s)
+          return prevScored[0]?.e.id
+        })()
+      : undefined
 
   const best = scored.find(({ entry }) => entry.id !== lastEntryId) ?? scored[0]
 
@@ -240,7 +346,11 @@ export function resolveReply(input: string, locale: Locale, messageHistory: Hist
     return getFallback(locale)
   }
 
-  return { reply: pick(best.entry.replies[locale]), followUps: best.entry.followUps[locale], entryId: best.entry.id }
+  return {
+    reply: pick(best.entry.replies[locale]),
+    followUps: best.entry.followUps[locale],
+    entryId: best.entry.id,
+  }
 }
 
 // ─── Fallback ─────────────────────────────────────────────────────────────────
@@ -251,21 +361,25 @@ const fallbacks: Record<Locale, string[]> = {
     "Hmm, I didn't catch that. Try: *Tell me about yourself* or *How can I contact you?*",
   ],
   no: [
-    "Jeg er ikke sikker på at jeg forstod det. Prøv å spørre om stakk, erfaring, prosjekter eller tilgjengelighet.",
-    "Kan du omformulere? Du kan spørre: *Hva er teknologistakken din?* eller *Er du tilgjengelig for ansettelse?*",
-    "Hmm, jeg skjønte ikke det. Prøv: *Fortell om deg selv* eller *Hvordan kan jeg kontakte deg?*",
+    'Jeg er ikke sikker på at jeg forstod det. Prøv å spørre om stakk, erfaring, prosjekter eller tilgjengelighet.',
+    'Kan du omformulere? Du kan spørre: *Hva er teknologistakken din?* eller *Er du tilgjengelig for ansettelse?*',
+    'Hmm, jeg skjønte ikke det. Prøv: *Fortell om deg selv* eller *Hvordan kan jeg kontakte deg?*',
   ],
   pt: [
-    "Não tenho certeza se entendi. Tente perguntar sobre meu stack, experiência, projetos ou disponibilidade.",
-    "Poderia reformular? Você pode perguntar: *Qual é o seu stack?* ou *Você está disponível para contratação?*",
-    "Hmm, não entendi. Tente: *Fale sobre você* ou *Como posso entrar em contato?*",
+    'Não tenho certeza se entendi. Tente perguntar sobre meu stack, experiência, projetos ou disponibilidade.',
+    'Poderia reformular? Você pode perguntar: *Qual é o seu stack?* ou *Você está disponível para contratação?*',
+    'Hmm, não entendi. Tente: *Fale sobre você* ou *Como posso entrar em contato?*',
   ],
 }
 
 const fallbackFollowUps: Record<Locale, string[]> = {
-  en: ["What's your tech stack?", "Are you available for hire?", "Tell me about your projects"],
-  no: ["Hva er teknologistakken din?", "Er du tilgjengelig for ansettelse?", "Fortell om prosjektene dine"],
-  pt: ["Qual é o seu stack?", "Você está disponível?", "Fale sobre seus projetos"],
+  en: ["What's your tech stack?", 'Are you available for hire?', 'Tell me about your projects'],
+  no: [
+    'Hva er teknologistakken din?',
+    'Er du tilgjengelig for ansettelse?',
+    'Fortell om prosjektene dine',
+  ],
+  pt: ['Qual é o seu stack?', 'Você está disponível?', 'Fale sobre seus projetos'],
 }
 
 function getFallback(locale: Locale): ResolveResult {
@@ -277,7 +391,20 @@ function getFallback(locale: Locale): ResolveResult {
 }
 
 // ─── Testimonial lookup ───────────────────────────────────────────────────────
-const testimonialTriggers = ['testimonial', 'reference', 'recommendation', 'said about', 'what did', 'anbefaling', 'anbefale', 'anbefalte', 'referanse', 'depoimento', 'recomendação', 'recomendacao']
+const testimonialTriggers = [
+  'testimonial',
+  'reference',
+  'recommendation',
+  'said about',
+  'what did',
+  'anbefaling',
+  'anbefale',
+  'anbefalte',
+  'referanse',
+  'depoimento',
+  'recomendação',
+  'recomendacao',
+]
 
 export function resolveTestimonial(input: string): Testimonial | null {
   const lower = input.toLowerCase()
@@ -301,4 +428,3 @@ export function resolveTestimonial(input: string): Testimonial | null {
   // No name specified — return a random testimonial
   return testimonials[Math.floor(Math.random() * testimonials.length)]
 }
-

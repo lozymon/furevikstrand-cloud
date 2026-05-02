@@ -3,7 +3,12 @@
 
 const buckets = new Map<string, Map<string, { count: number; resetAt: number }>>()
 
-export function checkRateLimit(scope: string, ip: string, limit: number, windowMs: number): boolean {
+export function checkRateLimit(
+  scope: string,
+  ip: string,
+  limit: number,
+  windowMs: number
+): boolean {
   const now = Date.now()
   let bucket = buckets.get(scope)
   if (!bucket) {

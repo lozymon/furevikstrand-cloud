@@ -26,7 +26,8 @@ function buildSystemPrompt(locale: Locale): string {
 
   const experienceSection = experience
     .map((e) => {
-      const desc = locale === 'no' ? e.description.no : locale === 'pt' ? e.description.pt : e.description.en
+      const desc =
+        locale === 'no' ? e.description.no : locale === 'pt' ? e.description.pt : e.description.en
       const role = locale === 'no' ? e.role.no : locale === 'pt' ? e.role.pt : e.role.en
       return `- **${e.company}** — ${role} (${e.period}, ${e.location})\n  ${desc}\n  Tech: ${e.tech.join(', ')}`
     })
@@ -34,7 +35,8 @@ function buildSystemPrompt(locale: Locale): string {
 
   const projectsSection = projects
     .map((p) => {
-      const desc = locale === 'no' ? p.description.no : locale === 'pt' ? p.description.pt : p.description.en
+      const desc =
+        locale === 'no' ? p.description.no : locale === 'pt' ? p.description.pt : p.description.en
       const repo = p.repo ? ` — [GitHub](${p.repo})` : ''
       const url = p.url ? ` — [Live](${p.url})` : ''
       return `- **${p.name}**${repo}${url}: ${desc} (${p.tech.join(', ')})`
@@ -100,7 +102,10 @@ export async function POST(request: Request) {
   const ip = clientIp(request)
 
   if (!checkRateLimit('chat', ip, RATE_LIMIT, RATE_WINDOW_MS)) {
-    return NextResponse.json({ error: 'Rate limit exceeded. Please try again later.' }, { status: 429 })
+    return NextResponse.json(
+      { error: 'Rate limit exceeded. Please try again later.' },
+      { status: 429 }
+    )
   }
 
   let message: string
@@ -121,7 +126,11 @@ export async function POST(request: Request) {
           .filter((m: unknown) => {
             if (typeof m !== 'object' || m === null) return false
             const msg = m as Record<string, unknown>
-            return (msg.role === 'user' || msg.role === 'assistant') && typeof msg.content === 'string' && msg.content.trim()
+            return (
+              (msg.role === 'user' || msg.role === 'assistant') &&
+              typeof msg.content === 'string' &&
+              msg.content.trim()
+            )
           })
           .slice(-10)
       : []
@@ -149,10 +158,7 @@ export async function POST(request: Request) {
         model: process.env.CLAUDE_MODEL ?? 'claude-haiku-4-5',
         max_tokens: 512,
         system: systemPrompt,
-        messages: [
-          ...history,
-          { role: 'user', content: message },
-        ],
+        messages: [...history, { role: 'user', content: message }],
       })
 
       const encoder = new TextEncoder()
@@ -160,16 +166,22 @@ export async function POST(request: Request) {
         async start(controller) {
           let accumulated = ''
           for await (const event of stream) {
-            if (
-              event.type === 'content_block_delta' &&
-              event.delta.type === 'text_delta'
-            ) {
+            if (event.type === 'content_block_delta' && event.delta.type === 'text_delta') {
               controller.enqueue(encoder.encode(event.delta.text))
               accumulated += event.delta.text
             }
           }
           controller.close()
-          logChatEvent({ session_id: sessionId, locale, reply_source: 'claude', topic: null, message_index: messageIndex, page, user_message: message, ai_reply: accumulated })
+          logChatEvent({
+            session_id: sessionId,
+            locale,
+            reply_source: 'claude',
+            topic: null,
+            message_index: messageIndex,
+            page,
+            user_message: message,
+            ai_reply: accumulated,
+          })
         },
       })
       return new Response(readable, {
@@ -226,7 +238,16 @@ export async function POST(request: Request) {
             }
           },
           flush() {
-            logChatEvent({ session_id: sessionId, locale, reply_source: 'ollama', topic: null, message_index: messageIndex, page, user_message: message, ai_reply: ollamaAccumulated })
+            logChatEvent({
+              session_id: sessionId,
+              locale,
+              reply_source: 'ollama',
+              topic: null,
+              message_index: messageIndex,
+              page,
+              user_message: message,
+              ai_reply: ollamaAccumulated,
+            })
           },
         })
         return new Response(ollamaRes.body.pipeThrough(stream), {
@@ -244,7 +265,16 @@ export async function POST(request: Request) {
 
   // ─── Fallback: keyword matcher ────────────────────────────────────────────
   const { reply } = resolveReply(message, locale, history)
-  logChatEvent({ session_id: sessionId, locale, reply_source: 'fallback', topic: null, message_index: messageIndex, page, user_message: message, ai_reply: reply })
+  logChatEvent({
+    session_id: sessionId,
+    locale,
+    reply_source: 'fallback',
+    topic: null,
+    message_index: messageIndex,
+    page,
+    user_message: message,
+    ai_reply: reply,
+  })
   return new Response(reply, {
     headers: {
       'Content-Type': 'text/plain; charset=utf-8',

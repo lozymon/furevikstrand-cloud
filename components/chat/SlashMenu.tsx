@@ -11,9 +11,7 @@ interface Props {
 }
 
 export default function SlashMenu({ query, commands, activeIndex, onSelect }: Props) {
-  const filtered = query === '/'
-    ? commands
-    : commands.filter((c) => c.cmd.startsWith(query))
+  const filtered = query === '/' ? commands : commands.filter((c) => c.cmd.startsWith(query))
 
   const activeRef = useRef<HTMLButtonElement>(null)
 
@@ -46,10 +44,17 @@ export default function SlashMenu({ query, commands, activeIndex, onSelect }: Pr
                   isActive ? 'bg-[#1e1e2e]' : 'hover:bg-[#1e1e2e]',
                 ].join(' ')}
               >
-                <span className={['font-mono text-xs shrink-0', isActive ? 'text-[#c4b5fd]' : 'text-[#a78bfa] group-hover:text-[#c4b5fd]'].join(' ')}>
+                <span
+                  className={[
+                    'font-mono text-xs shrink-0',
+                    isActive ? 'text-[#c4b5fd]' : 'text-[#a78bfa] group-hover:text-[#c4b5fd]',
+                  ].join(' ')}
+                >
                   {c.cmd}
                 </span>
-                <span className="text-[#8888a8] font-mono text-[11px] truncate">{c.description}</span>
+                <span className="text-[#8888a8] font-mono text-[11px] truncate">
+                  {c.description}
+                </span>
               </button>
             </li>
           )

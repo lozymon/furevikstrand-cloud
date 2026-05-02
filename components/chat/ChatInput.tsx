@@ -17,13 +17,18 @@ export default function ChatInput({ onSend, onClear, disabled }: Props) {
   const [activeIndex, setActiveIndex] = useState(0)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
-  const filtered = value.startsWith('/') && !value.includes(' ')
-    ? (value === '/' ? SLASH_COMMANDS : SLASH_COMMANDS.filter((c) => c.cmd.startsWith(value)))
-    : []
+  const filtered =
+    value.startsWith('/') && !value.includes(' ')
+      ? value === '/'
+        ? SLASH_COMMANDS
+        : SLASH_COMMANDS.filter((c) => c.cmd.startsWith(value))
+      : []
   const showMenu = filtered.length > 0
 
   // Reset active index when filtered list changes
-  useEffect(() => { setActiveIndex(0) }, [value])
+  useEffect(() => {
+    setActiveIndex(0)
+  }, [value])
 
   // Re-focus when AI finishes responding
   useEffect(() => {
@@ -129,10 +134,33 @@ export default function ChatInput({ onSend, onClear, disabled }: Props) {
           className="w-11 h-11 sm:w-9 sm:h-9 rounded-lg border border-[#252535] flex items-center justify-center hover:border-[#a78bfa]/50 hover:text-[#a78bfa] text-[#8888a8] transition-colors disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <polyline points="3 6 5 6 21 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M19 6l-1 14H6L5 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M10 11v6M14 11v6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
-            <path d="M9 6V4h6v2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+            <polyline
+              points="3 6 5 6 21 6"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M19 6l-1 14H6L5 6"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M10 11v6M14 11v6"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+            />
+            <path
+              d="M9 6V4h6v2"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
         </button>
         <button
@@ -142,7 +170,14 @@ export default function ChatInput({ onSend, onClear, disabled }: Props) {
           className="w-11 h-11 sm:w-9 sm:h-9 rounded-lg bg-[#a78bfa] flex items-center justify-center hover:bg-[#9370e8] transition-colors disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
         >
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-            <path d="M2 8L14 8M14 8L9 3M14 8L9 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-[#0d0d10]" />
+            <path
+              d="M2 8L14 8M14 8L9 3M14 8L9 13"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="text-[#0d0d10]"
+            />
           </svg>
         </button>
       </form>

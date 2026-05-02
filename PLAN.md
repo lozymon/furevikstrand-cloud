@@ -1,6 +1,6 @@
 # PLAN.md — Improvements for furevikstrand.cloud
 
-A living backlog of ideas. Pick from the top, push down what isn't ready. Each item lists *what / why / where* so anyone (including future-Claude) can pick it up cold.
+A living backlog of ideas. Pick from the top, push down what isn't ready. Each item lists _what / why / where_ so anyone (including future-Claude) can pick it up cold.
 
 Status legend: `[ ]` open · `[~]` in progress · `[x]` done · `[-]` dropped
 

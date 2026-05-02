@@ -4,7 +4,9 @@ import { createContext, useContext, useState, useEffect } from 'react'
 import { getOrCreateSessionId } from '@/lib/session'
 import type { Message } from '@/types'
 
-function storageKey(locale: string) { return `chat_history_${locale}` }
+function storageKey(locale: string) {
+  return `chat_history_${locale}`
+}
 
 function loadFromStorage(locale: string): Message[] {
   try {
@@ -63,7 +65,20 @@ export function ChatProvider({ children, locale }: { children: React.ReactNode; 
   }, [messages, isLoaded])
 
   return (
-    <ChatContext.Provider value={{ messages, setMessages, isTyping, setIsTyping, showSuggestions, setShowSuggestions, currentFollowUps, setCurrentFollowUps, isLoaded, sessionId }}>
+    <ChatContext.Provider
+      value={{
+        messages,
+        setMessages,
+        isTyping,
+        setIsTyping,
+        showSuggestions,
+        setShowSuggestions,
+        currentFollowUps,
+        setCurrentFollowUps,
+        isLoaded,
+        sessionId,
+      }}
+    >
       {children}
     </ChatContext.Provider>
   )

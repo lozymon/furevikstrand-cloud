@@ -19,7 +19,9 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
   // Close on Escape
   useEffect(() => {
     if (!isOpen) return
-    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
     document.addEventListener('keydown', handler)
     return () => document.removeEventListener('keydown', handler)
   }, [isOpen, onClose])
@@ -27,7 +29,9 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
   // Prevent body scroll when open
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : ''
-    return () => { document.body.style.overflow = '' }
+    return () => {
+      document.body.style.overflow = ''
+    }
   }, [isOpen])
 
   return (
@@ -55,7 +59,12 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
             aria-label="Close menu"
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <path d="M2 2l12 12M14 2L2 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+              <path
+                d="M2 2l12 12M14 2L2 14"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
             </svg>
           </button>
         </div>
@@ -85,9 +94,21 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
 
         {/* Stats */}
         <div className="p-4 border-b border-[#252535] grid grid-cols-3 gap-3">
-          <Stat label={locale === 'en' ? 'Experience' : locale === 'no' ? 'Erfaring' : 'Experiência'} value={profile.stats.experience + (locale === 'no' ? ' år' : locale === 'pt' ? ' anos' : ' yrs')} />
-          <Stat label={locale === 'en' ? 'Projects' : locale === 'no' ? 'Prosjekter' : 'Projetos'} value={profile.stats.projects + ''} />
-          <Stat label={locale === 'en' ? 'Languages' : locale === 'no' ? 'Språk' : 'Idiomas'} value={profile.stats.languages + ''} />
+          <Stat
+            label={locale === 'en' ? 'Experience' : locale === 'no' ? 'Erfaring' : 'Experiência'}
+            value={
+              profile.stats.experience +
+              (locale === 'no' ? ' år' : locale === 'pt' ? ' anos' : ' yrs')
+            }
+          />
+          <Stat
+            label={locale === 'en' ? 'Projects' : locale === 'no' ? 'Prosjekter' : 'Projetos'}
+            value={profile.stats.projects + ''}
+          />
+          <Stat
+            label={locale === 'en' ? 'Languages' : locale === 'no' ? 'Språk' : 'Idiomas'}
+            value={profile.stats.languages + ''}
+          />
         </div>
 
         {/* Info rows */}
@@ -98,7 +119,9 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
 
         {/* Stack chips */}
         <div className="p-4 border-b border-[#252535]">
-          <p className="text-[10px] text-[#8888a8] font-mono uppercase tracking-wider mb-3">{t('sections.stack')}</p>
+          <p className="text-[10px] text-[#8888a8] font-mono uppercase tracking-wider mb-3">
+            {t('sections.stack')}
+          </p>
           <div className="flex flex-wrap gap-1.5">
             {topChips.map((chip) => (
               <span
@@ -113,7 +136,9 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
 
         {/* Links */}
         <div className="p-4">
-          <p className="text-[10px] text-[#8888a8] font-mono uppercase tracking-wider mb-3">{t('sections.links')}</p>
+          <p className="text-[10px] text-[#8888a8] font-mono uppercase tracking-wider mb-3">
+            {t('sections.links')}
+          </p>
           <div className="space-y-2">
             <SocialLink href={profile.github} label="GitHub" icon="⌥" />
             <SocialLink href={profile.gitlab} label="GitLab" icon="⌥" />

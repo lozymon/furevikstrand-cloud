@@ -10,7 +10,10 @@ import type { Locale } from '@/types'
 
 const sourceBadge = {
   linkedin: { label: 'LinkedIn', color: 'text-[#38bdf8] border-[#38bdf8]/30 bg-[#38bdf8]/5' },
-  'we-share': { label: 'We Share · Compass.uol', color: 'text-[#a78bfa] border-[#a78bfa]/30 bg-[#a78bfa]/5' },
+  'we-share': {
+    label: 'We Share · Compass.uol',
+    color: 'text-[#a78bfa] border-[#a78bfa]/30 bg-[#a78bfa]/5',
+  },
 }
 
 const backLabel = {
@@ -30,7 +33,10 @@ export default function TestimonialPage() {
       <div className="min-h-screen bg-[#0d0d10] text-[#e2e2f0]">
         <PageHeader current="testimonials" />
         <main className="max-w-2xl mx-auto px-6 py-16">
-          <Link href={`/${locale}/testimonials`} className="text-sm font-mono text-[#8888a8] hover:text-[#e2e2f0] transition-colors">
+          <Link
+            href={`/${locale}/testimonials`}
+            className="text-sm font-mono text-[#8888a8] hover:text-[#e2e2f0] transition-colors"
+          >
             {backLabel[locale]}
           </Link>
           <p className="mt-8 text-[#8888a8] font-mono text-sm">Testimonial not found.</p>
@@ -74,15 +80,21 @@ export default function TestimonialPage() {
               <div>
                 <p className="text-sm font-semibold text-[#e2e2f0]">{t.name}</p>
                 <p className="text-xs text-[#8888a8] font-mono mt-0.5">
-                  {t.role ? `${t.role} · ` : ''}{t.company}
+                  {t.role ? `${t.role} · ` : ''}
+                  {t.company}
                 </p>
               </div>
               <div className="flex flex-col items-end gap-1 shrink-0">
-                <span className={`text-[10px] font-mono px-2 py-0.5 rounded border ${sourceBadge[t.source].color}`}>
+                <span
+                  className={`text-[10px] font-mono px-2 py-0.5 rounded border ${sourceBadge[t.source].color}`}
+                >
                   {sourceBadge[t.source].label}
                 </span>
                 <span className="text-[10px] text-[#8888a8] font-mono">
-                  {new Date(t.date).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}
+                  {new Date(t.date).toLocaleDateString('en-GB', {
+                    month: 'short',
+                    year: 'numeric',
+                  })}
                 </span>
               </div>
             </div>
