@@ -63,12 +63,14 @@ export async function topTopics(limit: number): Promise<TopicRow[]> {
 
 export type LocaleRow = { locale: string; count: number }
 
-export async function localeSplit(): Promise<LocaleRow[]> {
+export async function localeSplit(days: number): Promise<LocaleRow[]> {
   const [rows] = await getPool().execute<RowDataPacket[]>(
     `SELECT locale, COUNT(*) AS count
      FROM chat_events
+     WHERE created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)
      GROUP BY locale
-     ORDER BY count DESC`
+     ORDER BY count DESC`,
+    [days]
   )
   return rows.map((r) => ({ locale: String(r.locale), count: Number(r.count) }))
 }

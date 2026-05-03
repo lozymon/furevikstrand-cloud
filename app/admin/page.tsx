@@ -44,7 +44,7 @@ export default async function AdminPage({
     ? await Promise.all([
         safe(fallbackRateOverTime(DAYS_WINDOW)),
         safe(topTopics(TOPICS_LIMIT)),
-        safe(localeSplit()),
+        safe(localeSplit(DAYS_WINDOW)),
         safe(sessionsPerDay(DAYS_WINDOW)),
         safe(recentFallbackMisses(MISSES_PAGE_SIZE, offset)),
       ])
@@ -82,7 +82,7 @@ export default async function AdminPage({
                 <Panel title="Top topics" result={topics}>
                   {(rows) => <TopicsTable rows={rows} />}
                 </Panel>
-                <Panel title="Locale split" result={locales}>
+                <Panel title={`Locale split — last ${DAYS_WINDOW} days`} result={locales}>
                   {(rows) => <LocaleTable rows={rows} />}
                 </Panel>
               </div>
