@@ -5,6 +5,7 @@ import { m } from 'framer-motion'
 import Image from 'next/image'
 import { useLocale } from 'next-intl'
 import ReactMarkdown from 'react-markdown'
+import remarkBreaks from 'remark-breaks'
 import remarkGfm from 'remark-gfm'
 import type { Message } from '@/types'
 
@@ -74,7 +75,7 @@ export default function ChatMessage({ message }: Props) {
         ].join(' ')}
       >
         <ReactMarkdown
-          remarkPlugins={[remarkGfm]}
+          remarkPlugins={[remarkGfm, remarkBreaks]}
           components={{
             p: ({ children }) => <p className="mb-1 last:mb-0">{children}</p>,
             strong: ({ children }) => (
