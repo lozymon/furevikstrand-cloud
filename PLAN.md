@@ -89,7 +89,7 @@ ESLint shows 29 errors + 10 warnings in pre-existing code. Group and fix in dedi
 
 ### Tests
 
-- [ ] **Smoke tests with Playwright.** The MCP server is already wired and the dev server boots fine. Add a tiny `tests/` folder with one mobile + one desktop pass that covers: home loads, chat sends a message, slash command works, `/classic` doesn't horizontally scroll. Run via `npm run test:e2e` so we don't break mobile fixes silently.
+- [x] **Smoke tests with Playwright.** `tests/smoke.spec.ts` runs four checks (home redirects to `/en` + renders chat, chat sends a message and gets a reply, `/help` slash command shows the commands list, `/classic` has `scrollWidth ≤ clientWidth + 1`) on desktop Chrome and Pixel 5. `playwright.config.ts` boots the dev server itself on port 3100 with `DISABLE_CLAUDE=true DISABLE_OLLAMA=true` so tests use the keyword-fallback tier and need no API keys. `npm run test:e2e` locally; `.github/workflows/e2e.yml` runs on every PR with the Playwright browser cache keyed on `package-lock.json`. `.github/workflows/ci.yml` adds lint + format:check + typecheck as a separate job so failures don't mask each other.
 
 ### Chat UX
 
