@@ -36,12 +36,7 @@
     "skipToInput": "Ir para o campo de chat",
     "testimonialReply": "Veja o que **{name}** disse:",
     "error": "Algo deu errado. Tente novamente.",
-    "help": "**Comandos disponíveis:**\n\n*Tópicos*\n`/about` — Quem é Kim\n`/experience` — Histórico de trabalho\n`/stack` — Stack tecnológico\n`/skills` — Resumo de competências\n`/projects` — Projetos open-source\n`/hire` — Disponibilidade\n`/contact` — Como me contatar\n`/cv` — Baixar CV\n`/location` — Onde estou baseado\n`/databases` — Experiência com bancos de dados\n`/devops` — Docker e implantação\n`/mentoring` — Liderança e mentoria\n`/style` — Como eu trabalho\n`/certifications` — Certificados e cursos\n`/education` — Formação acadêmica\n`/testimonials` — O que colegas dizem\n\n*Idioma*\n`/en` `/no` `/pt` — Trocar idioma\n\n*Outros*\n`/help` — Mostrar esta mensagem\n`/clear` — Limpar a tela\n\nOu pergunte naturalmente em qualquer idioma.",
-    "fallback": [
-      "Não tenho certeza se entendi isso. Tente perguntar sobre meu stack, experiência, projetos ou disponibilidade.",
-      "Poderia reformular? Você pode perguntar sobre minhas habilidades técnicas, histórico de trabalho ou como entrar em contato.",
-      "Hmm, não entendi isso. Tente: 'Qual é o seu stack?' ou 'Você está disponível para contratação?'"
-    ]
+    "help": "**Comandos disponíveis:**\n\n*Tópicos*\n`/about` — Quem é Kim\n`/experience` — Histórico de trabalho\n`/stack` — Stack tecnológico\n`/skills` — Resumo de competências\n`/projects` — Projetos open-source\n`/hire` — Disponibilidade\n`/contact` — Como me contatar\n`/cv` — Baixar CV\n`/location` — Onde estou baseado\n`/databases` — Experiência com bancos de dados\n`/devops` — Docker e implantação\n`/mentoring` — Liderança e mentoria\n`/style` — Como eu trabalho\n`/certifications` — Certificados e cursos\n`/education` — Formação acadêmica\n`/testimonials` — O que colegas dizem\n\n*Idioma*\n`/en` `/no` `/pt` — Trocar idioma\n\n*Outros*\n`/help` — Mostrar esta mensagem\n`/clear` — Limpar a tela\n\nOu pergunte naturalmente em qualquer idioma."
   },
   "contact": {
     "title": "Entre em contato",

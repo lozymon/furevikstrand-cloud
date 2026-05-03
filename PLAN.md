@@ -100,15 +100,15 @@ ESLint shows 29 errors + 10 warnings in pre-existing code. Group and fix in dedi
 
 ## P2 — Polish, nice-to-haves
 
-- [ ] **Unify fallback copy.** `lib/chat.ts:247-263` and `messages/en.json` both have "didn't catch that"-style strings; pick one source.
-- [ ] **Log rate-limit hits** in `app/api/chat/route.ts:115`. Currently silent 429. A `console.warn` with the IP makes ops debugging possible without DB queries.
+- [x] **Unify fallback copy.** `chat.fallback` arrays in `messages/{en,no,pt}.json` were dead code — zero consumers (verified by grep). The active path is `lib/chat.ts`'s `fallbacks: Record<Locale, string[]>` consumed by `getFallback(locale)` server-side via `resolveById` / matcher. Deleted the unused JSON keys; `lib/chat.ts` is now the single source of fallback copy. No behavior change.
+- [x] **Log rate-limit hits** in `app/api/chat/route.ts`. Added `console.warn(\`[chat] rate-limit hit, ip: ${ip}\`)`at the 429 site (matches the`[contact] honeypot triggered`style already in`app/api/contact/route.ts`). Contact route's own rate-limit is still silent — out of scope for this item, can be a follow-up if useful.
 - [ ] **Surface `DATABASE_URL` health on `/api/health`.** Today the chat-event logger is best-effort silent — add an optional check so we know if we're losing analytics.
 - [ ] **Stronger testimonial alt text.** Verify `components/chat/ChatMessage.tsx` uses `${name}, ${role}` rather than a generic "photo of" — better for screen readers.
 - [ ] **Consider `next/font`** for the body font to eliminate FOUT and any layout shift, if not already in use.
-- [ ] **Add a `humans.txt`** in `public/` — small, fun, and you're a portfolio site.
+- [x] **Added `public/humans.txt`** with TEAM/SITE/THANKS sections.
 - [ ] **Open Graph debug pass.** Run `https://www.opengraph.xyz/url/https%3A%2F%2Ffurevikstrand.cloud` after the OG-image work lands and screenshot the result for the README.
 - [ ] **Add `@next/bundle-analyzer`** as a dev dep with a `npm run analyze` script. Without it we're flying blind on what `framer-motion` / `react-markdown` / `mysql2` actually cost in the client bundle.
-- [ ] **Pin Node version with `engines` in `package.json`.** Dockerfile uses Node 20, but a contributor running locally on Node 18 might hit subtle issues. Add `"engines": { "node": ">=20" }`.
+- [x] **Pin Node version with `engines` in `package.json`** — already done as part of the P0 lint/format/typecheck setup (`"engines": { "node": ">=20" }`). Listed twice; closed here.
 - [ ] **README quality pass.** Mention what the project is, screenshot, the env vars needed for full Claude/Ollama/MySQL/Resend setup, how to run locally, and that the dev server defaults to port 3000 (or 3001 if 3000 is taken).
 
 ---

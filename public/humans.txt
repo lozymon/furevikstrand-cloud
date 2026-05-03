@@ -1,0 +1,16 @@
+/* TEAM */
+Developer: Kim Andrè Furevikstrand
+Site: https://furevikstrand.cloud
+Contact: lozymon [at] gmail.com
+GitHub: @lozymon
+Location: Norway / Remote from Brazil
+
+/* SITE */
+Language: English / Norsk / Português
+Doctype: HTML5
+Components: Next.js, React, Tailwind CSS, TypeScript, Framer Motion
+Software: Claude Code, VS Code, Docker
+
+/* THANKS */
+The neural canvas, the keyword matcher, and the people who said
+"yes, I'd love to be a testimonial" — you know who you are.

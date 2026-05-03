@@ -123,6 +123,7 @@ export async function POST(request: Request) {
   const ip = clientIp(request)
 
   if (!checkRateLimit('chat', ip, RATE_LIMIT, RATE_WINDOW_MS)) {
+    console.warn(`[chat] rate-limit hit, ip: ${ip}`)
     return NextResponse.json(
       { error: 'Rate limit exceeded. Please try again later.' },
       { status: 429 }
