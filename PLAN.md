@@ -107,7 +107,19 @@ ESLint shows 29 errors + 10 warnings in pre-existing code. Group and fix in dedi
 - [ ] **Consider `next/font`** for the body font to eliminate FOUT and any layout shift, if not already in use.
 - [x] **Added `public/humans.txt`** with TEAM/SITE/THANKS sections.
 - [ ] **Open Graph debug pass.** Run `https://www.opengraph.xyz/url/https%3A%2F%2Ffurevikstrand.cloud` after the OG-image work lands and screenshot the result for the README.
-- [ ] **Add `@next/bundle-analyzer`** as a dev dep with a `npm run analyze` script. Without it we're flying blind on what `framer-motion` / `react-markdown` / `mysql2` actually cost in the client bundle.
+- [x] **Added `@next/bundle-analyzer`** as a dev dep + `npm run analyze` script. Caveat: the analyzer is webpack-only — Next 16's default Turbopack build skips it silently. Script uses `next build --webpack` so the report actually generates. Reports land in `.next/analyze/{client,nodejs,edge}.html`.
+
+  Findings from one run (parsed sizes, client bundle, ~1.2MB total):
+  - `next` framework: 528 KB — unavoidable
+  - app code: 214 KB
+  - `react-dom`: 174 KB — unavoidable
+  - **`react-markdown`: 105 KB** — biggest non-framework dep we control; chat replies mostly use bold/italic/code/lists, so a hand-rolled mini renderer could shave most of this. Possible follow-up.
+  - `framer-motion` + `motion-dom`: ~80 KB combined — already trimmed in P1 via LazyMotion + `m.*` swap.
+  - `use-intl`: 40 KB — required for i18n.
+  - **`remark-gfm`: 27 KB** — verify whether tables/strikethrough/autolinks/task-lists are actually used in chat content; if not, drop the plugin.
+
+  These are observations, not action items. Whether to act on `react-markdown` / `remark-gfm` is a P3 call.
+
 - [x] **Pin Node version with `engines` in `package.json`** — already done as part of the P0 lint/format/typecheck setup (`"engines": { "node": ">=20" }`). Listed twice; closed here.
 - [ ] **README quality pass.** Mention what the project is, screenshot, the env vars needed for full Claude/Ollama/MySQL/Resend setup, how to run locally, and that the dev server defaults to port 3000 (or 3001 if 3000 is taken).
 
