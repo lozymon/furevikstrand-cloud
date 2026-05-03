@@ -75,6 +75,49 @@ export async function localeSplit(days: number): Promise<LocaleRow[]> {
   return rows.map((r) => ({ locale: String(r.locale), count: Number(r.count) }))
 }
 
+export type ReplySourceRow = { source: string; count: number }
+
+export async function replySourceSplit(days: number): Promise<ReplySourceRow[]> {
+  const [rows] = await getPool().execute<RowDataPacket[]>(
+    `SELECT reply_source AS source, COUNT(*) AS count
+     FROM chat_events
+     WHERE created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)
+     GROUP BY reply_source
+     ORDER BY count DESC`,
+    [days]
+  )
+  return rows.map((r) => ({ source: String(r.source), count: Number(r.count) }))
+}
+
+export type DepthRow = { bucket: string; sessions: number }
+
+const DEPTH_BUCKET_ORDER = ['1', '2-3', '4-7', '8+'] as const
+
+export async function sessionDepthDistribution(days: number): Promise<DepthRow[]> {
+  const [rows] = await getPool().execute<RowDataPacket[]>(
+    `SELECT bucket, COUNT(*) AS sessions FROM (
+       SELECT session_id,
+         CASE
+           WHEN COUNT(*) = 1 THEN '1'
+           WHEN COUNT(*) BETWEEN 2 AND 3 THEN '2-3'
+           WHEN COUNT(*) BETWEEN 4 AND 7 THEN '4-7'
+           ELSE '8+'
+         END AS bucket
+       FROM chat_events
+       WHERE created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)
+       GROUP BY session_id
+     ) t
+     GROUP BY bucket
+     ORDER BY FIELD(bucket, '1', '2-3', '4-7', '8+')`,
+    [days]
+  )
+  const counts = new Map<string, number>(rows.map((r) => [String(r.bucket), Number(r.sessions)]))
+  return DEPTH_BUCKET_ORDER.map((bucket) => ({
+    bucket,
+    sessions: counts.get(bucket) ?? 0,
+  }))
+}
+
 export type MissRow = {
   id: number
   createdAt: string

@@ -3,11 +3,15 @@ import {
   fallbackRateOverTime,
   topTopics,
   localeSplit,
+  replySourceSplit,
+  sessionDepthDistribution,
   recentFallbackMisses,
   sessionsPerDay,
   type DailyFallbackRow,
   type TopicRow,
   type LocaleRow,
+  type ReplySourceRow,
+  type DepthRow,
   type SessionStats,
   type MissRow,
 } from '@/lib/admin/queries'
@@ -40,15 +44,17 @@ export default async function AdminPage({
   const { offset: offsetParam } = await searchParams
   const offset = Math.max(0, Number.parseInt(offsetParam ?? '0', 10) || 0)
 
-  const [fallback, topics, locales, sessions, misses] = dbConfigured
+  const [fallback, topics, locales, sources, depth, sessions, misses] = dbConfigured
     ? await Promise.all([
         safe(fallbackRateOverTime(DAYS_WINDOW)),
         safe(topTopics(TOPICS_LIMIT)),
         safe(localeSplit(DAYS_WINDOW)),
+        safe(replySourceSplit(DAYS_WINDOW)),
+        safe(sessionDepthDistribution(DAYS_WINDOW)),
         safe(sessionsPerDay(DAYS_WINDOW)),
         safe(recentFallbackMisses(MISSES_PAGE_SIZE, offset)),
       ])
-    : ([null, null, null, null, null] as const)
+    : ([null, null, null, null, null, null, null] as const)
 
   return (
     <html lang="en">
@@ -79,11 +85,20 @@ export default async function AdminPage({
               </Panel>
 
               <div className="grid gap-6 md:grid-cols-2">
-                <Panel title="Top topics" result={topics}>
-                  {(rows) => <TopicsTable rows={rows} />}
+                <Panel title={`Reply source — last ${DAYS_WINDOW} days`} result={sources}>
+                  {(rows) => <ReplySourceTable rows={rows} />}
                 </Panel>
                 <Panel title={`Locale split — last ${DAYS_WINDOW} days`} result={locales}>
                   {(rows) => <LocaleTable rows={rows} />}
+                </Panel>
+              </div>
+
+              <div className="grid gap-6 md:grid-cols-2">
+                <Panel title="Top topics" result={topics}>
+                  {(rows) => <TopicsTable rows={rows} />}
+                </Panel>
+                <Panel title={`Session depth — last ${DAYS_WINDOW} days`} result={depth}>
+                  {(rows) => <DepthTable rows={rows} />}
                 </Panel>
               </div>
 
@@ -228,6 +243,72 @@ function LocaleTable({ rows }: { rows: LocaleRow[] }) {
             </Td>
             <Td>
               <Bar fraction={total > 0 ? r.count / total : 0} />
+            </Td>
+          </Tr>
+        ))}
+      </tbody>
+    </table>
+  )
+}
+
+function ReplySourceTable({ rows }: { rows: ReplySourceRow[] }) {
+  if (rows.length === 0) return <Empty />
+  const total = rows.reduce((sum, r) => sum + r.count, 0)
+  const colorFor = (source: string) =>
+    source === 'fallback'
+      ? 'text-[#f87171]'
+      : source === 'claude'
+        ? 'text-[#34d399]'
+        : 'text-[#a78bfa]'
+  return (
+    <table className="w-full text-xs">
+      <tbody>
+        {rows.map((r) => (
+          <Tr key={r.source}>
+            <Td>
+              <span className={colorFor(r.source)}>{r.source}</span>
+            </Td>
+            <Td align="right" width="60px">
+              {r.count}
+            </Td>
+            <Td align="right" width="60px" muted>
+              {total > 0 ? ((r.count / total) * 100).toFixed(1) : '0.0'}%
+            </Td>
+            <Td>
+              <Bar fraction={total > 0 ? r.count / total : 0} />
+            </Td>
+          </Tr>
+        ))}
+      </tbody>
+    </table>
+  )
+}
+
+function DepthTable({ rows }: { rows: DepthRow[] }) {
+  const total = rows.reduce((sum, r) => sum + r.sessions, 0)
+  if (total === 0) return <Empty />
+  return (
+    <table className="w-full text-xs">
+      <thead>
+        <Tr head>
+          <Th>Messages</Th>
+          <Th align="right">Sessions</Th>
+          <Th align="right">Share</Th>
+          <Th>{''}</Th>
+        </Tr>
+      </thead>
+      <tbody>
+        {rows.map((r) => (
+          <Tr key={r.bucket}>
+            <Td>{r.bucket}</Td>
+            <Td align="right" width="60px">
+              {r.sessions}
+            </Td>
+            <Td align="right" width="60px" muted>
+              {((r.sessions / total) * 100).toFixed(1)}%
+            </Td>
+            <Td>
+              <Bar fraction={r.sessions / total} />
             </Td>
           </Tr>
         ))}
