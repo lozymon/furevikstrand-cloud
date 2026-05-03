@@ -10,7 +10,9 @@ npm run build   # Production build (next build, output: standalone)
 npm run start   # Run the built standalone server
 ```
 
-There is no test suite, linter, or formatter wired into `package.json`. Type-checking happens via `next build`. Run `npx tsc --noEmit` for a standalone type-check.
+Type-checking happens via `next build`. Run `npx tsc --noEmit` for a standalone type-check, `npm run lint` for ESLint, `npm run format` for Prettier.
+
+`npm run test:e2e` runs Playwright smoke tests (`tests/`) against a dev server it boots itself on port 3100. Tests run on desktop Chrome + Pixel 5 viewports. The webServer is started with `DISABLE_CLAUDE=true DISABLE_OLLAMA=true` so the chat falls through to the keyword-fallback tier and tests don't need any API keys. Browsers are installed with `npx playwright install chromium`.
 
 The path alias `@/*` resolves to the repo root (see `tsconfig.json`), so prefer `@/lib/...` over relative imports.
 
