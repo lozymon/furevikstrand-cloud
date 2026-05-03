@@ -383,6 +383,24 @@ function ReferrerTable({ rows }: { rows: ReferrerRow[] }) {
   )
 }
 
+const REGION_NAMES = new Intl.DisplayNames(['en'], { type: 'region' })
+
+function countryName(code: string): string {
+  if (!/^[A-Za-z]{2}$/.test(code)) return code
+  try {
+    return REGION_NAMES.of(code.toUpperCase()) ?? code
+  } catch {
+    return code
+  }
+}
+
+function flagEmoji(code: string): string {
+  if (!/^[A-Za-z]{2}$/.test(code)) return ''
+  const base = 0x1f1e6 - 'A'.charCodeAt(0)
+  const upper = code.toUpperCase()
+  return String.fromCodePoint(base + upper.charCodeAt(0), base + upper.charCodeAt(1))
+}
+
 function CountryTable({ rows }: { rows: CountryRow[] }) {
   if (rows.length === 0) return <Empty />
   const total = rows.reduce((sum, r) => sum + r.count, 0)
@@ -391,7 +409,13 @@ function CountryTable({ rows }: { rows: CountryRow[] }) {
       <tbody>
         {rows.map((r) => (
           <Tr key={r.country}>
-            <Td>{r.country}</Td>
+            <Td>
+              <span className="inline-flex items-center gap-2">
+                <span aria-hidden>{flagEmoji(r.country)}</span>
+                <span>{countryName(r.country)}</span>
+                <span className="text-[10px] text-[#5e5e7a] uppercase">{r.country}</span>
+              </span>
+            </Td>
             <Td align="right" width="60px">
               {r.count}
             </Td>

@@ -41,6 +41,13 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   output: 'standalone',
+  // geoip-lite resolves its data files relative to its own module location,
+  // which Turbopack rewrites during page-data collection. Keep it external
+  // and force-include the data files in the standalone output.
+  serverExternalPackages: ['geoip-lite'],
+  outputFileTracingIncludes: {
+    '/api/track': ['./node_modules/geoip-lite/data/**'],
+  },
   async headers() {
     return [
       {
