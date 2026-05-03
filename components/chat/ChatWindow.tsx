@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { AnimatePresence } from 'framer-motion'
+import { AnimatePresence, LazyMotion, domAnimation } from 'framer-motion'
 import ChatMessage from './ChatMessage'
 import ContactPromptCard from './ContactPromptCard'
 import TypingIndicator from './TypingIndicator'
@@ -36,39 +36,41 @@ export default function ChatWindow({
   }, [messages, isTyping])
 
   return (
-    <div
-      className="flex-1 overflow-y-auto flex flex-col"
-      role="log"
-      aria-live="polite"
-      aria-label="Chat messages"
-    >
-      <div className="flex-1" />
+    <LazyMotion features={domAnimation} strict>
+      <div
+        className="flex-1 overflow-y-auto flex flex-col"
+        role="log"
+        aria-live="polite"
+        aria-label="Chat messages"
+      >
+        <div className="flex-1" />
 
-      <AnimatePresence initial={false}>
-        {messages.map((msg) => (
-          <ChatMessage key={msg.id} message={msg} />
-        ))}
-      </AnimatePresence>
+        <AnimatePresence initial={false}>
+          {messages.map((msg) => (
+            <ChatMessage key={msg.id} message={msg} />
+          ))}
+        </AnimatePresence>
 
-      <AnimatePresence>
-        {showContactPrompt && (
-          <ContactPromptCard
-            key="contact-prompt"
-            locale={locale}
-            onDismiss={onDismissContactPrompt}
-          />
-        )}
-      </AnimatePresence>
+        <AnimatePresence>
+          {showContactPrompt && (
+            <ContactPromptCard
+              key="contact-prompt"
+              locale={locale}
+              onDismiss={onDismissContactPrompt}
+            />
+          )}
+        </AnimatePresence>
 
-      <AnimatePresence>{isTyping && <TypingIndicator key="typing" />}</AnimatePresence>
+        <AnimatePresence>{isTyping && <TypingIndicator key="typing" />}</AnimatePresence>
 
-      <AnimatePresence>
-        {showSuggestions && suggestions.length > 0 && (
-          <Suggestions key="suggestions" suggestions={suggestions} onSelect={onSuggestion} />
-        )}
-      </AnimatePresence>
+        <AnimatePresence>
+          {showSuggestions && suggestions.length > 0 && (
+            <Suggestions key="suggestions" suggestions={suggestions} onSelect={onSuggestion} />
+          )}
+        </AnimatePresence>
 
-      <div ref={bottomRef} />
-    </div>
+        <div ref={bottomRef} />
+      </div>
+    </LazyMotion>
   )
 }

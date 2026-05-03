@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import Image from 'next/image'
 import { useLocale } from 'next-intl'
 import ReactMarkdown from 'react-markdown'
@@ -30,7 +30,7 @@ export default function ChatMessage({ message }: Props) {
   const showCopy = isAi && message.content.trim().length > 0
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2 }}
@@ -253,6 +253,6 @@ export default function ChatMessage({ message }: Props) {
           )}
         </div>
       </div>
-    </motion.div>
+    </m.div>
   )
 }

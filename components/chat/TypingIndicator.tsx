@@ -1,10 +1,10 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 
 export default function TypingIndicator() {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 8 }}
@@ -20,7 +20,7 @@ export default function TypingIndicator() {
       >
         <div className="flex items-center gap-1.5" aria-hidden="true">
           {[0, 1, 2].map((i) => (
-            <motion.span
+            <m.span
               key={i}
               className="w-1.5 h-1.5 rounded-full bg-[#a78bfa]"
               animate={{ opacity: [0.3, 1, 0.3], y: [0, -4, 0] }}
@@ -29,6 +29,6 @@ export default function TypingIndicator() {
           ))}
         </div>
       </div>
-    </motion.div>
+    </m.div>
   )
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 
 interface Props {
   suggestions: string[]
@@ -9,7 +9,7 @@ interface Props {
 
 export default function Suggestions({ suggestions, onSelect }: Props) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 8 }}
@@ -26,6 +26,6 @@ export default function Suggestions({ suggestions, onSelect }: Props) {
           {s}
         </button>
       ))}
-    </motion.div>
+    </m.div>
   )
 }

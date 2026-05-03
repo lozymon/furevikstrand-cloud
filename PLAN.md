@@ -78,9 +78,9 @@ ESLint shows 29 errors + 10 warnings in pre-existing code. Group and fix in dedi
 
 ### Performance
 
-- [ ] **Confirm `NeuralCanvas` is lazy / paused off-screen.** It's the first thing rendered (`page.tsx:223`) and likely runs `requestAnimationFrame` continuously — verify it pauses on `document.hidden` and respects `prefers-reduced-motion`.
-- [ ] **Verify `framer-motion` isn't pulling in the full library** in client bundles. Use the per-component `motion/react` imports rather than the legacy entrypoint.
-- [ ] **Add `next/image` configuration** in `next.config.ts` if testimonial photos are served from external URLs. Currently no `images` block — any `<Image>` pointing off-domain will error.
+- [x] **`NeuralCanvas` pauses correctly.** `prefers-reduced-motion` was already respected (early-return). Added `visibilitychange` listener that cancels the rAF loop when `document.hidden` and resumes on visible. Skipped IntersectionObserver — it's a full-page absolute background, always behind content, never off-screen.
+- [x] **`framer-motion` shrunk via `LazyMotion` + `m`.** v12 already tree-shakes well (`sideEffects: false`), so the path swap alone wasn't the win. Real lever: wrapped `ChatWindow` in `<LazyMotion features={domAnimation} strict>` and changed the four chat motion components (`ChatMessage`, `ContactPromptCard`, `TypingIndicator`, `Suggestions`) from `motion.*` to `m.*`. `domAnimation` covers everything used here (animate/exit/transition, no drag/layout/gestures); `strict` prevents accidental `motion.*` regressions. `AnimatePresence` stays as-is.
+- [-] **`next/image` config** — N/A. All `<Image>` sources are local (`/profile-image.jpeg`, `/testimonials/*.png`). No external `remotePatterns` needed today; revisit if testimonial photos ever move off-domain.
 
 ### Security headers
 
