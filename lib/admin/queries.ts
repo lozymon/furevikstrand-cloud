@@ -154,6 +154,122 @@ export async function recentFallbackMisses(
   }
 }
 
+// ----- page_visits panels -----
+
+export type ReferrerRow = { host: string; count: number }
+
+export async function topReferrers(days: number, limit: number): Promise<ReferrerRow[]> {
+  const [rows] = await getPool().execute<RowDataPacket[]>(
+    `SELECT referrer_host AS host, COUNT(*) AS count
+     FROM page_visits
+     WHERE created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)
+       AND referrer_host IS NOT NULL
+       AND is_bot = 0
+     GROUP BY referrer_host
+     ORDER BY count DESC
+     LIMIT ?`,
+    [days, limit]
+  )
+  return rows.map((r) => ({ host: String(r.host), count: Number(r.count) }))
+}
+
+export type CountryRow = { country: string; count: number }
+
+export async function topCountries(days: number, limit: number): Promise<CountryRow[]> {
+  const [rows] = await getPool().execute<RowDataPacket[]>(
+    `SELECT country, COUNT(*) AS count
+     FROM page_visits
+     WHERE created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)
+       AND country IS NOT NULL
+       AND is_bot = 0
+     GROUP BY country
+     ORDER BY count DESC
+     LIMIT ?`,
+    [days, limit]
+  )
+  return rows.map((r) => ({ country: String(r.country), count: Number(r.count) }))
+}
+
+export type PageRow = { path: string; count: number }
+
+export async function topPages(days: number, limit: number): Promise<PageRow[]> {
+  const [rows] = await getPool().execute<RowDataPacket[]>(
+    `SELECT path, COUNT(*) AS count
+     FROM page_visits
+     WHERE created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)
+       AND is_bot = 0
+     GROUP BY path
+     ORDER BY count DESC
+     LIMIT ?`,
+    [days, limit]
+  )
+  return rows.map((r) => ({ path: String(r.path), count: Number(r.count) }))
+}
+
+export type DeviceRow = { device: string; count: number }
+
+export async function deviceSplit(days: number): Promise<DeviceRow[]> {
+  const [rows] = await getPool().execute<RowDataPacket[]>(
+    `SELECT device, COUNT(*) AS count
+     FROM page_visits
+     WHERE created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)
+       AND is_bot = 0
+     GROUP BY device
+     ORDER BY count DESC`,
+    [days]
+  )
+  return rows.map((r) => ({ device: String(r.device ?? 'unknown'), count: Number(r.count) }))
+}
+
+export type UtmRow = { source: string; count: number }
+
+export async function topUtmSources(days: number, limit: number): Promise<UtmRow[]> {
+  const [rows] = await getPool().execute<RowDataPacket[]>(
+    `SELECT utm_source AS source, COUNT(*) AS count
+     FROM page_visits
+     WHERE created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)
+       AND utm_source IS NOT NULL
+       AND is_bot = 0
+     GROUP BY utm_source
+     ORDER BY count DESC
+     LIMIT ?`,
+    [days, limit]
+  )
+  return rows.map((r) => ({ source: String(r.source), count: Number(r.count) }))
+}
+
+export type ConversionStats = {
+  visits: number
+  chatSessions: number
+  rate: number
+}
+
+export async function chatConversion(days: number): Promise<ConversionStats> {
+  const pool = getPool()
+  const [visitRows] = await pool.execute<RowDataPacket[]>(
+    `SELECT COUNT(DISTINCT session_id) AS c
+     FROM page_visits
+     WHERE created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)
+       AND is_bot = 0`,
+    [days]
+  )
+  const [chatRows] = await pool.execute<RowDataPacket[]>(
+    `SELECT COUNT(DISTINCT pv.session_id) AS c
+     FROM page_visits pv
+     JOIN chat_events ce ON ce.session_id = pv.session_id
+     WHERE pv.created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)
+       AND pv.is_bot = 0`,
+    [days]
+  )
+  const visits = Number(visitRows[0]?.c ?? 0)
+  const chatSessions = Number(chatRows[0]?.c ?? 0)
+  return {
+    visits,
+    chatSessions,
+    rate: visits > 0 ? chatSessions / visits : 0,
+  }
+}
+
 export type SessionStats = {
   day: string
   sessions: number

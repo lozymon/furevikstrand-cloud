@@ -3,6 +3,7 @@ import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, getTranslations } from 'next-intl/server'
 import { routing } from '@/i18n/routing'
 import { ChatProvider } from '@/context/ChatContext'
+import PageTracker from '@/components/layout/PageTracker'
 import { profile } from '@/data/profile'
 import type { Locale } from '@/types'
 import '../globals.css'
@@ -86,6 +87,7 @@ export default async function LocaleLayout({
         <NextIntlClientProvider messages={messages}>
           <ChatProvider locale={locale}>{children}</ChatProvider>
         </NextIntlClientProvider>
+        <PageTracker locale={locale} />
       </body>
     </html>
   )

@@ -7,6 +7,12 @@ import {
   sessionDepthDistribution,
   recentFallbackMisses,
   sessionsPerDay,
+  topReferrers,
+  topCountries,
+  topPages,
+  deviceSplit,
+  topUtmSources,
+  chatConversion,
   type DailyFallbackRow,
   type TopicRow,
   type LocaleRow,
@@ -14,6 +20,12 @@ import {
   type DepthRow,
   type SessionStats,
   type MissRow,
+  type ReferrerRow,
+  type CountryRow,
+  type PageRow,
+  type DeviceRow,
+  type UtmRow,
+  type ConversionStats,
 } from '@/lib/admin/queries'
 import { redactPII } from '@/lib/admin/redact'
 import '../globals.css'
@@ -23,6 +35,7 @@ export const revalidate = 0
 
 const DAYS_WINDOW = 30
 const TOPICS_LIMIT = 15
+const TRAFFIC_LIMIT = 10
 const MISSES_PAGE_SIZE = 20
 
 type PanelResult<T> = { ok: true; value: T } | { ok: false; error: string }
@@ -44,7 +57,21 @@ export default async function AdminPage({
   const { offset: offsetParam } = await searchParams
   const offset = Math.max(0, Number.parseInt(offsetParam ?? '0', 10) || 0)
 
-  const [fallback, topics, locales, sources, depth, sessions, misses] = dbConfigured
+  const [
+    fallback,
+    topics,
+    locales,
+    sources,
+    depth,
+    sessions,
+    misses,
+    referrers,
+    countries,
+    pages,
+    devices,
+    utms,
+    conversion,
+  ] = dbConfigured
     ? await Promise.all([
         safe(fallbackRateOverTime(DAYS_WINDOW)),
         safe(topTopics(TOPICS_LIMIT)),
@@ -53,8 +80,14 @@ export default async function AdminPage({
         safe(sessionDepthDistribution(DAYS_WINDOW)),
         safe(sessionsPerDay(DAYS_WINDOW)),
         safe(recentFallbackMisses(MISSES_PAGE_SIZE, offset)),
+        safe(topReferrers(DAYS_WINDOW, TRAFFIC_LIMIT)),
+        safe(topCountries(DAYS_WINDOW, TRAFFIC_LIMIT)),
+        safe(topPages(DAYS_WINDOW, TRAFFIC_LIMIT)),
+        safe(deviceSplit(DAYS_WINDOW)),
+        safe(topUtmSources(DAYS_WINDOW, TRAFFIC_LIMIT)),
+        safe(chatConversion(DAYS_WINDOW)),
       ])
-    : ([null, null, null, null, null, null, null] as const)
+    : ([null, null, null, null, null, null, null, null, null, null, null, null, null] as const)
 
   return (
     <html lang="en">
@@ -66,7 +99,7 @@ export default async function AdminPage({
           <header className="mb-8 flex items-baseline justify-between gap-4">
             <div>
               <p className="text-[10px] uppercase tracking-[0.2em] text-[#a78bfa] mb-1">/admin</p>
-              <h1 className="text-xl sm:text-2xl font-bold">chat_events dashboard</h1>
+              <h1 className="text-xl sm:text-2xl font-bold">chat &amp; traffic dashboard</h1>
             </div>
             <Link
               href="/en"
@@ -80,6 +113,36 @@ export default async function AdminPage({
             <NoDb />
           ) : (
             <div className="grid gap-6">
+              <SectionHeader>Traffic</SectionHeader>
+
+              <Panel title={`Chat conversion — last ${DAYS_WINDOW} days`} result={conversion}>
+                {(stats) => <ConversionStat stats={stats} />}
+              </Panel>
+
+              <div className="grid gap-6 md:grid-cols-2">
+                <Panel title={`Top referrers — last ${DAYS_WINDOW} days`} result={referrers}>
+                  {(rows) => <ReferrerTable rows={rows} />}
+                </Panel>
+                <Panel title={`Top countries — last ${DAYS_WINDOW} days`} result={countries}>
+                  {(rows) => <CountryTable rows={rows} />}
+                </Panel>
+              </div>
+
+              <div className="grid gap-6 md:grid-cols-2">
+                <Panel title={`Top pages — last ${DAYS_WINDOW} days`} result={pages}>
+                  {(rows) => <PagesTable rows={rows} />}
+                </Panel>
+                <Panel title={`Device split — last ${DAYS_WINDOW} days`} result={devices}>
+                  {(rows) => <DeviceTable rows={rows} />}
+                </Panel>
+              </div>
+
+              <Panel title={`Top UTM sources — last ${DAYS_WINDOW} days`} result={utms}>
+                {(rows) => <UtmTable rows={rows} />}
+              </Panel>
+
+              <SectionHeader>Chat</SectionHeader>
+
               <Panel title={`Fallback rate — last ${DAYS_WINDOW} days`} result={fallback}>
                 {(rows) => <FallbackTable rows={rows} />}
               </Panel>
@@ -243,6 +306,178 @@ function LocaleTable({ rows }: { rows: LocaleRow[] }) {
             </Td>
             <Td>
               <Bar fraction={total > 0 ? r.count / total : 0} />
+            </Td>
+          </Tr>
+        ))}
+      </tbody>
+    </table>
+  )
+}
+
+function SectionHeader({ children }: { children: React.ReactNode }) {
+  return (
+    <h2 className="text-[10px] uppercase tracking-[0.2em] text-[#a78bfa] mt-2 -mb-2">{children}</h2>
+  )
+}
+
+function ConversionStat({ stats }: { stats: ConversionStats }) {
+  if (stats.visits === 0) {
+    return (
+      <p className="text-xs text-[#8888a8]">
+        No tracked visits yet — give the page tracker a few hours to collect data.
+      </p>
+    )
+  }
+  return (
+    <div className="grid grid-cols-3 gap-4 text-center sm:text-left">
+      <Stat label="Unique visits" value={stats.visits.toLocaleString()} />
+      <Stat label="Chatted" value={stats.chatSessions.toLocaleString()} />
+      <Stat
+        label="Conversion"
+        value={`${(stats.rate * 100).toFixed(1)}%`}
+        accent={stats.rate > 0.1 ? '#34d399' : '#a78bfa'}
+      />
+    </div>
+  )
+}
+
+function Stat({ label, value, accent }: { label: string; value: string; accent?: string }) {
+  return (
+    <div>
+      <p className="text-[10px] uppercase tracking-[0.15em] text-[#8888a8]">{label}</p>
+      <p
+        className="text-2xl font-bold mt-1"
+        style={accent ? { color: accent } : { color: '#e2e2f0' }}
+      >
+        {value}
+      </p>
+    </div>
+  )
+}
+
+function ReferrerTable({ rows }: { rows: ReferrerRow[] }) {
+  if (rows.length === 0) {
+    return (
+      <p className="text-xs text-[#8888a8]">
+        No external referrers yet — every visit so far is direct or internal.
+      </p>
+    )
+  }
+  const max = rows[0]?.count ?? 1
+  return (
+    <table className="w-full text-xs">
+      <tbody>
+        {rows.map((r) => (
+          <Tr key={r.host}>
+            <Td>{r.host}</Td>
+            <Td align="right" width="60px">
+              {r.count}
+            </Td>
+            <Td>
+              <Bar fraction={r.count / max} />
+            </Td>
+          </Tr>
+        ))}
+      </tbody>
+    </table>
+  )
+}
+
+function CountryTable({ rows }: { rows: CountryRow[] }) {
+  if (rows.length === 0) return <Empty />
+  const total = rows.reduce((sum, r) => sum + r.count, 0)
+  return (
+    <table className="w-full text-xs">
+      <tbody>
+        {rows.map((r) => (
+          <Tr key={r.country}>
+            <Td>{r.country}</Td>
+            <Td align="right" width="60px">
+              {r.count}
+            </Td>
+            <Td align="right" width="60px" muted>
+              {((r.count / total) * 100).toFixed(1)}%
+            </Td>
+            <Td>
+              <Bar fraction={r.count / total} />
+            </Td>
+          </Tr>
+        ))}
+      </tbody>
+    </table>
+  )
+}
+
+function PagesTable({ rows }: { rows: PageRow[] }) {
+  if (rows.length === 0) return <Empty />
+  const max = rows[0]?.count ?? 1
+  return (
+    <table className="w-full text-xs">
+      <tbody>
+        {rows.map((r) => (
+          <Tr key={r.path}>
+            <Td>
+              <span className="break-all">{r.path}</span>
+            </Td>
+            <Td align="right" width="60px">
+              {r.count}
+            </Td>
+            <Td>
+              <Bar fraction={r.count / max} />
+            </Td>
+          </Tr>
+        ))}
+      </tbody>
+    </table>
+  )
+}
+
+function DeviceTable({ rows }: { rows: DeviceRow[] }) {
+  if (rows.length === 0) return <Empty />
+  const total = rows.reduce((sum, r) => sum + r.count, 0)
+  return (
+    <table className="w-full text-xs">
+      <tbody>
+        {rows.map((r) => (
+          <Tr key={r.device}>
+            <Td>{r.device}</Td>
+            <Td align="right" width="60px">
+              {r.count}
+            </Td>
+            <Td align="right" width="60px" muted>
+              {((r.count / total) * 100).toFixed(1)}%
+            </Td>
+            <Td>
+              <Bar fraction={r.count / total} />
+            </Td>
+          </Tr>
+        ))}
+      </tbody>
+    </table>
+  )
+}
+
+function UtmTable({ rows }: { rows: UtmRow[] }) {
+  if (rows.length === 0) {
+    return (
+      <p className="text-xs text-[#8888a8]">
+        No UTM-tagged visits yet — share links with{' '}
+        <code className="text-[#a78bfa]">?utm_source=…&amp;utm_medium=…</code> to populate this.
+      </p>
+    )
+  }
+  const max = rows[0]?.count ?? 1
+  return (
+    <table className="w-full text-xs">
+      <tbody>
+        {rows.map((r) => (
+          <Tr key={r.source}>
+            <Td>{r.source}</Td>
+            <Td align="right" width="60px">
+              {r.count}
+            </Td>
+            <Td>
+              <Bar fraction={r.count / max} />
             </Td>
           </Tr>
         ))}
