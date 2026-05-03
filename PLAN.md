@@ -48,7 +48,7 @@ ESLint shows 29 errors + 10 warnings in pre-existing code. Group and fix in dedi
   - 6 × `react-hooks/exhaustive-deps` — missing dep arrays (some are deliberate, some real bugs)
   - 3 × `react-hooks/set-state-in-effect` — anti-pattern; either restructure or justify per case
   - 1 × `react-hooks/immutability`
-- **Prettier** — 37 files diverge from `.prettierrc.json`. Run `npm run format` once, commit as a single dedicated `chore: prettier sweep` so the diff is reviewable in isolation.
+- [x] **Prettier sweep** — repo is already clean. `npm run format:check` reports no diffs; the 37-file divergence noted earlier landed incrementally during the lint/format work. CI's `format:check` keeps it that way.
 
 ### Robustness & resilience
 
