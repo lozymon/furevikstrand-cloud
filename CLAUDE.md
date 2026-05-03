@@ -49,7 +49,9 @@ Other route-level concerns: in-memory rate limit (20 req/hour/IP, resets on serv
 
 ### Analytics / logging
 
-`lib/logEvent.ts` writes to a MySQL `chat_events` table via a pooled `mysql2` connection (`lib/db.ts`). Logging is best-effort — if `DATABASE_URL` is unset or the insert fails, the request still succeeds. The schema is implied by the INSERT in `logEvent.ts`: `(session_id, locale, reply_source, topic, message_index, page, user_message, ai_reply)`.
+`lib/logEvent.ts` writes to a MySQL `chat_events` table via a pooled `mysql2` connection (`lib/db.ts`). Logging is best-effort — if `DATABASE_URL` is unset or the insert fails, the request still succeeds. The schema is implied by the INSERT in `logEvent.ts`: `(session_id, locale, reply_source, topic, message_index, page, user_message, ai_reply)`. Full schema (with `id`, `created_at`) is documented in `docs/todo.md`.
+
+The data is surfaced in a small server-rendered dashboard at `/admin` (basic-auth gated, route is locale-less and outside the next-intl tree). Queries live in `lib/admin/queries.ts`; the page renders five panels (fallback rate, top topics, locale split, sessions per day, recent fallback misses with PII redaction). Returns 404 when `ADMIN_USER`/`ADMIN_PASS` aren't configured.
 
 ### Adding a new page
 
@@ -68,6 +70,7 @@ See `.env.local` for the full list. The important ones:
 - `DISABLE_CLAUDE`, `DISABLE_OLLAMA` — kill switches (`true` to disable even when keys/hosts are set).
 - `OLLAMA_HOST`, `OLLAMA_MODEL` — enables tier 2.
 - `DATABASE_URL` — MySQL connection string for chat event logging.
+- `ADMIN_USER`, `ADMIN_PASS` — basic-auth for `/admin` analytics dashboard. If both are unset, the route returns 404 so it isn't discoverable. Auth is enforced in `proxy.ts` before next-intl middleware runs.
 - `RESEND_API_KEY`, `RESEND_TO_EMAIL` — contact-form delivery.
 - `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` — analytics; baked in at build time (see `Dockerfile`).
 
