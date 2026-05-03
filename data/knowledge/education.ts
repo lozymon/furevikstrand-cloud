@@ -1,46 +1,6 @@
 import type { KnowledgeEntry } from '@/types'
 
 export const educationKnowledge: KnowledgeEntry[] = [
-  // ─── Education ───────────────────────────────────────────────────────────────
-  {
-    id: 'education',
-    keys: [
-      'education',
-      'degree',
-      'university',
-      'study',
-      'school',
-      'certification',
-      'self-taught',
-      'utdanning',
-      'grad',
-      'universitet',
-      'studie',
-      'sertifisering',
-      'educação',
-      'graduação',
-      'universidade',
-      'certificação',
-      'autodidact',
-    ],
-    replies: {
-      en: [
-        "I'm largely self-taught, which I wear as a badge of honour in this field. My learning has been driven by the problems I needed to solve on the job — distributed systems, query optimisation, frontend performance — not by coursework. I've complemented that with cloud certifications and professional courses on architecture and distributed systems. After 10+ years in production, I think real-world output matters more than credentials, but I also never stop learning.",
-      ],
-      no: [
-        'Jeg er i stor grad selvlært, noe jeg bærer som et æresmerke i dette feltet. Læringen min har blitt drevet av problemene jeg trengte å løse på jobben — distribuerte systemer, spørringsoptimalisering, frontend-ytelse. Jeg har supplert med skysertifiseringer og profesjonelle kurs om arkitektur og distribuerte systemer.',
-      ],
-      pt: [
-        'Sou em grande parte autodidata, o que considero uma distinção nesta área. Meu aprendizado foi impulsionado pelos problemas que precisei resolver no trabalho — sistemas distribuídos, otimização de queries, performance de frontend. Complementei isso com certificações de nuvem e cursos profissionais sobre arquitetura e sistemas distribuídos.',
-      ],
-    },
-    followUps: {
-      en: ["What's your tech stack?", 'Tell me about your experience', 'Tell me about yourself'],
-      no: ['Hva er teknologistakken din?', 'Fortell om din erfaring', 'Fortell om deg selv'],
-      pt: ['Qual é o seu stack?', 'Fale sobre sua experiência', 'Fale sobre você'],
-    },
-  },
-
   // ─── Certifications ──────────────────────────────────────────────────────────
   {
     id: 'certifications',
@@ -88,24 +48,35 @@ export const educationKnowledge: KnowledgeEntry[] = [
       'school',
       'university',
       'degree',
+      'study',
       'studied',
+      'certification',
+      'self-taught',
+      'autodidact',
       'utdanning',
       'skole',
       'universitet',
+      'grad',
+      'studie',
+      'sertifisering',
+      'selvlært',
       'educação',
       'escola',
       'universidade',
+      'graduação',
       'formação',
+      'certificação',
+      'autodidata',
     ],
     replies: {
       en: [
-        "Kim's formal education spans both Norway and Brazil:\n\n🇧🇷 **Universidade Federal do Rio Grande do Norte** — Technician in Information Technology (2017)\n\n🇳🇴 **Bergen Maritime** — VK2 (2001–2002)\n🇳🇴 **Manger Folkehøgskule** — Lydteknikker (2000–2001)\n🇳🇴 **Norheimsund vidaregåande skule** — VK1 (1999–2000)\n🇳🇴 **Voss vidaregåande skule** — GK (1998–1999)\n\nBeyond formal education, Kim holds 14 industry certifications in TypeScript, Docker, microservices and AI.",
+        "Kim's formal education spans both Norway and Brazil:\n\n🇧🇷 **Universidade Federal do Rio Grande do Norte** — Technician in Information Technology (2017)\n\n🇳🇴 **Bergen Maritime** — VK2 (2001–2002)\n🇳🇴 **Manger Folkehøgskule** — Lydteknikker (2000–2001)\n🇳🇴 **Norheimsund vidaregåande skule** — VK1 (1999–2000)\n🇳🇴 **Voss vidaregåande skule** — GK (1998–1999)\n\nBeyond formal coursework, Kim is largely self-taught — driven by the problems he needed to solve on the job (distributed systems, query optimisation, frontend performance), and complemented by 14 industry certifications in TypeScript, Docker, microservices and AI. After 10+ years in production, real-world output matters more than credentials, but he never stops learning.",
       ],
       no: [
-        'Kims formelle utdanning spenner over både Norge og Brasil:\n\n🇧🇷 **Universidade Federal do Rio Grande do Norte** — Tekniker i informasjonsteknologi (2017)\n\n🇳🇴 **Bergen Maritime** — VK2 (2001–2002)\n🇳🇴 **Manger Folkehøgskule** — Lydteknikker (2000–2001)\n🇳🇴 **Norheimsund vidaregåande skule** — VK1 (1999–2000)\n🇳🇴 **Voss vidaregåande skule** — GK (1998–1999)\n\nI tillegg til formell utdanning har Kim 14 bransjesertifiseringer innen TypeScript, Docker, mikrotjenester og AI.',
+        'Kims formelle utdanning spenner over både Norge og Brasil:\n\n🇧🇷 **Universidade Federal do Rio Grande do Norte** — Tekniker i informasjonsteknologi (2017)\n\n🇳🇴 **Bergen Maritime** — VK2 (2001–2002)\n🇳🇴 **Manger Folkehøgskule** — Lydteknikker (2000–2001)\n🇳🇴 **Norheimsund vidaregåande skule** — VK1 (1999–2000)\n🇳🇴 **Voss vidaregåande skule** — GK (1998–1999)\n\nUtover formelt skolepensum er Kim i stor grad selvlært — drevet av problemene han trengte å løse på jobben (distribuerte systemer, spørringsoptimalisering, frontend-ytelse), og supplert med 14 bransjesertifiseringer innen TypeScript, Docker, mikrotjenester og AI. Etter 10+ år i produksjon er reell leveranse viktigere enn diplomer, men han slutter aldri å lære.',
       ],
       pt: [
-        'A formação acadêmica do Kim abrange tanto a Noruega quanto o Brasil:\n\n🇧🇷 **Universidade Federal do Rio Grande do Norte** — Técnico em Tecnologia da Informação (2017)\n\n🇳🇴 **Bergen Maritime** — VK2 (2001–2002)\n🇳🇴 **Manger Folkehøgskule** — Lydteknikker (2000–2001)\n🇳🇴 **Norheimsund vidaregåande skule** — VK1 (1999–2000)\n🇳🇴 **Voss vidaregåande skule** — GK (1998–1999)\n\nAlém da formação formal, Kim possui 14 certificações da indústria em TypeScript, Docker, microsserviços e IA.',
+        'A formação acadêmica do Kim abrange tanto a Noruega quanto o Brasil:\n\n🇧🇷 **Universidade Federal do Rio Grande do Norte** — Técnico em Tecnologia da Informação (2017)\n\n🇳🇴 **Bergen Maritime** — VK2 (2001–2002)\n🇳🇴 **Manger Folkehøgskule** — Lydteknikker (2000–2001)\n🇳🇴 **Norheimsund vidaregåande skule** — VK1 (1999–2000)\n🇳🇴 **Voss vidaregåande skule** — GK (1998–1999)\n\nAlém da formação formal, Kim é em grande parte autodidata — impulsionado pelos problemas que precisou resolver no trabalho (sistemas distribuídos, otimização de queries, performance de frontend), complementado por 14 certificações da indústria em TypeScript, Docker, microsserviços e IA. Depois de mais de 10 anos em produção, entrega prática vale mais que diplomas, mas ele nunca para de aprender.',
       ],
     },
     followUps: {
