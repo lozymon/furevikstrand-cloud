@@ -113,18 +113,27 @@ export default async function OgImage({ params }: { params: Promise<{ locale: st
         ))}
       </div>
 
-      {/* Domain watermark */}
+      {/* CTA pill */}
       <div
         style={{
           position: 'absolute',
           bottom: '48px',
           right: '80px',
-          color: '#252535',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
+          padding: '12px 20px',
+          borderRadius: '999px',
+          border: '1px solid rgba(167,139,250,0.4)',
+          background: 'rgba(167,139,250,0.08)',
+          color: '#a78bfa',
           fontSize: '18px',
           fontFamily: 'monospace',
         }}
       >
-        furevikstrand.cloud
+        <span style={{ color: '#e2e2f0' }}>Let’s build something</span>
+        <span>·</span>
+        <span>furevikstrand.cloud</span>
       </div>
     </div>,
     { ...size }
