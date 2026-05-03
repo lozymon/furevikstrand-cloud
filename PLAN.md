@@ -122,6 +122,7 @@ ESLint shows 29 errors + 10 warnings in pre-existing code. Group and fix in dedi
 
 - [x] **Pin Node version with `engines` in `package.json`** — already done as part of the P0 lint/format/typecheck setup (`"engines": { "node": ">=20" }`). Listed twice; closed here.
 - [x] **README quality pass.** Replaced the create-next-app boilerplate with: project description, screenshot (`public/screenshot.png`, captured via Playwright at 1280×800 in fallback mode — `docs/` is gitignored so it lives under `public/`), quick start, three-tier architecture summary (links out to `CLAUDE.md` for details), scripts table, env-var table with degrade-gracefully behavior, Docker deploy snippet, project map, and license note.
+- [x] **"Copy as TS entry" button on the misses panel.** New `app/admin/CopyEntryButton.tsx` (client component) wired into `MissesTable` as a fourth column. Click → clipboard receives a paste-ready `KnowledgeEntry` stub: `id: 'TODO-rename'`, derived `keys` (lowercased words from the redacted message, length ≥ 3, deduped, capped at 10), `replies`/`followUps` shells for all three locales, and a leading `// Miss: "..."` comment with locale + timestamp for context. Closes the loop from `/admin` misses queue → `data/knowledge/*.ts` entry — keeps source-of-truth in code (no DB-backed knowledge store), but cuts per-entry friction. Operates on the redacted message so PII never reaches the clipboard.
 
 ---
 

@@ -28,6 +28,7 @@ import {
   type ConversionStats,
 } from '@/lib/admin/queries'
 import { redactPII } from '@/lib/admin/redact'
+import CopyEntryButton from './CopyEntryButton'
 import '../globals.css'
 
 export const dynamic = 'force-dynamic'
@@ -634,20 +635,31 @@ function MissesTable({
             <Th>When</Th>
             <Th>Loc</Th>
             <Th>Message</Th>
+            <Th>{''}</Th>
           </Tr>
         </thead>
         <tbody>
-          {rows.map((r) => (
-            <Tr key={r.id}>
-              <Td muted nowrap>
-                {r.createdAt.replace('T', ' ').slice(0, 19)}
-              </Td>
-              <Td muted>{r.locale}</Td>
-              <Td>
-                <span className="break-words">{redactPII(r.userMessage)}</span>
-              </Td>
-            </Tr>
-          ))}
+          {rows.map((r) => {
+            const safeMessage = redactPII(r.userMessage)
+            return (
+              <Tr key={r.id}>
+                <Td muted nowrap>
+                  {r.createdAt.replace('T', ' ').slice(0, 19)}
+                </Td>
+                <Td muted>{r.locale}</Td>
+                <Td>
+                  <span className="break-words">{safeMessage}</span>
+                </Td>
+                <Td align="right" nowrap>
+                  <CopyEntryButton
+                    message={safeMessage}
+                    locale={r.locale}
+                    createdAt={r.createdAt}
+                  />
+                </Td>
+              </Tr>
+            )
+          })}
         </tbody>
       </table>
       <div className="mt-3 flex items-center justify-between text-[11px] text-[#8888a8]">
