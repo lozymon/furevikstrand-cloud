@@ -150,7 +150,7 @@ export default function ChatMessage({ message }: Props) {
               <div className="relative w-full">
                 <Image
                   src={message.testimonial.photo}
-                  alt={`Testimonial from ${message.testimonial.name}`}
+                  alt={`${message.testimonial.name}, ${message.testimonial.role ?? message.testimonial.company}`}
                   width={600}
                   height={400}
                   className="w-full h-auto object-contain"
