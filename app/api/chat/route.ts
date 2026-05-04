@@ -8,9 +8,10 @@ import { projects } from '@/data/projects'
 import { stack } from '@/data/stack'
 import { education } from '@/data/education'
 import { resolveReply } from '@/lib/chat'
+import { getAllPosts, getPostsForPrompt, isVisible } from '@/lib/blog/posts'
 import { logChatEvent } from '@/lib/logEvent'
 import { checkRateLimit, clientIp } from '@/lib/rateLimit'
-import type { Locale } from '@/types'
+import type { KnowledgeEntry, Locale } from '@/types'
 
 // Rate limit is enforced via an in-memory Map keyed by IP (see `lib/rateLimit.ts`).
 // This is single-instance only — counters reset on process restart and aren't shared
@@ -20,20 +21,60 @@ const RATE_LIMIT = 20
 const RATE_WINDOW_MS = 60 * 60 * 1000
 
 // ─── System prompt ────────────────────────────────────────────────────────────
-// The prompt is built from import-time data (profile, experience, projects,
-// stack, education) so it's stable for the lifetime of the process. Cache
-// per-locale to skip the rebuild on every request.
-const systemPromptCache = new Map<Locale, string>()
+// The static parts (profile, experience, projects, stack, education, rules)
+// are stable for the process lifetime and cached as a per-locale template
+// containing a {BLOG} placeholder. The blog section is rebuilt per request
+// from `getPostsForPrompt(locale)` so newly-live posts surface in the chat
+// without a deploy/restart.
+const systemPromptTemplateCache = new Map<Locale, string>()
 
 function systemPromptFor(locale: Locale): string {
-  const cached = systemPromptCache.get(locale)
-  if (cached) return cached
-  const built = buildSystemPrompt(locale)
-  systemPromptCache.set(locale, built)
-  return built
+  let template = systemPromptTemplateCache.get(locale)
+  if (!template) {
+    template = buildSystemPromptTemplate(locale)
+    systemPromptTemplateCache.set(locale, template)
+  }
+  return template.replace('{BLOG}', buildBlogSection(locale))
 }
 
-function buildSystemPrompt(locale: Locale): string {
+// Hook B: synthesise blog posts as KnowledgeEntry objects per request, so the
+// keyword-fallback tier surfaces them with the same `publishAt`/`draft`
+// gating as the index page and Hook A. Only the requesting locale's `replies`
+// slot is populated; per F1, posts not in this locale are filtered out.
+function buildBlogKnowledgeEntries(locale: Locale): KnowledgeEntry[] {
+  return getAllPosts(locale)
+    .filter((p) => isVisible(p))
+    .map((p) => {
+      const titleWords = p.title
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, '')
+        .split(/\s+/)
+        .filter((w) => w.length > 2)
+      const empty: Record<Locale, string[]> = { en: [], no: [], pt: [] }
+      const replies: Record<Locale, string[]> = { ...empty }
+      replies[locale] = [`${p.summary}\n\nRead it: \`/blog/${p.slug}\``]
+      return {
+        id: `blog:${p.slug}`,
+        keys: [...titleWords, ...p.tags, p.slug],
+        replies,
+        followUps: { ...empty },
+      }
+    })
+}
+
+function buildBlogSection(locale: Locale): string {
+  const posts = getPostsForPrompt(locale)
+  if (posts.length === 0) return '(no published posts yet)'
+  return posts
+    .map((p) => {
+      const date = p.publishAt.slice(0, 10)
+      const tagSegment = p.tags.length > 0 ? ` [tags: ${p.tags.join(', ')}]` : ''
+      return `- **${p.title}** (${date}, \`/blog/${p.slug}\`)${tagSegment}: ${p.summary}`
+    })
+    .join('\n')
+}
+
+function buildSystemPromptTemplate(locale: Locale): string {
   const localeInstruction =
     locale === 'no'
       ? 'Respond in Norwegian (Bokmål).'
@@ -84,8 +125,9 @@ FORMATTING:
 - Use **bold** for names, companies, and emphasis.
 - Use *italic* for quotes.
 - For external URLs use markdown links: [label](https://url)
-- For internal pages use backtick paths: \`/testimonials\`, \`/certifications\`, \`/classic\`
-- Available internal pages: \`/testimonials\`, \`/certifications\`, \`/classic\` (CV)
+- For internal pages use backtick paths: \`/testimonials\`, \`/certifications\`, \`/classic\`, \`/blog\`
+- Available internal pages: \`/testimonials\`, \`/certifications\`, \`/classic\` (CV), \`/blog\`, \`/blog/<slug>\`
+- When citing a blog post, link to its \`/blog/<slug>\` path and quote the title in **bold**.
 
 PROFILE:
 Name: ${profile.name}
@@ -102,6 +144,9 @@ ${experienceSection}
 
 PROJECTS:
 ${projectsSection}
+
+BLOG POSTS:
+{BLOG}
 
 TECH STACK:
 ${stackSection}
@@ -293,7 +338,8 @@ export async function POST(request: Request) {
   }
 
   // ─── Fallback: keyword matcher ────────────────────────────────────────────
-  const { reply, entryId } = resolveReply(message, locale, history)
+  const blogEntries = buildBlogKnowledgeEntries(locale)
+  const { reply, entryId } = resolveReply(message, locale, history, blogEntries)
   logChatEvent({
     session_id: sessionId,
     locale,

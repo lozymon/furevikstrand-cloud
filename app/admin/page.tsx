@@ -13,6 +13,9 @@ import {
   deviceSplit,
   topUtmSources,
   chatConversion,
+  topBlogPosts,
+  blogChatConversion,
+  blogChatCitations,
   type DailyFallbackRow,
   type TopicRow,
   type LocaleRow,
@@ -26,6 +29,9 @@ import {
   type DeviceRow,
   type UtmRow,
   type ConversionStats,
+  type BlogPostRow,
+  type BlogChatConversion,
+  type BlogCitationRow,
 } from '@/lib/admin/queries'
 import { redactPII } from '@/lib/admin/redact'
 import CopyEntryButton from './CopyEntryButton'
@@ -72,6 +78,9 @@ export default async function AdminPage({
     devices,
     utms,
     conversion,
+    blogPosts,
+    blogConv,
+    blogCites,
   ] = dbConfigured
     ? await Promise.all([
         safe(fallbackRateOverTime(DAYS_WINDOW)),
@@ -87,8 +96,28 @@ export default async function AdminPage({
         safe(deviceSplit(DAYS_WINDOW)),
         safe(topUtmSources(DAYS_WINDOW, TRAFFIC_LIMIT)),
         safe(chatConversion(DAYS_WINDOW)),
+        safe(topBlogPosts(DAYS_WINDOW, TRAFFIC_LIMIT)),
+        safe(blogChatConversion(DAYS_WINDOW)),
+        safe(blogChatCitations(DAYS_WINDOW, TRAFFIC_LIMIT)),
       ])
-    : ([null, null, null, null, null, null, null, null, null, null, null, null, null] as const)
+    : ([
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+      ] as const)
 
   return (
     <html lang="en">
@@ -169,6 +198,24 @@ export default async function AdminPage({
               <Panel title={`Sessions per day — last ${DAYS_WINDOW} days`} result={sessions}>
                 {(rows) => <SessionsTable rows={rows} />}
               </Panel>
+
+              <SectionHeader>Blog</SectionHeader>
+
+              <Panel title={`Blog → chat conversion — last ${DAYS_WINDOW} days`} result={blogConv}>
+                {(stats) => <BlogConversionStat stats={stats} />}
+              </Panel>
+
+              <div className="grid gap-6 md:grid-cols-2">
+                <Panel title={`Top blog posts — last ${DAYS_WINDOW} days`} result={blogPosts}>
+                  {(rows) => <BlogPostsTable rows={rows} />}
+                </Panel>
+                <Panel
+                  title={`AI citations of blog posts — last ${DAYS_WINDOW} days`}
+                  result={blogCites}
+                >
+                  {(rows) => <BlogCitationsTable rows={rows} />}
+                </Panel>
+              </div>
 
               <Panel title="Recent fallback misses (topic IS NULL)" result={misses}>
                 {(data) => (
@@ -596,6 +643,82 @@ function SessionsTable({ rows }: { rows: SessionStats[] }) {
             <Td align="right">{r.sessions}</Td>
             <Td align="right">{r.messages}</Td>
             <Td align="right">{r.avgMessagesPerSession.toFixed(1)}</Td>
+          </Tr>
+        ))}
+      </tbody>
+    </table>
+  )
+}
+
+function BlogConversionStat({ stats }: { stats: BlogChatConversion }) {
+  if (stats.blogVisitors === 0) {
+    return (
+      <p className="text-xs text-[#8888a8]">
+        No blog visits yet — once readers start arriving, this will show how many also chatted.
+      </p>
+    )
+  }
+  return (
+    <div className="grid grid-cols-3 gap-4 text-center sm:text-left">
+      <Stat label="Blog visitors" value={stats.blogVisitors.toLocaleString()} />
+      <Stat label="Chatted after" value={stats.chattedAfter.toLocaleString()} />
+      <Stat
+        label="Conversion"
+        value={`${(stats.rate * 100).toFixed(1)}%`}
+        accent={stats.rate > 0.1 ? '#34d399' : '#a78bfa'}
+      />
+    </div>
+  )
+}
+
+function BlogPostsTable({ rows }: { rows: BlogPostRow[] }) {
+  if (rows.length === 0) return <Empty />
+  const max = rows[0]?.views ?? 1
+  return (
+    <table className="w-full text-xs">
+      <tbody>
+        {rows.map((r) => (
+          <Tr key={r.slug}>
+            <Td>
+              <span className="break-all">{r.slug}</span>
+            </Td>
+            <Td align="right" width="60px">
+              {r.views}
+            </Td>
+            <Td>
+              <Bar fraction={r.views / max} />
+            </Td>
+          </Tr>
+        ))}
+      </tbody>
+    </table>
+  )
+}
+
+function BlogCitationsTable({ rows }: { rows: BlogCitationRow[] }) {
+  if (rows.length === 0) {
+    return (
+      <p className="text-xs text-[#8888a8]">
+        No blog citations yet — the assistant hasn&apos;t linked to any posts in chat replies during
+        this window.
+      </p>
+    )
+  }
+  const max = rows[0]?.count ?? 1
+  return (
+    <table className="w-full text-xs">
+      <tbody>
+        {rows.map((r) => (
+          <Tr key={r.slug}>
+            <Td>
+              <span className="break-all">{r.slug}</span>
+            </Td>
+            <Td align="right" width="60px">
+              {r.count}
+            </Td>
+            <Td>
+              <Bar fraction={r.count / max} />
+            </Td>
           </Tr>
         ))}
       </tbody>

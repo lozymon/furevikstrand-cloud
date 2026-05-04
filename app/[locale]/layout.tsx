@@ -39,6 +39,9 @@ export async function generateMetadata({
         pt: '/pt',
         'x-default': '/en',
       },
+      types: {
+        'application/rss+xml': `/${locale}/blog/rss.xml`,
+      },
     },
     openGraph: {
       title: t('title'),

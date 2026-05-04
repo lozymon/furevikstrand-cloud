@@ -11,9 +11,16 @@ interface PageHeaderProps {
   current: string
   maxWidth?: string
   extra?: React.ReactNode
+  /** Per-locale path overrides forwarded to the language switcher. */
+  localeOverrides?: Partial<Record<string, string>>
 }
 
-export default function PageHeader({ current, maxWidth = 'max-w-5xl', extra }: PageHeaderProps) {
+export default function PageHeader({
+  current,
+  maxWidth = 'max-w-5xl',
+  extra,
+  localeOverrides,
+}: PageHeaderProps) {
   const locale = useLocale() as Locale
   const t = useTranslations('topbar')
   const router = useRouter()
@@ -38,7 +45,7 @@ export default function PageHeader({ current, maxWidth = 'max-w-5xl', extra }: P
 
         {/* Right — language switcher + nav + print CV + optional slot */}
         <div className="flex items-center gap-3 sm:gap-4 shrink-0">
-          <LanguageSwitcher />
+          <LanguageSwitcher localeOverrides={localeOverrides} />
           <div className="hidden lg:block">
             <PageNav current={current} />
           </div>

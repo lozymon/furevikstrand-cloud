@@ -270,6 +270,163 @@ export async function chatConversion(days: number): Promise<ConversionStats> {
   }
 }
 
+// ----- blog panels -----
+//
+// Citation aggregation per the C1 decision: matching slugs across locales
+// count as the same post. Locale prefix is stripped during aggregation.
+
+const BLOG_PATH_REGEX = '^/(en|no|pt)/blog'
+const BLOG_SLUG_REGEX = /^\/(en|no|pt)\/blog\/([a-z0-9-]+)/
+
+function aggregateBySlug(
+  rows: Array<{ key: string; count: number }>,
+  limit: number
+): Array<{ slug: string; count: number }> {
+  const tally = new Map<string, number>()
+  for (const r of rows) {
+    const match = r.key.match(BLOG_SLUG_REGEX)
+    if (!match) continue
+    const slug = match[2]
+    tally.set(slug, (tally.get(slug) ?? 0) + r.count)
+  }
+  return Array.from(tally.entries())
+    .map(([slug, count]) => ({ slug, count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, limit)
+}
+
+export type BlogPostRow = { slug: string; views: number }
+
+export async function topBlogPosts(days: number, limit: number): Promise<BlogPostRow[]> {
+  const [rows] = await getPool().execute<RowDataPacket[]>(
+    `SELECT path, COUNT(*) AS count
+     FROM page_visits
+     WHERE path REGEXP ?
+       AND is_bot = 0
+       AND created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)
+     GROUP BY path`,
+    [BLOG_PATH_REGEX + '/[a-z0-9-]+', days]
+  )
+  return aggregateBySlug(
+    rows.map((r) => ({ key: String(r.path), count: Number(r.count) })),
+    limit
+  ).map(({ slug, count }) => ({ slug, views: count }))
+}
+
+export type BlogTrafficShare = { total: number; blog: number; rate: number }
+
+export async function blogTrafficShare(days: number): Promise<BlogTrafficShare> {
+  const [rows] = await getPool().execute<RowDataPacket[]>(
+    `SELECT
+       COUNT(*) AS total,
+       SUM(CASE WHEN path REGEXP ? THEN 1 ELSE 0 END) AS blog
+     FROM page_visits
+     WHERE created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)
+       AND is_bot = 0`,
+    [BLOG_PATH_REGEX, days]
+  )
+  const total = Number(rows[0]?.total ?? 0)
+  const blog = Number(rows[0]?.blog ?? 0)
+  return { total, blog, rate: total > 0 ? blog / total : 0 }
+}
+
+export type BlogLocaleRow = { locale: string; count: number }
+
+export async function blogLocaleSplit(days: number): Promise<BlogLocaleRow[]> {
+  const [rows] = await getPool().execute<RowDataPacket[]>(
+    `SELECT locale, COUNT(*) AS count
+     FROM page_visits
+     WHERE path REGEXP ?
+       AND locale IS NOT NULL
+       AND is_bot = 0
+       AND created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)
+     GROUP BY locale
+     ORDER BY count DESC`,
+    [BLOG_PATH_REGEX, days]
+  )
+  return rows.map((r) => ({ locale: String(r.locale), count: Number(r.count) }))
+}
+
+export type BlogReferrerRow = { host: string; count: number }
+
+export async function blogReferrers(days: number, limit: number): Promise<BlogReferrerRow[]> {
+  const [rows] = await getPool().execute<RowDataPacket[]>(
+    `SELECT referrer_host AS host, COUNT(*) AS count
+     FROM page_visits
+     WHERE path REGEXP ?
+       AND referrer_host IS NOT NULL
+       AND is_bot = 0
+       AND created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)
+     GROUP BY referrer_host
+     ORDER BY count DESC
+     LIMIT ?`,
+    [BLOG_PATH_REGEX, days, limit]
+  )
+  return rows.map((r) => ({ host: String(r.host), count: Number(r.count) }))
+}
+
+export type BlogChatConversion = { blogVisitors: number; chattedAfter: number; rate: number }
+
+export async function blogChatConversion(days: number): Promise<BlogChatConversion> {
+  const pool = getPool()
+  const [visitorRows] = await pool.execute<RowDataPacket[]>(
+    `SELECT COUNT(DISTINCT session_id) AS c
+     FROM page_visits
+     WHERE path REGEXP ?
+       AND is_bot = 0
+       AND created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)`,
+    [BLOG_PATH_REGEX, days]
+  )
+  const [chatRows] = await pool.execute<RowDataPacket[]>(
+    `SELECT COUNT(DISTINCT pv.session_id) AS c
+     FROM page_visits pv
+     JOIN chat_events ce
+       ON ce.session_id = pv.session_id
+      AND ce.created_at > pv.created_at
+     WHERE pv.path REGEXP ?
+       AND pv.is_bot = 0
+       AND pv.created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)`,
+    [BLOG_PATH_REGEX, days]
+  )
+  const blogVisitors = Number(visitorRows[0]?.c ?? 0)
+  const chattedAfter = Number(chatRows[0]?.c ?? 0)
+  return {
+    blogVisitors,
+    chattedAfter,
+    rate: blogVisitors > 0 ? chattedAfter / blogVisitors : 0,
+  }
+}
+
+export type BlogCitationRow = { slug: string; count: number }
+
+export async function blogChatCitations(days: number, limit: number): Promise<BlogCitationRow[]> {
+  const [rows] = await getPool().execute<RowDataPacket[]>(
+    `SELECT ai_reply
+     FROM chat_events
+     WHERE ai_reply LIKE '%/blog/%'
+       AND created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)`,
+    [days]
+  )
+  // Extract distinct slugs per reply (so a reply linking the same post twice
+  // counts once); aggregate across all replies, dropping locale prefix.
+  const tally = new Map<string, number>()
+  const slugRegex = /\/(?:en|no|pt)?\/?blog\/([a-z0-9-]+)/g
+  for (const row of rows) {
+    const reply = String(row.ai_reply ?? '')
+    const seen = new Set<string>()
+    for (const match of reply.matchAll(slugRegex)) {
+      seen.add(match[1])
+    }
+    for (const slug of seen) {
+      tally.set(slug, (tally.get(slug) ?? 0) + 1)
+    }
+  }
+  return Array.from(tally.entries())
+    .map(([slug, count]) => ({ slug, count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, limit)
+}
+
 export type SessionStats = {
   day: string
   sessions: number

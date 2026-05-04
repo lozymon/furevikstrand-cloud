@@ -12,9 +12,19 @@ const locales = [
 
 interface LanguageSwitcherProps {
   variant?: 'default' | 'terminal'
+  /**
+   * Optional per-locale path overrides. When the user picks a locale present
+   * here, the switcher navigates to the override path instead of the default
+   * segment-swap. Used by the blog post page to fall back to /{loc}/blog when
+   * a translation of the current slug doesn't exist.
+   */
+  localeOverrides?: Partial<Record<string, string>>
 }
 
-export default function LanguageSwitcher({ variant = 'default' }: LanguageSwitcherProps) {
+export default function LanguageSwitcher({
+  variant = 'default',
+  localeOverrides,
+}: LanguageSwitcherProps) {
   const locale = useLocale()
   const router = useRouter()
   const pathname = usePathname()
@@ -22,10 +32,17 @@ export default function LanguageSwitcher({ variant = 'default' }: LanguageSwitch
 
   const switchLocale = (next: string) => {
     if (next === locale) return
-    const segments = pathname.split('/')
-    segments[1] = next
+    const override = localeOverrides?.[next]
+    let target: string
+    if (override) {
+      target = override
+    } else {
+      const segments = pathname.split('/')
+      segments[1] = next
+      target = segments.join('/')
+    }
     startTransition(() => {
-      router.push(segments.join('/'))
+      router.push(target)
     })
   }
 

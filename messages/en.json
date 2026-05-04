@@ -38,6 +38,15 @@
     "error": "Something went wrong. Please try again.",
     "help": "**Available commands:**\n\n*Topics*\n`/about` — Who is Kim\n`/experience` — Work history\n`/stack` — Tech stack\n`/skills` — Competency breakdown\n`/projects` — Open-source projects\n`/hire` — Availability\n`/contact` — How to reach me\n`/cv` — Download CV\n`/location` — Where I'm based\n`/databases` — Database experience\n`/devops` — Docker & deployment\n`/mentoring` — Leadership & mentoring\n`/style` — How I work\n`/certifications` — Certificates & courses\n`/education` — Academic background\n`/testimonials` — What colleagues say\n\n*Language*\n`/en` `/no` `/pt` — Switch language\n\n*Other*\n`/help` — Show this message\n`/clear` — Clear the screen\n\nOr just ask naturally in any language."
   },
+  "blog": {
+    "title": "Blog",
+    "subtitle": "Notes on shipping software.",
+    "empty": "No posts yet.",
+    "back": "← All posts",
+    "readingTime": "{minutes} min read",
+    "draftBanner": "Draft — not published",
+    "scheduledBanner": "Scheduled for {date}"
+  },
   "contact": {
     "title": "Get in touch",
     "name": "Your name",

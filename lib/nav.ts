@@ -9,6 +9,7 @@ export const NAV_LINKS: NavLink[] = [
   { label: '← chat', path: '' },
   { label: '/classic', path: 'classic' },
   { label: '/dev', path: 'dev' },
+  { label: '/blog', path: 'blog' },
   { label: '/testimonials', path: 'testimonials' },
   { label: '/certifications', path: 'certifications' },
 ]

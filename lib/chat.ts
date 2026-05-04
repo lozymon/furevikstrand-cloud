@@ -295,13 +295,16 @@ type HistoryMessage = { role: string; content: string; entryId?: string }
 // persisted one. Falls back to re-scoring the prior user message — used when
 // the assistant reply came from Claude/Ollama (no entry concept) or from an
 // older session before entryId was wired up.
-function lastEntryIdFrom(messageHistory: HistoryMessage[]): string | undefined {
+function lastEntryIdFrom(
+  messageHistory: HistoryMessage[],
+  entries: KnowledgeEntry[] = knowledge
+): string | undefined {
   const lastAssistant = [...messageHistory].reverse().find((m) => m.role === 'assistant')
   if (lastAssistant?.entryId) return lastAssistant.entryId
 
   const prevUser = [...messageHistory].reverse().find((m) => m.role === 'user')
   if (!prevUser) return undefined
-  const prevScored = knowledge
+  const prevScored = entries
     .map((entry) => ({ entry, score: scoreEntry(prevUser.content, entry) }))
     .filter(({ score }) => score > 0)
     .sort((a, b) => b.score - a.score)
@@ -311,12 +314,15 @@ function lastEntryIdFrom(messageHistory: HistoryMessage[]): string | undefined {
 export function resolveReply(
   input: string,
   locale: Locale,
-  messageHistory: HistoryMessage[] = []
+  messageHistory: HistoryMessage[] = [],
+  extraEntries: KnowledgeEntry[] = []
 ): ResolveResult {
+  const allEntries = extraEntries.length > 0 ? [...knowledge, ...extraEntries] : knowledge
+
   // Continuation intent: re-use last matched entry but pick a different reply variant
   if (isContinuation(input) && messageHistory.length > 0) {
-    const lastEntryId = lastEntryIdFrom(messageHistory)
-    const lastEntry = lastEntryId ? knowledge.find((e) => e.id === lastEntryId) : undefined
+    const lastEntryId = lastEntryIdFrom(messageHistory, allEntries)
+    const lastEntry = lastEntryId ? allEntries.find((e) => e.id === lastEntryId) : undefined
     if (lastEntry) {
       const variants = lastEntry.replies[locale]
       // Pick a variant different from the last AI reply if possible
@@ -331,13 +337,14 @@ export function resolveReply(
     }
   }
 
-  const scored = knowledge
+  const scored = allEntries
     .map((entry) => ({ entry, score: scoreEntry(input, entry) }))
     .filter(({ score }) => score > 0)
     .sort((a, b) => b.score - a.score)
 
   // Avoid repeating the last matched entry
-  const lastEntryId = messageHistory.length > 0 ? lastEntryIdFrom(messageHistory) : undefined
+  const lastEntryId =
+    messageHistory.length > 0 ? lastEntryIdFrom(messageHistory, allEntries) : undefined
 
   const best = scored.find(({ entry }) => entry.id !== lastEntryId) ?? scored[0]
 

@@ -38,6 +38,15 @@
     "error": "Algo deu errado. Tente novamente.",
     "help": "**Comandos disponíveis:**\n\n*Tópicos*\n`/about` — Quem é Kim\n`/experience` — Histórico de trabalho\n`/stack` — Stack tecnológico\n`/skills` — Resumo de competências\n`/projects` — Projetos open-source\n`/hire` — Disponibilidade\n`/contact` — Como me contatar\n`/cv` — Baixar CV\n`/location` — Onde estou baseado\n`/databases` — Experiência com bancos de dados\n`/devops` — Docker e implantação\n`/mentoring` — Liderança e mentoria\n`/style` — Como eu trabalho\n`/certifications` — Certificados e cursos\n`/education` — Formação acadêmica\n`/testimonials` — O que colegas dizem\n\n*Idioma*\n`/en` `/no` `/pt` — Trocar idioma\n\n*Outros*\n`/help` — Mostrar esta mensagem\n`/clear` — Limpar a tela\n\nOu pergunte naturalmente em qualquer idioma."
   },
+  "blog": {
+    "title": "Blog",
+    "subtitle": "Notas sobre desenvolvimento de software.",
+    "empty": "Ainda sem posts.",
+    "back": "← Todos os posts",
+    "readingTime": "{minutes} min de leitura",
+    "draftBanner": "Rascunho — não publicado",
+    "scheduledBanner": "Agendado para {date}"
+  },
   "contact": {
     "title": "Entre em contato",
     "name": "Seu nome",
