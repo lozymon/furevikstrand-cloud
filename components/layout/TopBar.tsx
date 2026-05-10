@@ -20,7 +20,7 @@ export default function TopBar({ onMenuOpen }: TopBarProps) {
       <div className="flex items-center gap-3 min-w-0">
         <button
           onClick={onMenuOpen}
-          className="lg:hidden text-[#8888a8] hover:text-[#e2e2f0] transition-colors p-1 -ml-1 shrink-0"
+          className="lg:hidden text-[#8888a8] hover:text-[#e2e2f0] transition-colors p-2 -ml-2 shrink-0"
           aria-label="Open menu"
         >
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
@@ -32,12 +32,12 @@ export default function TopBar({ onMenuOpen }: TopBarProps) {
             />
           </svg>
         </button>
-        <div className="flex items-center gap-1.5 shrink-0">
+        <div className="flex items-center gap-1.5 min-w-0">
           <span
-            className="w-2.5 h-2.5 rounded-full bg-[#34d399] animate-pulse"
+            className="w-2.5 h-2.5 rounded-full bg-[#34d399] animate-pulse shrink-0"
             aria-label={profile.availability.label[locale as Locale]}
           />
-          <span className="hidden sm:inline text-xs text-[#8888a8] font-mono">{t('model')}</span>
+          <span className="text-xs text-[#8888a8] font-mono truncate">{t('model')}</span>
         </div>
         <span className="hidden sm:inline text-[#252535] text-xs">|</span>
         <span className="hidden sm:inline text-xs text-[#34d399] font-mono whitespace-nowrap truncate">

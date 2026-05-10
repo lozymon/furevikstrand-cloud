@@ -46,7 +46,7 @@ export default function TestimonialsPage() {
             >
               {/* Original card image */}
               {t.photo && (
-                <div className="relative w-full aspect-[4/3] border-b border-[#252535]">
+                <div className="relative w-full aspect-video sm:aspect-[4/3] border-b border-[#252535]">
                   <Image
                     src={t.photo}
                     alt={`We Share card from ${t.name}`}

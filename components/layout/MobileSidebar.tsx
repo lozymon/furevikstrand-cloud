@@ -58,7 +58,7 @@ export default function MobileSidebar({ isOpen, onClose, current = '' }: MobileS
           <span className="text-xs text-[#8888a8] font-mono">menu</span>
           <button
             onClick={onClose}
-            className="text-[#8888a8] hover:text-[#e2e2f0] transition-colors p-1"
+            className="text-[#8888a8] hover:text-[#e2e2f0] transition-colors p-2 -mr-2"
             aria-label="Close menu"
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -132,13 +132,13 @@ export default function MobileSidebar({ isOpen, onClose, current = '' }: MobileS
             <p className="text-[10px] text-[#8888a8] font-mono uppercase tracking-wider mb-3">
               {locale === 'no' ? 'Sider' : locale === 'pt' ? 'Páginas' : 'Pages'}
             </p>
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col">
               {navLinks.map((link) => (
                 <Link
                   key={link.path}
                   href={`/${locale}${link.path ? `/${link.path}` : ''}`}
                   onClick={onClose}
-                  className="text-xs text-[#8888a8] hover:text-[#38bdf8] transition-colors font-mono py-1"
+                  className="text-xs text-[#8888a8] hover:text-[#38bdf8] transition-colors font-mono py-2.5 -mx-2 px-2 rounded"
                 >
                   {link.label}
                 </Link>

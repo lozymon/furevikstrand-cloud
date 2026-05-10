@@ -33,7 +33,7 @@ export default function TestimonialsCarousel({
             <button
               onClick={prev}
               aria-label="Previous testimonial"
-              className="w-4 h-4 flex items-center justify-center text-[#8888a8] hover:text-[#a78bfa] transition-colors"
+              className="w-7 h-7 flex items-center justify-center text-[#8888a8] hover:text-[#a78bfa] transition-colors text-base"
             >
               ‹
             </button>
@@ -43,7 +43,7 @@ export default function TestimonialsCarousel({
             <button
               onClick={next}
               aria-label="Next testimonial"
-              className="w-4 h-4 flex items-center justify-center text-[#8888a8] hover:text-[#a78bfa] transition-colors"
+              className="w-7 h-7 flex items-center justify-center text-[#8888a8] hover:text-[#a78bfa] transition-colors text-base"
             >
               ›
             </button>
@@ -72,7 +72,7 @@ export default function TestimonialsCarousel({
           <button
             onClick={prev}
             aria-label="Previous testimonial"
-            className="w-4 h-4 flex items-center justify-center text-[#8888a8] hover:text-[#a78bfa] transition-colors"
+            className="w-7 h-7 flex items-center justify-center text-[#8888a8] hover:text-[#a78bfa] transition-colors text-base"
           >
             ‹
           </button>
@@ -82,7 +82,7 @@ export default function TestimonialsCarousel({
           <button
             onClick={next}
             aria-label="Next testimonial"
-            className="w-4 h-4 flex items-center justify-center text-[#8888a8] hover:text-[#a78bfa] transition-colors"
+            className="w-7 h-7 flex items-center justify-center text-[#8888a8] hover:text-[#a78bfa] transition-colors text-base"
           >
             ›
           </button>

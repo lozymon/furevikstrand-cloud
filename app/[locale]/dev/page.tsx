@@ -364,7 +364,7 @@ export default function DevPage() {
 
   return (
     <div
-      className="h-screen bg-[#020c02] text-[#33ff33] font-mono text-sm flex flex-col overflow-hidden"
+      className="h-dvh bg-[#020c02] text-[#33ff33] font-mono text-sm flex flex-col overflow-hidden"
       onClick={() => inputRef.current?.focus()}
     >
       {/* Title bar */}
@@ -400,8 +400,14 @@ export default function DevPage() {
       </div>
 
       {/* Mobile nav row — terminal style, hidden once page-nav fits in title bar */}
-      <div className="lg:hidden flex items-center gap-3 px-4 py-1.5 border-b border-[#0a2a0a] bg-[#010801] overflow-x-auto shrink-0">
-        <PageNav current="dev" variant="terminal" />
+      <div className="lg:hidden relative border-b border-[#0a2a0a] bg-[#010801] shrink-0">
+        <div className="flex items-center gap-3 px-4 py-1.5 overflow-x-auto">
+          <PageNav current="dev" variant="terminal" />
+        </div>
+        <div
+          aria-hidden="true"
+          className="absolute right-0 top-0 bottom-px w-8 bg-gradient-to-l from-[#010801] to-transparent pointer-events-none"
+        />
       </div>
 
       {/* Terminal body */}
