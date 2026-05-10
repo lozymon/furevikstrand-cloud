@@ -399,6 +399,11 @@ export default function DevPage() {
         </div>
       </div>
 
+      {/* Mobile nav row — terminal style, hidden once page-nav fits in title bar */}
+      <div className="lg:hidden flex items-center gap-3 px-4 py-1.5 border-b border-[#0a2a0a] bg-[#010801] overflow-x-auto shrink-0">
+        <PageNav current="dev" variant="terminal" />
+      </div>
+
       {/* Terminal body */}
       <div className="flex-1 overflow-y-auto p-4 space-y-1">
         {lines.map((line) => (

@@ -16,8 +16,8 @@ export default function PageNav({ current, variant = 'default' }: PageNavProps) 
 
   const linkClass =
     variant === 'terminal'
-      ? 'text-[#1a6b1a] hover:text-[#33ff33] transition-colors text-xs font-mono'
-      : 'text-xs font-mono text-[#8888a8] hover:text-[#38bdf8] transition-colors'
+      ? 'text-[#1a6b1a] hover:text-[#33ff33] transition-colors text-xs font-mono whitespace-nowrap'
+      : 'text-xs font-mono text-[#8888a8] hover:text-[#38bdf8] transition-colors whitespace-nowrap'
 
   return (
     <div className={`flex items-center ${variant === 'terminal' ? 'gap-3' : 'gap-4'}`}>

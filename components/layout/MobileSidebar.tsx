@@ -2,21 +2,26 @@
 
 import { useEffect } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useTranslations, useLocale } from 'next-intl'
 import { profile } from '@/data/profile'
 import { topChips } from '@/data/stack'
+import { education } from '@/data/education'
+import { NAV_LINKS } from '@/lib/nav'
+import TestimonialsCarousel from '@/components/sidebar/TestimonialsCarousel'
 import type { Locale } from '@/types'
 
 interface MobileSidebarProps {
   isOpen: boolean
   onClose: () => void
+  /** Path of the current page so its own link is hidden from the nav. */
+  current?: string
 }
 
-export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
+export default function MobileSidebar({ isOpen, onClose, current = '' }: MobileSidebarProps) {
   const t = useTranslations('sidebar')
   const locale = useLocale() as Locale
 
-  // Close on Escape
   useEffect(() => {
     if (!isOpen) return
     const handler = (e: KeyboardEvent) => {
@@ -26,7 +31,6 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
     return () => document.removeEventListener('keydown', handler)
   }, [isOpen, onClose])
 
-  // Prevent body scroll when open
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : ''
     return () => {
@@ -34,23 +38,22 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
     }
   }, [isOpen])
 
+  const navLinks = NAV_LINKS.filter((l) => l.path !== current)
+
   return (
     <>
-      {/* Backdrop */}
       <div
         className={`fixed inset-0 z-40 bg-black/60 transition-opacity duration-300 lg:hidden ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
         onClick={onClose}
         aria-hidden="true"
       />
 
-      {/* Drawer */}
       <aside
         className={`fixed top-0 left-0 z-50 h-full w-72 bg-[#161620] border-r border-[#252535] flex flex-col overflow-y-auto transition-transform duration-300 ease-in-out lg:hidden ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
         aria-label="Navigation menu"
         role="dialog"
         aria-modal="true"
       >
-        {/* Close button */}
         <div className="flex items-center justify-between px-4 h-12 border-b border-[#252535] shrink-0">
           <span className="text-xs text-[#8888a8] font-mono">menu</span>
           <button
@@ -92,29 +95,94 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
           </div>
         </div>
 
-        {/* Stats */}
-        <div className="p-4 border-b border-[#252535] grid grid-cols-3 gap-3">
-          <Stat
-            label={locale === 'en' ? 'Experience' : locale === 'no' ? 'Erfaring' : 'Experiência'}
-            value={
-              profile.stats.experience +
-              (locale === 'no' ? ' år' : locale === 'pt' ? ' anos' : ' yrs')
-            }
-          />
-          <Stat
-            label={locale === 'en' ? 'Projects' : locale === 'no' ? 'Prosjekter' : 'Projetos'}
-            value={profile.stats.projects + ''}
-          />
-          <Stat
-            label={locale === 'en' ? 'Languages' : locale === 'no' ? 'Språk' : 'Idiomas'}
-            value={profile.stats.languages + ''}
-          />
+        {/* Stats + location */}
+        <div className="p-4 border-b border-[#252535]">
+          <div className="grid grid-cols-3 gap-3 mb-3">
+            <Stat
+              label={locale === 'en' ? 'Experience' : locale === 'no' ? 'Erfaring' : 'Experiência'}
+              value={
+                profile.stats.experience +
+                (locale === 'no' ? ' år' : locale === 'pt' ? ' anos' : ' yrs')
+              }
+            />
+            <Stat
+              label={locale === 'en' ? 'Projects' : locale === 'no' ? 'Prosjekter' : 'Projetos'}
+              value={profile.stats.projects + ''}
+            />
+            <Stat
+              label={locale === 'en' ? 'Languages' : locale === 'no' ? 'Språk' : 'Idiomas'}
+              value={profile.stats.languages + ''}
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-xs">📍</span>
+            <span className="text-[10px] text-[#8888a8] font-mono">
+              {locale === 'no'
+                ? 'Natal, Brasil · Åpen for Norge'
+                : locale === 'pt'
+                  ? 'Natal, Brasil · Aberto à Noruega'
+                  : 'Natal, Brazil · Open to Norway'}
+            </span>
+          </div>
         </div>
 
-        {/* Info rows */}
-        <div className="p-4 border-b border-[#252535] space-y-2">
-          <InfoRow icon="📍" value={t('location')} />
-          <InfoRow icon="🌐" value={t('languages')} />
+        {/* Page navigation */}
+        {navLinks.length > 0 && (
+          <nav className="p-4 border-b border-[#252535]" aria-label="Pages">
+            <p className="text-[10px] text-[#8888a8] font-mono uppercase tracking-wider mb-3">
+              {locale === 'no' ? 'Sider' : locale === 'pt' ? 'Páginas' : 'Pages'}
+            </p>
+            <div className="flex flex-col gap-1">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.path}
+                  href={`/${locale}${link.path ? `/${link.path}` : ''}`}
+                  onClick={onClose}
+                  className="text-xs text-[#8888a8] hover:text-[#38bdf8] transition-colors font-mono py-1"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          </nav>
+        )}
+
+        {/* Language proficiency */}
+        <div className="p-4 border-b border-[#252535]">
+          <p className="text-[10px] text-[#8888a8] font-mono uppercase tracking-wider mb-3">
+            {locale === 'no' ? 'Språk' : locale === 'pt' ? 'Idiomas' : 'Languages'}
+          </p>
+          <div className="space-y-2">
+            <LangBadge
+              flag="🇳🇴"
+              lang="Norwegian"
+              level={locale === 'no' ? 'Morsmål' : locale === 'pt' ? 'Nativo' : 'Native'}
+            />
+            <LangBadge
+              flag="🇬🇧"
+              lang="English"
+              level={
+                locale === 'no' ? 'Profesjonell' : locale === 'pt' ? 'Profissional' : 'Professional'
+              }
+            />
+            <LangBadge
+              flag="🇧🇷"
+              lang="Portuguese"
+              level={
+                locale === 'no' ? 'Profesjonell' : locale === 'pt' ? 'Profissional' : 'Professional'
+              }
+            />
+            <LangBadge
+              flag="🇸🇪"
+              lang="Swedish"
+              level={locale === 'no' ? 'Begrenset' : locale === 'pt' ? 'Limitado' : 'Limited'}
+            />
+            <LangBadge
+              flag="🇩🇰"
+              lang="Danish"
+              level={locale === 'no' ? 'Begrenset' : locale === 'pt' ? 'Limitado' : 'Limited'}
+            />
+          </div>
         </div>
 
         {/* Stack chips */}
@@ -133,6 +201,26 @@ export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
             ))}
           </div>
         </div>
+
+        {/* Education */}
+        <div className="p-4 border-b border-[#252535]">
+          <p className="text-[10px] text-[#8888a8] font-mono uppercase tracking-wider mb-3">
+            {locale === 'no' ? 'Utdanning' : locale === 'pt' ? 'Educação' : 'Education'}
+          </p>
+          {education
+            .filter((e) => e.country === 'br')
+            .map((ed) => (
+              <div key={ed.school}>
+                <p className="text-xs text-[#e2e2f0]">{ed.school}</p>
+                <p className="text-[10px] text-[#8888a8] font-mono mt-0.5">
+                  {ed.degree} · {ed.period}
+                </p>
+              </div>
+            ))}
+        </div>
+
+        {/* Testimonials */}
+        <TestimonialsCarousel locale={locale} compact />
 
         {/* Links */}
         <div className="p-4">
@@ -160,11 +248,16 @@ function Stat({ label, value }: { label: string; value: string }) {
   )
 }
 
-function InfoRow({ icon, value }: { icon: string; value: string }) {
+function LangBadge({ flag, lang, level }: { flag: string; lang: string; level: string }) {
   return (
-    <div className="flex items-center gap-2">
-      <span className="text-xs">{icon}</span>
-      <span className="text-xs text-[#8888a8] font-mono">{value}</span>
+    <div className="flex items-center justify-between">
+      <div className="flex items-center gap-2">
+        <span className="text-sm">{flag}</span>
+        <span className="text-xs text-[#8888a8] font-mono">{lang}</span>
+      </div>
+      <span className="text-[10px] font-mono px-2 py-0.5 rounded border border-[#252535] bg-[#1e1e2e] text-[#38bdf8]">
+        {level}
+      </span>
     </div>
   )
 }
@@ -177,7 +270,12 @@ function SocialLink({ href, label, icon }: { href: string; label: string; icon: 
       rel="noopener noreferrer"
       className="flex items-center gap-2 text-xs text-[#8888a8] hover:text-[#38bdf8] transition-colors font-mono group"
     >
-      <span className="text-[#252535] group-hover:text-[#38bdf8] transition-colors">{icon}</span>
+      <span
+        aria-hidden="true"
+        className="text-[#252535] group-hover:text-[#38bdf8] transition-colors"
+      >
+        {icon}
+      </span>
       <span className="truncate">{label}</span>
     </a>
   )
