@@ -12,18 +12,12 @@ import type { Locale } from '@/types'
 
 interface PageHeaderProps {
   current: NavPath
-  maxWidth?: string
   extra?: React.ReactNode
   /** Per-locale path overrides forwarded to the language switcher. */
   localeOverrides?: Partial<Record<string, string>>
 }
 
-export default function PageHeader({
-  current,
-  maxWidth = 'max-w-5xl',
-  extra,
-  localeOverrides,
-}: PageHeaderProps) {
+export default function PageHeader({ current, extra, localeOverrides }: PageHeaderProps) {
   const locale = useLocale() as Locale
   const t = useTranslations('topbar')
   const router = useRouter()
@@ -35,9 +29,7 @@ export default function PageHeader({
         aria-label="Primary"
         className="sticky top-0 z-10 border-b border-[#252535] bg-[#0d0d10]/90 backdrop-blur-sm"
       >
-        <div
-          className={`${maxWidth} mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-2`}
-        >
+        <div className="px-4 sm:px-6 h-14 flex items-center justify-between gap-2">
           {/* Left — hamburger + logo + availability */}
           <div className="flex items-center gap-3 min-w-0">
             <button
