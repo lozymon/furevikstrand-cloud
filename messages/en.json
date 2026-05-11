@@ -10,6 +10,14 @@
     "github": "GitHub",
     "gitlab": "GitLab"
   },
+  "nav": {
+    "chat": "← chat",
+    "classic": "/classic",
+    "dev": "/dev",
+    "blog": "/blog",
+    "testimonials": "/testimonials",
+    "certifications": "/certifications"
+  },
   "sidebar": {
     "role": "Senior Software Engineer",
     "availability": "Open to opportunities",

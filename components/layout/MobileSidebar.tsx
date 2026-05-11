@@ -7,7 +7,7 @@ import { useTranslations, useLocale } from 'next-intl'
 import { profile } from '@/data/profile'
 import { topChips } from '@/data/stack'
 import { education } from '@/data/education'
-import { NAV_LINKS } from '@/lib/nav'
+import { localizedHref, visibleNavLinks, type NavPath } from '@/lib/nav'
 import TestimonialsCarousel from '@/components/sidebar/TestimonialsCarousel'
 import type { Locale } from '@/types'
 
@@ -15,11 +15,12 @@ interface MobileSidebarProps {
   isOpen: boolean
   onClose: () => void
   /** Path of the current page so its own link is hidden from the nav. */
-  current?: string
+  current?: NavPath
 }
 
 export default function MobileSidebar({ isOpen, onClose, current = '' }: MobileSidebarProps) {
   const t = useTranslations('sidebar')
+  const tNav = useTranslations('nav')
   const locale = useLocale() as Locale
 
   useEffect(() => {
@@ -38,7 +39,7 @@ export default function MobileSidebar({ isOpen, onClose, current = '' }: MobileS
     }
   }, [isOpen])
 
-  const navLinks = NAV_LINKS.filter((l) => l.path !== current)
+  const navLinks = visibleNavLinks(current)
 
   return (
     <>
@@ -133,16 +134,27 @@ export default function MobileSidebar({ isOpen, onClose, current = '' }: MobileS
               {locale === 'no' ? 'Sider' : locale === 'pt' ? 'Páginas' : 'Pages'}
             </p>
             <div className="flex flex-col">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.path}
-                  href={`/${locale}${link.path ? `/${link.path}` : ''}`}
-                  onClick={onClose}
-                  className="text-xs text-[#8888a8] hover:text-[#38bdf8] transition-colors font-mono py-2.5 -mx-2 px-2 rounded"
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {navLinks.map((link) => {
+                const href = localizedHref(locale, link)
+                const className =
+                  'text-xs text-[#8888a8] hover:text-[#38bdf8] transition-colors font-mono py-2.5 -mx-2 px-2 rounded'
+                return link.external ? (
+                  <a
+                    key={link.path}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={onClose}
+                    className={className}
+                  >
+                    {tNav(link.labelKey)}
+                  </a>
+                ) : (
+                  <Link key={link.path} href={href} onClick={onClose} className={className}>
+                    {tNav(link.labelKey)}
+                  </Link>
+                )
+              })}
             </div>
           </nav>
         )}

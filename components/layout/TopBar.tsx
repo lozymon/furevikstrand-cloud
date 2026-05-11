@@ -3,7 +3,7 @@
 import { useTranslations, useLocale } from 'next-intl'
 import Link from 'next/link'
 import LanguageSwitcher from './LanguageSwitcher'
-import { NAV_LINKS } from '@/lib/nav'
+import { localizedHref, visibleNavLinks } from '@/lib/nav'
 import { profile } from '@/data/profile'
 import type { Locale } from '@/types'
 
@@ -13,6 +13,7 @@ interface TopBarProps {
 
 export default function TopBar({ onMenuOpen }: TopBarProps) {
   const t = useTranslations('topbar')
+  const tNav = useTranslations('nav')
   const locale = useLocale()
 
   return (
@@ -48,15 +49,26 @@ export default function TopBar({ onMenuOpen }: TopBarProps) {
       <div className="flex items-center gap-3 shrink-0">
         <LanguageSwitcher />
 
-        {NAV_LINKS.filter((l) => l.path !== '').map((link) => (
-          <Link
-            key={link.path}
-            href={`/${locale}/${link.path}`}
-            className="hidden lg:block text-xs text-[#8888a8] hover:text-[#38bdf8] transition-colors font-mono"
-          >
-            {link.label}
-          </Link>
-        ))}
+        {visibleNavLinks('').map((link) => {
+          const href = localizedHref(locale, link)
+          const className =
+            'hidden lg:block text-xs text-[#8888a8] hover:text-[#38bdf8] transition-colors font-mono'
+          return link.external ? (
+            <a
+              key={link.path}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={className}
+            >
+              {tNav(link.labelKey)}
+            </a>
+          ) : (
+            <Link key={link.path} href={href} className={className}>
+              {tNav(link.labelKey)}
+            </Link>
+          )
+        })}
 
         <button
           onClick={() => window.open(`/${locale}/classic?print=true`, '_blank')}

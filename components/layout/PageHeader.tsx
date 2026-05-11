@@ -7,10 +7,11 @@ import PageNav from './PageNav'
 import LanguageSwitcher from './LanguageSwitcher'
 import MobileSidebar from './MobileSidebar'
 import { profile } from '@/data/profile'
+import type { NavPath } from '@/lib/nav'
 import type { Locale } from '@/types'
 
 interface PageHeaderProps {
-  current: string
+  current: NavPath
   maxWidth?: string
   extra?: React.ReactNode
   /** Per-locale path overrides forwarded to the language switcher. */
@@ -30,7 +31,10 @@ export default function PageHeader({
 
   return (
     <>
-      <nav className="sticky top-0 z-10 border-b border-[#252535] bg-[#0d0d10]/90 backdrop-blur-sm">
+      <nav
+        aria-label="Primary"
+        className="sticky top-0 z-10 border-b border-[#252535] bg-[#0d0d10]/90 backdrop-blur-sm"
+      >
         <div
           className={`${maxWidth} mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-2`}
         >
