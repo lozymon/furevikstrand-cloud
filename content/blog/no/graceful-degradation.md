@@ -13,6 +13,8 @@ Jeg bygde furevikstrand.cloud med tre lag med graceful degradation:
 2. **Lokal Ollama** — sekundær, også streamet, når den er self-hosted.
 3. **Ren TypeScript-nøkkelordmatcher** — alltid tilgjengelig. Levenshtein + vektede nøkler over en håndlaget kunnskapsbase. Ingen nettverk, ingen API-nøkler.
 
+![Diagram med tre lag: Claude (Haiku) faller gjennom til lokal Ollama, som faller gjennom til en TypeScript-nøkkelordmatcher. X-Reply-Source-headeren forteller hvilket lag som svarte.](/blog/graceful-degradation/no.png)
+
 Hvert lag setter en `X-Reply-Source`-header på responsen, så klienten vet om den skal lese en stream eller en enkelt streng.
 
 ## Hvorfor det betyr noe

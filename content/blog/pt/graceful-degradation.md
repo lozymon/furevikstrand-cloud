@@ -13,6 +13,8 @@ Construí furevikstrand.cloud com três níveis de degradação suave:
 2. **Ollama local** — secundário, também em streaming, quando self-hosted.
 3. **Keyword matcher em TypeScript puro** — sempre disponível. Levenshtein + chaves ponderadas sobre uma base de conhecimento feita à mão. Sem rede, sem chaves de API.
 
+![Diagrama de três níveis: Claude (Haiku) cai para o Ollama local, que cai para um keyword matcher em TypeScript. O header X-Reply-Source indica qual nível respondeu.](/blog/graceful-degradation/pt.png)
+
 Cada nível define um header `X-Reply-Source` na resposta, para o cliente saber se deve ler um stream ou uma string única.
 
 ## Por que isso importa

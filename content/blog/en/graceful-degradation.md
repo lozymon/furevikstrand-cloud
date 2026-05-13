@@ -13,6 +13,8 @@ I built furevikstrand.cloud with three-tier graceful degradation:
 2. **Local Ollama** — secondary, also streamed, when self-hosted.
 3. **Pure-TypeScript keyword matcher** — always available. Levenshtein + weighted keys over a hand-curated knowledge base. No network, no API keys.
 
+![Three-tier fallback diagram: Claude (Haiku) falls through to local Ollama, which falls through to a TypeScript keyword matcher, with the X-Reply-Source header indicating which tier replied.](/blog/graceful-degradation/en.png)
+
 Each tier sets an `X-Reply-Source` header on the response so the client knows whether to read a stream or a single string.
 
 ## Why this matters
