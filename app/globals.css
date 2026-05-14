@@ -73,3 +73,58 @@ body {
   outline-offset: 2px;
   border-radius: 4px;
 }
+
+/* highlight.js theme — palette-matched, applied via rehype-highlight on blog posts */
+.hljs {
+  color: #c0c0d8;
+  background: transparent;
+}
+.hljs-comment,
+.hljs-quote {
+  color: var(--text-muted);
+  font-style: italic;
+}
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-tag,
+.hljs-name,
+.hljs-type {
+  color: var(--violet);
+}
+.hljs-string,
+.hljs-doctag,
+.hljs-addition {
+  color: var(--emerald);
+}
+.hljs-number,
+.hljs-regexp,
+.hljs-symbol,
+.hljs-link {
+  color: #fbbf24;
+}
+.hljs-title,
+.hljs-built_in,
+.hljs-section,
+.hljs-class .hljs-title,
+.hljs-function .hljs-title {
+  color: var(--sky);
+}
+.hljs-attr,
+.hljs-attribute,
+.hljs-property,
+.hljs-variable,
+.hljs-params,
+.hljs-template-variable {
+  color: #cbd5e1;
+}
+.hljs-meta,
+.hljs-deletion {
+  color: var(--text-muted);
+}
+.hljs-emphasis {
+  font-style: italic;
+}
+.hljs-strong {
+  font-weight: 700;
+}

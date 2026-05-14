@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import rehypeHighlight from 'rehype-highlight'
 import { getTranslations } from 'next-intl/server'
 import { bannerKind, getPost, isVisible } from '@/lib/blog/posts'
 import PageHeader from '@/components/layout/PageHeader'
@@ -91,6 +92,7 @@ export default async function BlogPostPage({
           <div className="text-[#c0c0d8] leading-relaxed">
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
+              rehypePlugins={[rehypeHighlight]}
               components={{
                 h1: ({ children }) => (
                   <h2 className="text-2xl font-bold text-[#e2e2f0] mt-10 mb-4">{children}</h2>
