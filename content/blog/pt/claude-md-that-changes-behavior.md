@@ -5,7 +5,7 @@ publishAt: 2026-05-19T09:00:00-03:00
 tags: [claude-code, ai, prompting, developer-tools]
 ---
 
-Já escrevi mais arquivos CLAUDE.md do que consigo contar. A maioria dos primeiros não mudou em nada o comportamento do Claude.
+Meus primeiros arquivos CLAUDE.md não mudaram em nada o comportamento do Claude.
 
 ![À esquerda: um CLAUDE.md cheio de descrição do projeto (stack, pastas, comando de build) marcado "Claude pode derivar isso." À direita: um CLAUDE.md cheio de regras negativas, regras enraizadas em incidente, e regras de gosto com um porquê — marcado "muda o que é escrito."](/blog/claude-md-that-changes-behavior/pt.svg)
 

@@ -5,7 +5,7 @@ publishAt: 2026-05-19T09:00:00-03:00
 tags: [claude-code, ai, prompting, developer-tools]
 ---
 
-I've written more CLAUDE.md files than I can count. Most of the first ones didn't change Claude's behavior at all.
+My first few CLAUDE.md files didn't change Claude's behavior at all.
 
 ![Left: a CLAUDE.md full of project description (stack, folders, build command) labeled "Claude could derive this." Right: a CLAUDE.md full of negative rules, incident-rooted rules, and taste rules with a why — labeled "changes what gets written."](/blog/claude-md-that-changes-behavior/en.svg)
 

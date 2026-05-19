@@ -5,7 +5,7 @@ publishAt: 2026-05-19T09:00:00-03:00
 tags: [claude-code, ai, prompting, developer-tools]
 ---
 
-Jeg har skrevet flere CLAUDE.md-filer enn jeg kan telle. De fleste av de første endret ikke Claudes atferd i det hele tatt.
+Mine første CLAUDE.md-filer endret ikke Claudes atferd i det hele tatt.
 
 ![Til venstre: en CLAUDE.md full av prosjektbeskrivelse (stack, mapper, build-kommando) merket "Claude kan utlede dette." Til høyre: en CLAUDE.md full av negative regler, hendelses-rotfestede regler, og smaksregler med en grunn — merket "endrer hva som blir skrevet."](/blog/claude-md-that-changes-behavior/no.svg)
 
