@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Inter, system-ui, sans-serif">
+  <!-- background -->
+  <rect width="1200" height="630" fill="#0b1220"/>
+
+  <!-- subtle grid -->
+  <g stroke="#111a2c" stroke-width="1">
+    <path d="M0 105 H1200 M0 210 H1200 M0 315 H1200 M0 420 H1200 M0 525 H1200"/>
+    <path d="M150 0 V630 M300 0 V630 M450 0 V630 M600 0 V630 M750 0 V630 M900 0 V630 M1050 0 V630"/>
+  </g>
+
+  <!-- title -->
+  <text x="600" y="80" text-anchor="middle" fill="#f8fafc" font-size="40" font-weight="700" letter-spacing="-0.5">
+    To CLAUDE.md-filer.
+  </text>
+  <text x="600" y="112" text-anchor="middle" fill="#94a3b8" font-size="18">
+    bare én av dem endrer hva modellen gjør
+  </text>
+
+  <!-- ===== LEFT SIDE: describes ===== -->
+  <g>
+    <text x="280" y="160" text-anchor="middle" fill="#fb7185" font-size="14" font-weight="700" letter-spacing="4" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">
+      BESKRIVER
+    </text>
+
+    <!-- file header -->
+    <rect x="60" y="180" width="440" height="290" rx="10" fill="#131c2e" stroke="#1f2a44" stroke-width="2"/>
+    <text x="80" y="208" fill="#64748b" font-size="13" letter-spacing="2" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">CLAUDE.md</text>
+
+    <!-- lines (faded — Claude could derive these) -->
+    <g font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace" font-size="15" fill="#64748b">
+      <text x="80" y="245">Stack: Next.js + Postgres</text>
+      <text x="80" y="272">Folders: src/, app/, lib/</text>
+      <text x="80" y="299">Build: npm run build</text>
+      <text x="80" y="326">Tests: npm test</text>
+      <text x="80" y="353">Lint: npm run lint</text>
+      <text x="80" y="380">Deploy: Vercel</text>
+      <text x="80" y="407">Package manager: pnpm</text>
+    </g>
+
+    <!-- stamp -->
+    <text x="280" y="450" text-anchor="middle" fill="#fb7185" font-size="14" font-weight="600" letter-spacing="2" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">
+      CLAUDE KAN UTLEDE DETTE
+    </text>
+
+    <!-- footer -->
+    <text x="280" y="495" text-anchor="middle" fill="#fb7185" font-size="17" font-weight="600">
+      beskriver prosjektet
+    </text>
+    <text x="280" y="520" text-anchor="middle" fill="#94a3b8" font-size="15">
+      endrer ingenting i outputen
+    </text>
+  </g>
+
+  <!-- divider -->
+  <line x1="600" y1="150" x2="600" y2="540" stroke="#1f2a44" stroke-width="1" stroke-dasharray="4 6"/>
+
+  <!-- ===== RIGHT SIDE: constrains ===== -->
+  <g>
+    <text x="920" y="160" text-anchor="middle" fill="#34d399" font-size="14" font-weight="700" letter-spacing="4" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">
+      BEGRENSER
+    </text>
+
+    <!-- file header -->
+    <rect x="700" y="180" width="440" height="290" rx="10" fill="#0f1d2a" stroke="#34d399" stroke-width="2"/>
+    <text x="720" y="208" fill="#64748b" font-size="13" letter-spacing="2" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">CLAUDE.md</text>
+
+    <!-- lines (real rules) -->
+    <g font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace" font-size="14" fill="#f8fafc">
+      <text x="720" y="242"><tspan fill="#34d399" font-weight="700">IKKE</tspan> legg til kommentarer med mindre</text>
+      <text x="720" y="262">WHY ikke er åpenbart.</text>
+
+      <text x="720" y="298"><tspan fill="#34d399" font-weight="700">IKKE</tspan> mock databasen i integrasjons-</text>
+      <text x="720" y="318">tester. Grunn: Q3 prod-migrering bommet.</text>
+
+      <text x="720" y="354"><tspan fill="#34d399" font-weight="700">FORETREKK</tspan> én samlet PR for refaktor.</text>
+      <text x="720" y="374">Grunn: reviewerne ba om det.</text>
+
+      <text x="720" y="410"><tspan fill="#34d399" font-weight="700">SPØR</tspan> før destruktive git-kommandoer.</text>
+      <text x="720" y="430">Grunn: mistet en branch i februar.</text>
+    </g>
+
+    <!-- footer -->
+    <text x="920" y="495" text-anchor="middle" fill="#34d399" font-size="17" font-weight="600">
+      endrer hva som blir skrevet
+    </text>
+    <text x="920" y="520" text-anchor="middle" fill="#94a3b8" font-size="15">
+      hver regel har en WHY
+    </text>
+  </g>
+
+  <!-- footer tagline -->
+  <text x="600" y="580" text-anchor="middle" fill="#cbd5e1" font-size="18" font-style="italic">
+    negative regler. hendelses-rotfestet. smak med en grunn.
+  </text>
+
+  <!-- watermark -->
+  <text x="1140" y="615" text-anchor="end" fill="#475569" font-size="14" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">
+    furevikstrand.cloud
+  </text>
+</svg>
