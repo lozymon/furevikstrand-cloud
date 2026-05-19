@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Inter, system-ui, sans-serif">
+  <!-- background -->
+  <rect width="1200" height="630" fill="#0b1220"/>
+
+  <!-- subtle grid -->
+  <g stroke="#111a2c" stroke-width="1">
+    <path d="M0 105 H1200 M0 210 H1200 M0 315 H1200 M0 420 H1200 M0 525 H1200"/>
+    <path d="M150 0 V630 M300 0 V630 M450 0 V630 M600 0 V630 M750 0 V630 M900 0 V630 M1050 0 V630"/>
+  </g>
+
+  <!-- title -->
+  <text x="600" y="80" text-anchor="middle" fill="#f8fafc" font-size="40" font-weight="700" letter-spacing="-0.5">
+    The negative-space prompt
+  </text>
+  <text x="600" y="112" text-anchor="middle" fill="#94a3b8" font-size="18">
+    what you tell Claude NOT to do is more load-bearing than the ask
+  </text>
+
+  <!-- ===== LEFT SIDE: over-action ===== -->
+  <g>
+    <text x="280" y="160" text-anchor="middle" fill="#fb7185" font-size="14" font-weight="700" letter-spacing="4" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">
+      WITHOUT NEGATIVE SCOPE
+    </text>
+
+    <!-- prompt box -->
+    <rect x="60" y="180" width="440" height="60" rx="10" fill="#131c2e" stroke="#1f2a44" stroke-width="2"/>
+    <text x="80" y="207" fill="#64748b" font-size="11" letter-spacing="2" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">PROMPT</text>
+    <text x="80" y="228" fill="#f8fafc" font-size="17" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">"Fix the bug."</text>
+
+    <!-- arrow down -->
+    <g stroke="#fb7185" stroke-width="2" fill="none">
+      <path d="M280 250 L280 275" />
+    </g>
+    <polygon points="280,278 272,265 288,265" fill="#fb7185"/>
+
+    <!-- diff box -->
+    <rect x="60" y="285" width="440" height="180" rx="10" fill="#131c2e" stroke="#1f2a44" stroke-width="2"/>
+    <text x="80" y="310" fill="#64748b" font-size="11" letter-spacing="2" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">DIFF</text>
+
+    <g font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace" font-size="14" fill="#f8fafc">
+      <text x="80" y="335"><tspan fill="#fb7185" font-weight="700">+</tspan> fixed the bug</text>
+      <text x="80" y="358"><tspan fill="#fb7185" font-weight="700">+</tspan> refactored the surrounding code</text>
+      <text x="80" y="381"><tspan fill="#fb7185" font-weight="700">+</tspan> added three new tests</text>
+      <text x="80" y="404"><tspan fill="#fb7185" font-weight="700">+</tspan> renamed the file</text>
+      <text x="80" y="427"><tspan fill="#fb7185" font-weight="700">+</tspan> added a comment explaining</text>
+      <text x="100" y="448" fill="#94a3b8">why the fix is safe</text>
+    </g>
+
+    <!-- footer -->
+    <text x="280" y="495" text-anchor="middle" fill="#fb7185" font-size="17" font-weight="600">
+      300-line diff
+    </text>
+    <text x="280" y="520" text-anchor="middle" fill="#94a3b8" font-size="14">
+      most of it wasn't asked for
+    </text>
+  </g>
+
+  <!-- divider -->
+  <line x1="600" y1="150" x2="600" y2="540" stroke="#1f2a44" stroke-width="1" stroke-dasharray="4 6"/>
+
+  <!-- ===== RIGHT SIDE: scoped ===== -->
+  <g>
+    <text x="920" y="160" text-anchor="middle" fill="#34d399" font-size="14" font-weight="700" letter-spacing="4" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">
+      WITH NEGATIVE SCOPE
+    </text>
+
+    <!-- prompt box -->
+    <rect x="700" y="180" width="440" height="60" rx="10" fill="#0f1d2a" stroke="#34d399" stroke-width="2"/>
+    <text x="720" y="207" fill="#64748b" font-size="11" letter-spacing="2" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">PROMPT</text>
+    <text x="720" y="228" fill="#f8fafc" font-size="17" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">"Fix the bug. <tspan fill="#34d399" font-weight="700">Don't refactor.</tspan>"</text>
+
+    <!-- arrow down -->
+    <g stroke="#34d399" stroke-width="2" fill="none">
+      <path d="M920 250 L920 275" />
+    </g>
+    <polygon points="920,278 912,265 928,265" fill="#34d399"/>
+
+    <!-- diff box -->
+    <rect x="700" y="285" width="440" height="180" rx="10" fill="#0f1d2a" stroke="#34d399" stroke-width="2"/>
+    <text x="720" y="310" fill="#64748b" font-size="11" letter-spacing="2" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">DIFF</text>
+
+    <g font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace" font-size="14" fill="#f8fafc">
+      <text x="720" y="350"><tspan fill="#fb7185" font-weight="700">-</tspan> if (user.id == id)</text>
+      <text x="720" y="376"><tspan fill="#34d399" font-weight="700">+</tspan> if (user.id === id)</text>
+    </g>
+
+    <!-- footer -->
+    <text x="920" y="495" text-anchor="middle" fill="#34d399" font-size="17" font-weight="600">
+      1-line diff
+    </text>
+    <text x="920" y="520" text-anchor="middle" fill="#94a3b8" font-size="14">
+      exactly what you asked for
+    </text>
+  </g>
+
+  <!-- footer tagline -->
+  <text x="600" y="580" text-anchor="middle" fill="#cbd5e1" font-size="18" font-style="italic">
+    give less surface area to act on.
+  </text>
+
+  <!-- watermark -->
+  <text x="1140" y="615" text-anchor="end" fill="#475569" font-size="14" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">
+    furevikstrand.cloud
+  </text>
+</svg>
