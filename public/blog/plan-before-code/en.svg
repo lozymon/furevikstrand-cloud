@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Inter, system-ui, sans-serif">
+  <!-- background -->
+  <rect width="1200" height="630" fill="#0b1220"/>
+
+  <!-- subtle grid -->
+  <g stroke="#111a2c" stroke-width="1">
+    <path d="M0 105 H1200 M0 210 H1200 M0 315 H1200 M0 420 H1200 M0 525 H1200"/>
+    <path d="M150 0 V630 M300 0 V630 M450 0 V630 M600 0 V630 M750 0 V630 M900 0 V630 M1050 0 V630"/>
+  </g>
+
+  <!-- title -->
+  <text x="600" y="80" text-anchor="middle" fill="#f8fafc" font-size="38" font-weight="700" letter-spacing="-0.5">
+    Plan before code
+  </text>
+  <text x="600" y="112" text-anchor="middle" fill="#94a3b8" font-size="18">
+    the value isn't the plan — it's the disagreement it surfaces
+  </text>
+
+  <!-- ===== LEFT SIDE: just write it ===== -->
+  <g>
+    <text x="280" y="160" text-anchor="middle" fill="#fb7185" font-size="14" font-weight="700" letter-spacing="4" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">
+      "JUST WRITE IT"
+    </text>
+
+    <!-- prompt box -->
+    <rect x="60" y="180" width="440" height="60" rx="10" fill="#131c2e" stroke="#1f2a44" stroke-width="2"/>
+    <text x="80" y="207" fill="#64748b" font-size="11" letter-spacing="2" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">PROMPT</text>
+    <text x="80" y="228" fill="#f8fafc" font-size="17" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">"Refactor the auth flow."</text>
+
+    <!-- arrow down -->
+    <g stroke="#fb7185" stroke-width="2" fill="none">
+      <path d="M280 250 L280 275" />
+    </g>
+    <polygon points="280,278 272,265 288,265" fill="#fb7185"/>
+
+    <!-- diff box -->
+    <rect x="60" y="285" width="440" height="200" rx="10" fill="#131c2e" stroke="#1f2a44" stroke-width="2"/>
+    <text x="80" y="310" fill="#64748b" font-size="11" letter-spacing="2" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">DIFF — 300 LINES</text>
+
+    <g font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace" font-size="13" fill="#f8fafc">
+      <text x="80" y="335"><tspan fill="#fb7185" font-weight="700">+</tspan> extracted AuthBase class</text>
+      <text x="80" y="356"><tspan fill="#fb7185" font-weight="700">+</tspan> added 3 strategy classes</text>
+      <text x="80" y="377"><tspan fill="#fb7185" font-weight="700">+</tspan> rewrote 6 callers</text>
+      <text x="80" y="398"><tspan fill="#fb7185" font-weight="700">+</tspan> added 18 new tests</text>
+      <text x="80" y="419"><tspan fill="#fb7185" font-weight="700">+</tspan> renamed files to match</text>
+    </g>
+
+    <!-- stamp -->
+    <g transform="translate(280 462) rotate(-6)">
+      <rect x="-160" y="-18" width="320" height="36" rx="4" fill="none" stroke="#fb7185" stroke-width="2.5"/>
+      <text x="0" y="6" text-anchor="middle" fill="#fb7185" font-size="14" font-weight="800" letter-spacing="2" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">
+        WRONG ABSTRACTION — REVERT
+      </text>
+    </g>
+
+    <text x="280" y="535" text-anchor="middle" fill="#94a3b8" font-size="14">
+      caught at review · 8 hours lost
+    </text>
+  </g>
+
+  <!-- divider -->
+  <line x1="600" y1="150" x2="600" y2="560" stroke="#1f2a44" stroke-width="1" stroke-dasharray="4 6"/>
+
+  <!-- ===== RIGHT SIDE: plan first ===== -->
+  <g>
+    <text x="920" y="160" text-anchor="middle" fill="#34d399" font-size="14" font-weight="700" letter-spacing="4" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">
+      "PLAN FIRST"
+    </text>
+
+    <!-- prompt box -->
+    <rect x="700" y="180" width="440" height="60" rx="10" fill="#0f1d2a" stroke="#34d399" stroke-width="2"/>
+    <text x="720" y="207" fill="#64748b" font-size="11" letter-spacing="2" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">PROMPT</text>
+    <text x="720" y="228" fill="#f8fafc" font-size="17" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">"Refactor the auth flow. <tspan fill="#34d399" font-weight="700">Plan first.</tspan>"</text>
+
+    <!-- arrow down -->
+    <g stroke="#34d399" stroke-width="2" fill="none">
+      <path d="M920 250 L920 275" />
+    </g>
+    <polygon points="920,278 912,265 928,265" fill="#34d399"/>
+
+    <!-- plan box -->
+    <rect x="700" y="285" width="440" height="200" rx="10" fill="#0f1d2a" stroke="#34d399" stroke-width="2"/>
+    <text x="720" y="310" fill="#64748b" font-size="11" letter-spacing="2" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">PLAN — 5 STEPS</text>
+
+    <g font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace" font-size="13" fill="#f8fafc">
+      <text x="720" y="335">1. read existing usage of authFlow()</text>
+      <text x="720" y="356">2. extract shared validation to helper</text>
+      <g>
+        <text x="720" y="377" fill="#64748b" text-decoration="line-through">3. add strategy pattern for 3 cases</text>
+        <line x1="720" y1="373" x2="1050" y2="373" stroke="#fb7185" stroke-width="2"/>
+      </g>
+      <text x="720" y="398">4. update each caller</text>
+      <text x="720" y="419">5. add tests for each branch</text>
+    </g>
+
+    <!-- callout for step 3 -->
+    <g transform="translate(920 462)">
+      <text x="0" y="0" text-anchor="middle" fill="#34d399" font-size="14" font-weight="700" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">
+        ↑ caught in 90 seconds
+      </text>
+    </g>
+
+    <text x="920" y="535" text-anchor="middle" fill="#94a3b8" font-size="14">
+      no code written · no revert needed
+    </text>
+  </g>
+
+  <!-- footer tagline -->
+  <text x="600" y="585" text-anchor="middle" fill="#cbd5e1" font-size="18" font-style="italic">
+    if you can't predict the diff, plan first.
+  </text>
+
+  <!-- watermark -->
+  <text x="1140" y="615" text-anchor="end" fill="#475569" font-size="14" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">
+    furevikstrand.cloud
+  </text>
+</svg>
