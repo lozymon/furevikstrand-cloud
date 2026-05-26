@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Inter, system-ui, sans-serif">
+  <rect width="1200" height="630" fill="#0b1220"/>
+
+  <g stroke="#111a2c" stroke-width="1">
+    <path d="M0 105 H1200 M0 210 H1200 M0 315 H1200 M0 420 H1200 M0 525 H1200"/>
+    <path d="M150 0 V630 M300 0 V630 M450 0 V630 M600 0 V630 M750 0 V630 M900 0 V630 M1050 0 V630"/>
+  </g>
+
+  <text x="600" y="80" text-anchor="middle" fill="#f8fafc" font-size="38" font-weight="700" letter-spacing="-0.5">
+    Verifique antes de recomendar
+  </text>
+  <text x="600" y="112" text-anchor="middle" fill="#94a3b8" font-size="18">
+    todo símbolo nomeado é hipótese — dê grep antes de agir
+  </text>
+
+  <g>
+    <text x="280" y="160" text-anchor="middle" fill="#fb7185" font-size="14" font-weight="700" letter-spacing="4" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">
+      O QUE A IA DISSE
+    </text>
+
+    <rect x="60" y="180" width="440" height="305" rx="10" fill="#131c2e" stroke="#1f2a44" stroke-width="2"/>
+    <text x="80" y="208" fill="#64748b" font-size="11" letter-spacing="2" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">ASSISTENTE</text>
+
+    <g font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace" font-size="14" fill="#f8fafc">
+      <text x="80" y="240">Para validar a sessão:</text>
+      <text x="80" y="278">  1. Passe a flag <tspan fill="#facc15">--strict</tspan></text>
+      <text x="80" y="306">  2. Chame <tspan fill="#facc15">validateInput()</tspan></text>
+      <text x="80" y="334">  3. Importe de</text>
+      <text x="80" y="358"><tspan fill="#facc15">     src/lib/auth/middleware.ts</tspan></text>
+    </g>
+
+    <g transform="translate(280 425) rotate(-4)">
+      <rect x="-110" y="-18" width="220" height="36" rx="4" fill="none" stroke="#fb7185" stroke-width="2.5"/>
+      <text x="0" y="6" text-anchor="middle" fill="#fb7185" font-size="14" font-weight="800" letter-spacing="3" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">
+        CONFIANTE
+      </text>
+    </g>
+
+    <text x="280" y="530" text-anchor="middle" fill="#94a3b8" font-size="14">
+      soa certo · era certo · não é mais
+    </text>
+  </g>
+
+  <line x1="600" y1="150" x2="600" y2="560" stroke="#1f2a44" stroke-width="1" stroke-dasharray="4 6"/>
+
+  <g>
+    <text x="920" y="160" text-anchor="middle" fill="#34d399" font-size="14" font-weight="700" letter-spacing="4" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">
+      O QUE O GREP DISSE
+    </text>
+
+    <rect x="700" y="180" width="440" height="305" rx="10" fill="#0f1d2a" stroke="#34d399" stroke-width="2"/>
+    <text x="720" y="208" fill="#64748b" font-size="11" letter-spacing="2" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">TERMINAL</text>
+
+    <g font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace" font-size="13" fill="#f8fafc">
+      <text x="720" y="240"><tspan fill="#64748b">$</tspan> grep -r '\-\-strict' cli/</text>
+      <text x="720" y="262" fill="#fb7185">  (sem resultados)  ← removida v4.2</text>
+
+      <text x="720" y="298"><tspan fill="#64748b">$</tspan> grep -r 'validateInput' src/</text>
+      <text x="720" y="320" fill="#fb7185">  (sem resultados)  ← renomeada</text>
+      <text x="720" y="340" fill="#fb7185">    para checkSession()</text>
+
+      <text x="720" y="376"><tspan fill="#64748b">$</tspan> ls src/lib/auth/middleware.ts</text>
+      <text x="720" y="398" fill="#fb7185">  Arquivo ou diretório inexistente</text>
+      <text x="720" y="418" fill="#64748b">  (movido para src/auth/session.ts)</text>
+    </g>
+
+    <text x="920" y="450" text-anchor="middle" fill="#34d399" font-size="14" font-weight="700" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">
+      3 citações velhas · pegas em 10s
+    </text>
+
+    <text x="920" y="530" text-anchor="middle" fill="#94a3b8" font-size="14">
+      codebase é presente · memória é snapshot
+    </text>
+  </g>
+
+  <text x="600" y="585" text-anchor="middle" fill="#cbd5e1" font-size="18" font-style="italic">
+    quando a IA cita, você dá grep.
+  </text>
+
+  <text x="1140" y="615" text-anchor="end" fill="#475569" font-size="14" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">
+    furevikstrand.cloud
+  </text>
+</svg>

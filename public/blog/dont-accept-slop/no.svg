@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Inter, system-ui, sans-serif">
+  <rect width="1200" height="630" fill="#0b1220"/>
+
+  <g stroke="#111a2c" stroke-width="1">
+    <path d="M0 105 H1200 M0 210 H1200 M0 315 H1200 M0 420 H1200 M0 525 H1200"/>
+    <path d="M150 0 V630 M300 0 V630 M450 0 V630 M600 0 V630 M750 0 V630 M900 0 V630 M1050 0 V630"/>
+  </g>
+
+  <text x="600" y="80" text-anchor="middle" fill="#f8fafc" font-size="38" font-weight="700" letter-spacing="-0.5">
+    Ikke godta slop på første pass
+  </text>
+  <text x="600" y="112" text-anchor="middle" fill="#94a3b8" font-size="18">
+    oppsummeringen er markedsføring — diffen er produktet
+  </text>
+
+  <text x="280" y="160" text-anchor="middle" fill="#fb7185" font-size="14" font-weight="700" letter-spacing="4" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">
+    OPPSUMMERINGEN
+  </text>
+
+  <rect x="60" y="180" width="440" height="305" rx="10" fill="#131c2e" stroke="#1f2a44" stroke-width="2"/>
+  <text x="80" y="208" fill="#64748b" font-size="11" letter-spacing="2" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">ASSISTENT-RECAP</text>
+
+  <g font-size="16" fill="#f8fafc">
+    <text x="80" y="250">✓ La til input-validering</text>
+    <text x="80" y="285">✓ Forbedret feilhåndtering</text>
+    <text x="80" y="320">✓ Forsterket registreringen</text>
+    <text x="80" y="355">✓ Skrev tester for nye stier</text>
+  </g>
+
+  <g transform="translate(280 425) rotate(-4)">
+    <rect x="-130" y="-18" width="260" height="36" rx="4" fill="none" stroke="#fb7185" stroke-width="2.5"/>
+    <text x="0" y="6" text-anchor="middle" fill="#fb7185" font-size="14" font-weight="800" letter-spacing="3" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">
+      FØLES PRODUKTIVT
+    </text>
+  </g>
+
+  <text x="280" y="530" text-anchor="middle" fill="#94a3b8" font-size="14">
+    4 selvsikre linjer · alle plausible
+  </text>
+
+  <line x1="600" y1="150" x2="600" y2="560" stroke="#1f2a44" stroke-width="1" stroke-dasharray="4 6"/>
+
+  <text x="920" y="160" text-anchor="middle" fill="#34d399" font-size="14" font-weight="700" letter-spacing="4" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">
+    DIFFEN
+  </text>
+
+  <rect x="700" y="180" width="440" height="305" rx="10" fill="#0f1d2a" stroke="#34d399" stroke-width="2"/>
+  <text x="720" y="208" fill="#94a3b8" font-size="11" letter-spacing="2" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">+60 −2 · register.ts</text>
+
+  <g font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace" font-size="13" fill="#cbd5e1">
+    <text x="720" y="235" xml:space="preserve"><tspan fill="#475569">+</tspan> <tspan fill="#fb7185">try</tspan> {</text>
+    <text x="720" y="253" xml:space="preserve"><tspan fill="#475569">+</tspan>   <tspan fill="#fb7185">if</tspan> (!user) <tspan fill="#fb7185">throw new</tspan> <tspan fill="#7dd3fc">Err</tspan>(...)</text>
+    <text x="720" y="271" fill="#64748b" xml:space="preserve">    // kommer fra req.user</text>
+    <text x="720" y="289" fill="#64748b" xml:space="preserve">    // allerede validert ovenfor</text>
+    <text x="720" y="307" xml:space="preserve"><tspan fill="#475569">+</tspan>   <tspan fill="#fb7185">if</tspan> (!user.id) <tspan fill="#fb7185">throw new</tspan> <tspan fill="#7dd3fc">Err</tspan>(...)</text>
+    <text x="720" y="325" xml:space="preserve"><tspan fill="#475569">+</tspan>   <tspan fill="#fb7185">if</tspan> (<tspan fill="#fb7185">typeof</tspan> user.id !== <tspan fill="#86efac">'string'</tspan>)</text>
+    <text x="720" y="343" xml:space="preserve"><tspan fill="#475569">+</tspan>     <tspan fill="#fb7185">throw new</tspan> <tspan fill="#7dd3fc">TypeError</tspan>(...)</text>
+    <text x="720" y="361" xml:space="preserve"><tspan fill="#475569">+</tspan>   <tspan fill="#fb7185">await</tspan> persist(user)</text>
+    <text x="720" y="379" xml:space="preserve"><tspan fill="#475569">+</tspan> } <tspan fill="#fb7185">catch</tspan> (e) {</text>
+    <text x="720" y="397" xml:space="preserve"><tspan fill="#475569">+</tspan>   logger.warn(e)</text>
+    <text x="720" y="415" xml:space="preserve"><tspan fill="#475569">+</tspan>   <tspan fill="#fb7185">throw</tspan> e  <tspan fill="#64748b">// re-kaster samme</tspan></text>
+    <text x="720" y="433" xml:space="preserve"><tspan fill="#475569">+</tspan> }</text>
+  </g>
+
+  <text x="920" y="465" text-anchor="middle" fill="#fb7185" font-size="14" font-weight="700" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">
+    defensiv · død · bærende om 6 måneder
+  </text>
+
+  <text x="920" y="530" text-anchor="middle" fill="#94a3b8" font-size="14">
+    60 linjer · ville jeg skrevet dette?
+  </text>
+
+  <text x="600" y="585" text-anchor="middle" fill="#cbd5e1" font-size="18" font-style="italic">
+    les hver endrede linje. avvis det som feiler testen.
+  </text>
+
+  <text x="1140" y="615" text-anchor="end" fill="#475569" font-size="14" font-family="ui-monospace, 'SF Mono', 'JetBrains Mono', Consolas, monospace">
+    furevikstrand.cloud
+  </text>
+</svg>
