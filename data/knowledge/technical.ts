@@ -129,18 +129,24 @@ export const technicalKnowledge: KnowledgeEntry[] = [
       'demos',
       'jobdex',
       'crm',
+      'termhaus',
+      'tauri',
+      'rust',
+      'terminal',
+      'ruleshub',
+      'monorepo',
     ],
     replies: {
       en: [
-        'My three most notable public projects: **Jobdex** — a full-stack job application tracker with a CRM-style kanban pipeline, built with Next.js, NestJS, and PostgreSQL. **Micro-CRM** — a microservices CRM where each domain (contacts, deals, tasks) is a separate NestJS service communicating via RabbitMQ. And **Conta de Casa** — a household expense splitter for families, a mobile-first PWA. All are TypeScript, all are on GitHub at github.com/lozymon.',
+        'My most notable public projects: **Termhaus** — a Linux-first GUI terminal multiplexer (a graphical tmux) built with Tauri, Rust, and SolidJS, tuned for driving fleets of CLI coding agents; type once and broadcast input to many panes, and let one agent drive the others over an inter-pane control bus. **RulesHub** — a registry and hub for sharing Claude Code rules, commands, skills, and workflows (`npx ruleshub`), built as a TypeScript monorepo with a NestJS API, a Next.js 15 web app, and a CLI — live at ruleshub.dev. **Jobdex** — a full-stack job application tracker with a CRM-style kanban pipeline, built with Next.js, NestJS, and PostgreSQL. And **Micro-CRM** — a microservices CRM where each domain (contacts, deals, tasks) is a separate NestJS service communicating via RabbitMQ. All are on GitHub at github.com/lozymon.',
         "I have 30+ repositories on GitHub and GitLab — most are TypeScript/Node.js. My pinned projects cover microservices architecture, full-stack apps, and tooling. The project I'm most proud of is probably Micro-CRM: it's a clean implementation of domain-driven microservices that I use to demo architectural patterns to junior devs.",
       ],
       no: [
-        'Mine tre mest bemerkelsesverdige offentlige prosjekter: **Jobdex** — en full-stack jobbsøknadssporer med CRM-stil kanban-rørledning. **Micro-CRM** — et mikrotjeneste-CRM der hvert domene er en separat NestJS-tjeneste via RabbitMQ. Og **Conta de Casa** — en husholdningsutgiftsdeler. Alle er TypeScript og finnes på GitHub (github.com/lozymon).',
+        'Mine mest bemerkelsesverdige offentlige prosjekter: **Termhaus** — en Linux-først GUI terminal-multiplekser (en grafisk tmux) bygget med Tauri, Rust og SolidJS, tilpasset for å styre flåter av CLI-kodeagenter; skriv én gang og kringkast input til mange ruter, og la én agent styre de andre over en kontrollbuss mellom ruter. **RulesHub** — et register og en hub for å dele Claude Code-regler, kommandoer, ferdigheter og arbeidsflyter (`npx ruleshub`), bygget som et TypeScript-monorepo med et NestJS-API, en Next.js 15 webapp og et CLI — live på ruleshub.dev. **Jobdex** — en full-stack jobbsøknadssporer med CRM-stil kanban-rørledning. Og **Micro-CRM** — et mikrotjeneste-CRM der hvert domene er en separat NestJS-tjeneste via RabbitMQ. Alle finnes på GitHub (github.com/lozymon).',
         'Jeg har 30+ repositorier på GitHub og GitLab. Prosjektet jeg er mest stolt av er sannsynligvis Micro-CRM: det er en ren implementering av domenedrevne mikrotjenester som jeg bruker til å demonstrere arkitekturmønstre for juniorer.',
       ],
       pt: [
-        'Meus três projetos públicos mais notáveis: **Jobdex** — um rastreador de candidaturas full-stack com pipeline kanban estilo CRM. **Micro-CRM** — um CRM de microsserviços onde cada domínio é um serviço NestJS separado via RabbitMQ. E **Conta de Casa** — um divisor de despesas domésticas PWA. Todos em TypeScript, todos no GitHub em github.com/lozymon.',
+        'Meus projetos públicos mais notáveis: **Termhaus** — um multiplexador de terminal GUI Linux-first (um tmux gráfico) construído com Tauri, Rust e SolidJS, ajustado para conduzir frotas de agentes de código via CLI; digite uma vez e faça broadcast da entrada para vários painéis, e deixe um agente conduzir os outros por um barramento de controle entre painéis. **RulesHub** — um registro e hub para compartilhar regras, comandos, skills e workflows do Claude Code (`npx ruleshub`), construído como um monorepo TypeScript com uma API NestJS, um app web Next.js 15 e um CLI — disponível em ruleshub.dev. **Jobdex** — um rastreador de candidaturas full-stack com pipeline kanban estilo CRM. E **Micro-CRM** — um CRM de microsserviços onde cada domínio é um serviço NestJS separado via RabbitMQ. Todos no GitHub em github.com/lozymon.',
         'Tenho 30+ repositórios no GitHub e GitLab. O projeto que mais me orgulho é provavelmente o Micro-CRM: é uma implementação limpa de microsserviços orientados a domínio que uso para demonstrar padrões arquiteturais a devs junior.',
       ],
     },
